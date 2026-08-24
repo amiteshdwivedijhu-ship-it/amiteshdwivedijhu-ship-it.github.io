@@ -266,7 +266,7 @@ demos live in `public/demos/<project>/` and run untouched.
 
 **Hosting:** Cloudflare Pages, git-push deploys. Netlify is an acceptable substitute.
 
-**Domain:** `amiteshdwivedi.com` (to buy).
+**Domain:** `amiteshdwivedijhu-ship-it.github.io`. A custom domain can be connected later.
 
 **Repo:** a separate `portfolio/` repo. A `sync` script copies only *built* demo assets —
 HTML/CSS/JS and generated JSON — into `public/demos/`. The three source projects stay where

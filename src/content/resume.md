@@ -1,5 +1,5 @@
 **Amitesh Dwivedi | Technical Product Manager**  
-Baltimore, MD • amitesh.dwivedi.jhu@gmail.com • [linkedin.com/in/amiteshdwivedi/](http://linkedin.com/in/amiteshdwivedi/) • [Portfolio](https://grove-leo-bef.notion.site/My-Product-Journey-dd1af8000c354ab2a934df07c8064304?pvs=74)
+Baltimore, MD • amitesh.dwivedi.jhu@gmail.com • [linkedin.com/in/amiteshdwivedi/](http://linkedin.com/in/amiteshdwivedi/) • [Portfolio](https://amiteshdwivedijhu-ship-it.github.io/)
 
 AI Product Manager with 3 years building and shipping agentic AI products in regulated healthcare. Founded the agent evaluation function at a Series A startup and set the release standard that clinical voice agents must pass before launch, including deployments at Aetna, Duke, and Highmark. Owns the platform, the agents, and the evaluation infrastructure behind clinical voice products, and builds hands-on with AI coding tools.
 
