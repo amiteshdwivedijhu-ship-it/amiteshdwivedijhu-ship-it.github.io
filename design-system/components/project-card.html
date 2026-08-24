@@ -1,0 +1,61 @@
+<!-- @dsCard group="Components" -->
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<title>Project cards</title><link rel="stylesheet" href="../_tokens.css"></head><body>
+<div class="wrap">
+<p class="eyebrow">Components / Project card</p>
+<p style="color:var(--muted);max-width:44rem;line-height:1.6;margin:0 0 2rem">Homepage cards are
+affirmative only. One scale figure each, measured, never a gate result. The failed gate lives one
+click down, on the project page.</p>
+
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.1rem">
+  <a class="card glass" href="#">
+    <p class="eyebrow" style="margin:0 0 .7rem">Clinical</p>
+    <h3>Prior Auth Agent</h3>
+    <p class="desc">Reads a chart, checks the payer's published policy, and drafts an evidence cited
+    authorization request. Every claim carries the span it came from.</p>
+    <p class="stat"><span class="num">402</span> determinations, 20 cases across 6 payer policies</p>
+    <span class="go">Open case study</span>
+  </a>
+  <a class="card glass" href="#">
+    <p class="eyebrow" style="margin:0 0 .7rem">Markets</p>
+    <h3>10-K Risk Extractor</h3>
+    <p class="desc">Turns Item 1A prose into a comparable, diffable, source cited dataset, then
+    grades its own output.</p>
+    <p class="stat"><span class="num">3,216</span> risk claims across 20 filings</p>
+    <span class="go">Open case study</span>
+  </a>
+  <a class="card glass" href="#">
+    <p class="eyebrow" style="margin:0 0 .7rem">Legal</p>
+    <h3>NDA Triage</h3>
+    <p class="desc">Compares inbound NDAs against a company playbook to decide who, if anyone,
+    needs to read them. Built around proving a clause is absent.</p>
+    <p class="stat"><span class="num">0.983</span> absence precision on real NDAs</p>
+    <span class="go">Open case study</span>
+  </a>
+</div>
+</div>
+<style>
+.card{display:block;padding:1.6rem;text-decoration:none;color:inherit;position:relative;overflow:hidden;
+  transition:transform var(--d2) var(--ease),background var(--d2) var(--ease),box-shadow var(--d2) var(--ease),border-color var(--d2) var(--ease)}
+.card::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:radial-gradient(420px 200px at var(--mx,50%) var(--my,0%),rgba(232,169,124,.13),transparent 62%);
+  opacity:0;transition:opacity var(--d2) var(--ease)}
+.card:hover{transform:translateY(-4px);background:var(--glass-hi);border-color:rgba(232,169,124,.30);
+  box-shadow:0 20px 60px rgba(0,0,0,.48), inset 0 1px 0 rgba(255,255,255,.14)}
+.card:hover::after{opacity:1}
+.card h3{margin:0 0 .55rem;font-size:1.22rem;letter-spacing:-.015em}
+.desc{margin:0 0 1.1rem;color:var(--muted);font-size:.93rem;line-height:1.58}
+.stat{margin:0 0 1.1rem;font-size:.86rem;color:var(--muted)}
+.stat .num{color:var(--accent);font-size:1rem}
+.go{font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);
+  transition:color var(--d1) var(--ease)}
+.card:hover .go{color:var(--accent)}
+</style>
+<script>
+document.querySelectorAll('.card').forEach(c=>c.addEventListener('pointermove',e=>{
+  const r=c.getBoundingClientRect();
+  c.style.setProperty('--mx',((e.clientX-r.left)/r.width*100)+'%');
+  c.style.setProperty('--my',((e.clientY-r.top)/r.height*100)+'%');
+}));
+</script>
+</body></html>

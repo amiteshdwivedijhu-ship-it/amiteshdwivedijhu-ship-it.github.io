@@ -1,0 +1,65 @@
+<!-- @dsCard group="Components" -->
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<title>Results table</title><link rel="stylesheet" href="../_tokens.css"></head><body>
+<div class="wrap">
+<p class="eyebrow">Components / Results table</p>
+<h2 style="font-size:1.5rem;margin:0 0 .5rem;letter-spacing:-.02em">The data layer is never glass</h2>
+<p style="color:var(--muted);max-width:46rem;line-height:1.62;margin:0 0 1.8rem">
+Everything measured sits in a flat well: no blur, no gloss, no hover lift, no entrance animation.
+The one thing on the page that does not move is the evidence. Values are generated at build time
+from <span class="num" style="font-size:.85rem;color:var(--accent)">runs/scorecards/_summary.json</span>
+and are never typed by hand.</p>
+
+<div class="well">
+  <p class="cap">Gates are pass or fail, and are reported before any utility metric. No utility metric
+  offsets a failed gate. Gate: met-precision at or above 0.95 with a lower Wilson bound above 0.90.</p>
+  <div class="scroll">
+  <table>
+    <thead><tr><th>Configuration</th><th class="r">met-precision</th><th class="r">Wilson 95%</th><th class="r">n</th><th class="r">Gate</th></tr></thead>
+    <tbody>
+      <tr><td>fc-golden</td><td class="r num">0.939</td><td class="r num dim">[0.879, 0.970]</td><td class="r num dim">114</td><td class="r"><span class="fail">FAIL</span></td></tr>
+      <tr><td>fc-extracted</td><td class="r num">0.938</td><td class="r num dim">[0.877, 0.969]</td><td class="r num dim">112</td><td class="r"><span class="fail">FAIL</span></td></tr>
+      <tr><td>retr-golden</td><td class="r num">0.903</td><td class="r num dim">[0.834, 0.945]</td><td class="r num dim">113</td><td class="r"><span class="fail">FAIL</span></td></tr>
+      <tr><td>retr-extracted</td><td class="r num">0.922</td><td class="r num dim">[0.853, 0.960]</td><td class="r num dim">102</td><td class="r"><span class="fail">FAIL</span></td></tr>
+      <tr><td>fc-golden-norouting</td><td class="r num">0.939</td><td class="r num dim">[0.879, 0.970]</td><td class="r num dim">114</td><td class="r"><span class="fail">FAIL</span></td></tr>
+      <tr><td>ood-fc-golden <span class="note">scored separately</span></td><td class="r num">1.000</td><td class="r num dim">[0.722, 1.000]</td><td class="r num dim">10</td><td class="r"><span class="fail">FAIL</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="cap" style="margin:1rem 0 0">The out of distribution row returns a perfect point estimate and
+  still fails, because ten observations cannot put the lower bound above 0.90. Reporting it as a pass
+  would be the interesting kind of dishonest.</p>
+</div>
+
+<div class="well" style="margin-top:1.2rem">
+  <div class="scroll">
+  <table>
+    <thead><tr><th>Grounded citation</th><th class="r">value</th><th class="r">n</th><th class="r">Gate</th></tr></thead>
+    <tbody>
+      <tr><td>all six configurations</td><td class="r num">1.000</td><td class="r num dim">200 to 224</td><td class="r"><span class="pass">PASS</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="cap" style="margin:1rem 0 0">Enforced by code rather than by prompting: the evaluator relocates
+  every span itself and drops what it cannot find. This is 1.000 by construction, not by luck.</p>
+</div>
+</div>
+<style>
+.well{background:rgba(0,0,0,.24);border:1px solid var(--hairline);border-radius:14px;padding:1.4rem}
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.9rem;min-width:32rem}
+th{text-align:left;font-family:var(--mono);font-weight:500;font-size:.68rem;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--dim);padding:0 .9rem .7rem 0;border-bottom:1px solid var(--hairline)}
+td{padding:.72rem .9rem .72rem 0;border-bottom:1px solid rgba(255,255,255,.05)}
+tbody tr:last-child td{border-bottom:0}
+.r{text-align:right;padding-right:0}
+th.r{padding-right:0}
+.dim{color:var(--dim);font-size:.82rem}
+.note{font-family:var(--mono);font-size:.66rem;color:var(--dim);letter-spacing:.06em}
+.cap{margin:0 0 1.2rem;color:var(--muted);font-size:.86rem;line-height:1.58;max-width:46rem}
+.fail{font-family:var(--mono);font-size:.74rem;letter-spacing:.09em;color:var(--alarm);
+  border:1px solid rgba(255,117,99,.38);background:rgba(255,117,99,.10);padding:.16rem .5rem;border-radius:4px}
+.pass{font-family:var(--mono);font-size:.74rem;letter-spacing:.09em;color:var(--muted);
+  border:1px solid var(--hairline);padding:.16rem .5rem;border-radius:4px}
+</style>
+</body></html>

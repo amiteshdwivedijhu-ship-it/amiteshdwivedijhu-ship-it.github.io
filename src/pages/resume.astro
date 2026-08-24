@@ -1,0 +1,40 @@
+---
+import { marked } from "marked";
+import md from "../content/resume.md?raw";
+import Base from "../layouts/Base.astro";
+const splitAt = md.indexOf("## TECHNICAL SKILLS");
+const intro = marked.parse(md.slice(0, splitAt));
+const body = marked.parse(md.slice(splitAt));
+---
+<Base title="Resume – Amitesh Dwivedi" description="Amitesh Dwivedi, technical product manager. Agentic AI in regulated healthcare.">
+  <header class="resume-top">
+    <div><p class="eyebrow"><a href="/">&larr; Home</a></p><h1>Résumé</h1></div>
+    <nav class="resume-actions no-print" aria-label="Resume actions">
+      <button class="pill primary" id="save-pdf" type="button">Download / save PDF</button>
+      <button class="pill" id="copy-email" type="button" data-email="amitesh.dwivedi.jhu@gmail.com">Copy email</button>
+      <a class="pill" href="https://linkedin.com/in/amiteshdwivedi/" target="_blank" rel="me noopener">LinkedIn ↗</a>
+    </nav>
+  </header>
+  <section class="resume-intro glass" aria-label="Contact and professional summary" set:html={intro} />
+  <article class="prose resume" set:html={body} />
+</Base>
+<style>
+  .resume-top{display:flex;align-items:end;justify-content:space-between;gap:1rem;margin-bottom:1.2rem}.resume-top h1{font-size:2rem;margin:.35rem 0 0}.resume-top .eyebrow{margin:0}.resume-top .eyebrow a{text-decoration:none;color:var(--muted)}
+  .resume-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:.55rem}.resume-actions button{cursor:pointer}
+  .resume-intro{display:grid;grid-template-columns:minmax(250px,.85fr) minmax(300px,1.4fr);gap:1.5rem;padding:1.4rem 1.5rem}.resume-intro :global(p){margin:0;color:var(--muted);font-size:.9rem}.resume-intro :global(p:first-child){line-height:1.55}.resume-intro :global(p:first-child strong){display:block;color:var(--ink);font-family:var(--serif);font-size:1.35rem;margin-bottom:.35rem}.resume-intro :global(a){overflow-wrap:anywhere}
+  .resume{margin-top:1.6rem}
+  .resume :global(h2){font-size:1.15rem;margin:2.2rem 0 .7rem}
+  .resume :global(em){color:var(--muted);font-style:italic}
+  .resume :global(h2:first-child + ul){display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem;padding:0;list-style:none}.resume :global(h2:first-child + ul > li){margin:0;padding:1rem;border:1px solid var(--hairline);border-radius:12px;background:rgba(0,0,0,.2);font-size:.86rem;line-height:1.55}
+  .resume :global(li strong){color:var(--ink)}
+  @media(max-width:760px){.resume-top{display:block}.resume-actions{justify-content:flex-start;margin-top:1rem}.resume-intro{grid-template-columns:1fr}.resume :global(h2:first-child + ul){grid-template-columns:1fr}}
+</style>
+<script>
+  document.querySelector<HTMLButtonElement>("#save-pdf")?.addEventListener("click", () => window.print());
+  document.querySelector<HTMLButtonElement>("#copy-email")?.addEventListener("click", async (event) => {
+    const button = event.currentTarget as HTMLButtonElement;
+    await navigator.clipboard.writeText(button.dataset.email || "");
+    const original = button.textContent; button.textContent = "Email copied";
+    setTimeout(() => { button.textContent = original; }, 1800);
+  });
+</script>

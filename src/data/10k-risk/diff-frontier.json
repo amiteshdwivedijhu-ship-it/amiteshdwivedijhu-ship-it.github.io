@@ -1,0 +1,98 @@
+{
+ "model": "claude-opus-5",
+ "tag": "frontier",
+ "issuers": [
+  {
+   "ticker": "NVDA",
+   "claims": 308,
+   "new": 5,
+   "same": 285,
+   "intensified": 15,
+   "weakened": 2,
+   "abstain": 1,
+   "rejected_citations": 0,
+   "unknown_categories": 0,
+   "unresolved_adjudications": 0,
+   "on_blocking_boundary": 191,
+   "cost_usd": 0.0
+  },
+  {
+   "ticker": "PG",
+   "claims": 126,
+   "new": 1,
+   "same": 121,
+   "intensified": 4,
+   "weakened": 0,
+   "abstain": 0,
+   "rejected_citations": 0,
+   "unknown_categories": 0,
+   "unresolved_adjudications": 0,
+   "on_blocking_boundary": 59,
+   "cost_usd": 0.0
+  },
+  {
+   "ticker": "ED",
+   "claims": 96,
+   "new": 6,
+   "same": 88,
+   "intensified": 0,
+   "weakened": 1,
+   "abstain": 1,
+   "rejected_citations": 0,
+   "unknown_categories": 0,
+   "unresolved_adjudications": 0,
+   "on_blocking_boundary": 48,
+   "cost_usd": 0.0
+  },
+  {
+   "ticker": "JPM",
+   "claims": 362,
+   "new": 9,
+   "same": 346,
+   "intensified": 6,
+   "weakened": 0,
+   "abstain": 1,
+   "rejected_citations": 0,
+   "unknown_categories": 0,
+   "unresolved_adjudications": 0,
+   "on_blocking_boundary": 188,
+   "cost_usd": 0.0
+  },
+  {
+   "ticker": "FSLR",
+   "claims": 263,
+   "new": 4,
+   "same": 251,
+   "intensified": 6,
+   "weakened": 1,
+   "abstain": 1,
+   "rejected_citations": 0,
+   "unknown_categories": 0,
+   "unresolved_adjudications": 0,
+   "on_blocking_boundary": 155,
+   "cost_usd": 2.96415775
+  },
+  {
+   "ticker": "PLD",
+   "claims": 199,
+   "new": 2,
+   "same": 192,
+   "intensified": 5,
+   "weakened": 0,
+   "abstain": 0,
+   "rejected_citations": 0,
+   "unknown_categories": 0,
+   "unresolved_adjudications": 0,
+   "on_blocking_boundary": 120,
+   "cost_usd": 3.53151575
+  }
+ ],
+ "totals": {
+  "claims": 1354,
+  "new": 27,
+  "abstain": 4,
+  "rejected_citations": 0,
+  "unknown_categories": 0,
+  "cost_usd": 6.4957
+ }
+}

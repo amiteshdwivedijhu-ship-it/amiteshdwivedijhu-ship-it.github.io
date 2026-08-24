@@ -1,0 +1,240 @@
+{
+ "model_under_test": "claude-haiku-4-5",
+ "sample_size": 200,
+ "panel_models": [
+  "gpt-5.6-luna",
+  "gemini-3.7-flash",
+  "claude-sonnet-5"
+ ],
+ "contributing_models": [
+  "gpt-5.6-luna",
+  "gemini-3.7-flash",
+  "claude-sonnet-5"
+ ],
+ "failed_batches": {
+  "gpt-5.6-luna": 0,
+  "gemini-3.7-flash": 3,
+  "claude-sonnet-5": 0
+ },
+ "agreement_all": {
+  "n": 125,
+  "fleiss_kappa": 0.848077489687684,
+  "unanimous": 0.8,
+  "gpt-5.6-luna vs gemini-3.7-flash": 0.8675057966213977,
+  "gpt-5.6-luna vs claude-sonnet-5": 0.8426631334879098,
+  "gemini-3.7-flash vs claude-sonnet-5": 0.8342614691063378
+ },
+ "agreement_cross_family": {
+  "n": 125,
+  "fleiss_kappa": 0.8674399337199669,
+  "unanimous": 0.872,
+  "gpt-5.6-luna vs gemini-3.7-flash": 0.8675057966213977
+ },
+ "correlated_error_gap": {
+  "including_same_family": 0.848077489687684,
+  "cross_family_only": 0.8674399337199669,
+  "gap": -0.019362444032282822
+ },
+ "per_category": {
+  "accounting_and_internal_controls": {
+   "n": 4,
+   "unanimous": 0.5,
+   "matches_pipeline": 1.0
+  },
+  "anti_corruption_compliance": {
+   "n": 1,
+   "unanimous": 1.0,
+   "matches_pipeline": 1.0
+  },
+  "artificial_intelligence": {
+   "n": 5,
+   "unanimous": 1.0,
+   "matches_pipeline": 0.6
+  },
+  "business_interruption": {
+   "n": 1,
+   "unanimous": 0.0,
+   "matches_pipeline": 0.0
+  },
+  "capital_return_and_dilution": {
+   "n": 2,
+   "unanimous": 1.0,
+   "matches_pipeline": 1.0
+  },
+  "climate_transition_and_policy": {
+   "n": 5,
+   "unanimous": 1.0,
+   "matches_pipeline": 0.8
+  },
+  "competition_intensity": {
+   "n": 4,
+   "unanimous": 0.75,
+   "matches_pipeline": 1.0
+  },
+  "country_specific_exposure": {
+   "n": 3,
+   "unanimous": 1.0,
+   "matches_pipeline": 0.6666666666666666
+  },
+  "credit_and_counterparty": {
+   "n": 1,
+   "unanimous": 1.0,
+   "matches_pipeline": 1.0
+  },
+  "customer_concentration": {
+   "n": 2,
+   "unanimous": 0.5,
+   "matches_pipeline": 0.5
+  },
+  "cybersecurity_incident": {
+   "n": 2,
+   "unanimous": 0.5,
+   "matches_pipeline": 1.0
+  },
+  "data_breach_and_loss": {
+   "n": 1,
+   "unanimous": 1.0,
+   "matches_pipeline": 1.0
+  },
+  "demand_volatility": {
+   "n": 7,
+   "unanimous": 0.5714285714285714,
+   "matches_pipeline": 0.8571428571428571
+  },
+  "environmental_liability": {
+   "n": 2,
+   "unanimous": 1.0,
+   "matches_pipeline": 1.0
+  },
+  "geopolitical_conflict": {
+   "n": 1,
+   "unanimous": 1.0,
+   "matches_pipeline": 1.0
+  },
+  "indebtedness_and_covenants": {
+   "n": 5,
+   "unanimous": 1.0,
+   "matches_pipeline": 1.0
+  },
+  "inflation_and_input_costs": {
+   "n": 2,
+   "unanimous": 1.0,
+   "matches_pipeline": 1.0
+  },
+  "intellectual_property": {
+   "n": 6,
+   "unanimous": 0.8333333333333334,
+   "matches_pipeline": 1.0
+  },
+  "interest_rate_exposure": {
+   "n": 3,
+   "unanimous": 0.6666666666666666,
+   "matches_pipeline": 1.0
+  },
+  "key_personnel_dependence": {
+   "n": 1,
+   "unanimous": 1.0,
+   "matches_pipeline": 1.0
+  },
+  "liquidity_and_capital_access": {
+   "n": 6,
+   "unanimous": 1.0,
+   "matches_pipeline": 0.8333333333333334
+  },
+  "litigation_and_claims": {
+   "n": 4,
+   "unanimous": 0.75,
+   "matches_pipeline": 0.75
+  },
+  "ma_and_integration": {
+   "n": 5,
+   "unanimous": 0.8,
+   "matches_pipeline": 0.8
+  },
+  "manufacturing_capacity": {
+   "n": 9,
+   "unanimous": 0.7777777777777778,
+   "matches_pipeline": 0.6666666666666666
+  },
+  "ownership_and_control": {
+   "n": 2,
+   "unanimous": 1.0,
+   "matches_pipeline": 1.0
+  },
+  "physical_climate_impacts": {
+   "n": 2,
+   "unanimous": 0.5,
+   "matches_pipeline": 1.0
+  },
+  "pricing_pressure": {
+   "n": 1,
+   "unanimous": 1.0,
+   "matches_pipeline": 1.0
+  },
+  "privacy_and_data_law": {
+   "n": 3,
+   "unanimous": 1.0,
+   "matches_pipeline": 1.0
+  },
+  "product_quality_defects": {
+   "n": 2,
+   "unanimous": 0.0,
+   "matches_pipeline": 1.0
+  },
+  "regulatory_compliance_general": {
+   "n": 1,
+   "unanimous": 0.0,
+   "matches_pipeline": 1.0
+  },
+  "sanctions_and_export_controls": {
+   "n": 4,
+   "unanimous": 1.0,
+   "matches_pipeline": 0.75
+  },
+  "sector_specific_regulation": {
+   "n": 7,
+   "unanimous": 0.7142857142857143,
+   "matches_pipeline": 0.8571428571428571
+  },
+  "share_price_volatility": {
+   "n": 2,
+   "unanimous": 1.0,
+   "matches_pipeline": 0.5
+  },
+  "supplier_concentration": {
+   "n": 3,
+   "unanimous": 0.6666666666666666,
+   "matches_pipeline": 0.3333333333333333
+  },
+  "supply_chain_disruption": {
+   "n": 2,
+   "unanimous": 0.5,
+   "matches_pipeline": 0.5
+  },
+  "talent_attraction_retention": {
+   "n": 5,
+   "unanimous": 0.8,
+   "matches_pipeline": 0.8
+  },
+  "tax_regulation": {
+   "n": 1,
+   "unanimous": 0.0,
+   "matches_pipeline": 0.0
+  },
+  "technology_infrastructure_dependence": {
+   "n": 2,
+   "unanimous": 1.0,
+   "matches_pipeline": 1.0
+  },
+  "third_party_dependence": {
+   "n": 5,
+   "unanimous": 1.0,
+   "matches_pipeline": 0.8
+  },
+  "trade_policy_and_tariffs": {
+   "n": 1,
+   "unanimous": 1.0,
+   "matches_pipeline": 1.0
+  }
+ }
+}

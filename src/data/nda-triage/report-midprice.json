@@ -1,0 +1,1102 @@
+{
+  "phase": "F follow-up \u2014 mid-price extraction eval over the Splice Fixtures",
+  "question": "Does a mid-price model clear the kill criterion (zero unacceptable-tier extraction misses) where gemini-3.7-flash missed 7/24?",
+  "fixtures_dir": "runs/phase-f/fixtures",
+  "models": {
+    "anthropic/claude-haiku-4.5": {
+      "model": "anthropic/claude-haiku-4.5",
+      "prompt_version": "v5",
+      "provider_pin": [
+        "Anthropic"
+      ],
+      "execution": "cached",
+      "spliced_fixtures": 24,
+      "splice_hits": 15,
+      "splice_hit_rate": 0.625,
+      "miss_kinds": {
+        "type_level_fn": 8,
+        "wrong_span": 1
+      },
+      "kill_criterion_misses": [
+        {
+          "fixture_id": "fix-nc-08",
+          "clause_type": "non_compete_solicit",
+          "cuad_category": "Non-Compete",
+          "miss_kind": "type_level_fn",
+          "extraction_failure": null,
+          "reported_present": false
+        },
+        {
+          "fixture_id": "fix-nc-10",
+          "clause_type": "non_compete_solicit",
+          "cuad_category": "Non-Compete",
+          "miss_kind": "type_level_fn",
+          "extraction_failure": null,
+          "reported_present": false
+        },
+        {
+          "fixture_id": "fix-nc-12",
+          "clause_type": "non_compete_solicit",
+          "cuad_category": "No-Solicit Of Customers",
+          "miss_kind": "type_level_fn",
+          "extraction_failure": null,
+          "reported_present": false
+        },
+        {
+          "fixture_id": "fix-ip-01",
+          "clause_type": "ip_assignment",
+          "cuad_category": "Ip Ownership Assignment",
+          "miss_kind": "wrong_span",
+          "extraction_failure": null,
+          "reported_present": true
+        },
+        {
+          "fixture_id": "fix-ip-02",
+          "clause_type": "ip_assignment",
+          "cuad_category": "Ip Ownership Assignment",
+          "miss_kind": "type_level_fn",
+          "extraction_failure": null,
+          "reported_present": false
+        },
+        {
+          "fixture_id": "fix-ip-04",
+          "clause_type": "ip_assignment",
+          "cuad_category": "Ip Ownership Assignment",
+          "miss_kind": "type_level_fn",
+          "extraction_failure": null,
+          "reported_present": false
+        },
+        {
+          "fixture_id": "fix-ip-06",
+          "clause_type": "ip_assignment",
+          "cuad_category": "Ip Ownership Assignment",
+          "miss_kind": "type_level_fn",
+          "extraction_failure": null,
+          "reported_present": false
+        },
+        {
+          "fixture_id": "fix-ip-11",
+          "clause_type": "ip_assignment",
+          "cuad_category": "Ip Ownership Assignment",
+          "miss_kind": "type_level_fn",
+          "extraction_failure": null,
+          "reported_present": false
+        },
+        {
+          "fixture_id": "fix-ip-12",
+          "clause_type": "ip_assignment",
+          "cuad_category": "Ip Ownership Assignment",
+          "miss_kind": "type_level_fn",
+          "extraction_failure": null,
+          "reported_present": false
+        }
+      ],
+      "clears_kill_criterion": false,
+      "control_false_positives": [
+        {
+          "fixture_id": "fix-ctl-03",
+          "false_positives": [
+            "ip_assignment"
+          ]
+        }
+      ],
+      "per_fixture": {
+        "fix-nc-01": {
+          "failure": null,
+          "unverified_spans": 0,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "governing_law",
+            "mutuality",
+            "non_compete_solicit",
+            "term_survival"
+          ],
+          "expected": {
+            "non_compete_solicit": true,
+            "ip_assignment": false
+          },
+          "splice_hit": true
+        },
+        "fix-nc-02": {
+          "failure": null,
+          "unverified_spans": 0,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "governing_law",
+            "mutuality",
+            "non_compete_solicit",
+            "term_survival"
+          ],
+          "expected": {
+            "non_compete_solicit": true,
+            "ip_assignment": false
+          },
+          "splice_hit": true
+        },
+        "fix-nc-03": {
+          "failure": null,
+          "unverified_spans": 0,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "governing_law",
+            "ip_assignment",
+            "mutuality",
+            "non_compete_solicit",
+            "term_survival"
+          ],
+          "expected": {
+            "non_compete_solicit": true,
+            "ip_assignment": false
+          },
+          "splice_hit": true
+        },
+        "fix-nc-04": {
+          "failure": null,
+          "unverified_spans": 0,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "governing_law",
+            "mutuality",
+            "non_compete_solicit",
+            "term_survival"
+          ],
+          "expected": {
+            "non_compete_solicit": true,
+            "ip_assignment": false
+          },
+          "splice_hit": true
+        },
+        "fix-nc-05": {
+          "failure": null,
+          "unverified_spans": 1,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "mutuality",
+            "non_compete_solicit",
+            "term_survival"
+          ],
+          "expected": {
+            "non_compete_solicit": true,
+            "ip_assignment": false
+          },
+          "splice_hit": true
+        },
+        "fix-nc-06": {
+          "failure": null,
+          "unverified_spans": 1,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "governing_law",
+            "mutuality",
+            "non_compete_solicit",
+            "term_survival"
+          ],
+          "expected": {
+            "non_compete_solicit": true,
+            "ip_assignment": false
+          },
+          "splice_hit": true
+        },
+        "fix-nc-07": {
+          "failure": null,
+          "unverified_spans": 0,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "mutuality",
+            "non_compete_solicit",
+            "term_survival"
+          ],
+          "expected": {
+            "non_compete_solicit": true,
+            "ip_assignment": false
+          },
+          "splice_hit": true
+        },
+        "fix-nc-08": {
+          "failure": null,
+          "unverified_spans": 0,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "governing_law",
+            "mutuality",
+            "term_survival"
+          ],
+          "expected": {
+            "non_compete_solicit": true,
+            "ip_assignment": false
+          },
+          "splice_hit": false,
+          "miss_kind": "type_level_fn"
+        },
+        "fix-nc-09": {
+          "failure": null,
+          "unverified_spans": 0,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "governing_law",
+            "mutuality",
+            "non_compete_solicit",
+            "term_survival"
+          ],
+          "expected": {
+            "non_compete_solicit": true,
+            "ip_assignment": false
+          },
+          "splice_hit": true
+        },
+        "fix-nc-10": {
+          "failure": null,
+          "unverified_spans": 0,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "governing_law",
+            "mutuality",
+            "term_survival"
+          ],
+          "expected": {
+            "non_compete_solicit": true,
+            "ip_assignment": false
+          },
+          "splice_hit": false,
+          "miss_kind": "type_level_fn"
+        },
+        "fix-nc-11": {
+          "failure": null,
+          "unverified_spans": 0,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "governing_law",
+            "mutuality",
+            "non_compete_solicit"
+          ],
+          "expected": {
+            "non_compete_solicit": true,
+            "ip_assignment": false
+          },
+          "splice_hit": true
+        },
+        "fix-nc-12": {
+          "failure": null,
+          "unverified_spans": 0,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "governing_law",
+            "mutuality",
+            "term_survival"
+          ],
+          "expected": {
+            "non_compete_solicit": true,
+            "ip_assignment": false
+          },
+          "splice_hit": false,
+          "miss_kind": "type_level_fn"
+        },
+        "fix-ip-01": {
+          "failure": null,
+          "unverified_spans": 0,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "governing_law",
+            "ip_assignment",
+            "mutuality",
+            "term_survival"
+          ],
+          "expected": {
+            "non_compete_solicit": false,
+            "ip_assignment": true
+          },
+          "splice_hit": false,
+          "miss_kind": "wrong_span"
+        },
+        "fix-ip-02": {
+          "failure": null,
+          "unverified_spans": 0,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "term_survival"
+          ],
+          "expected": {
+            "non_compete_solicit": false,
+            "ip_assignment": true
+          },
+          "splice_hit": false,
+          "miss_kind": "type_level_fn"
+        },
+        "fix-ip-03": {
+          "failure": null,
+          "unverified_spans": 0,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "ip_assignment",
+            "mutuality",
+            "term_survival"
+          ],
+          "expected": {
+            "non_compete_solicit": false,
+            "ip_assignment": true
+          },
+          "splice_hit": true
+        },
+        "fix-ip-04": {
+          "failure": null,
+          "unverified_spans": 0,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "governing_law",
+            "mutuality",
+            "term_survival"
+          ],
+          "expected": {
+            "non_compete_solicit": false,
+            "ip_assignment": true
+          },
+          "splice_hit": false,
+          "miss_kind": "type_level_fn"
+        },
+        "fix-ip-05": {
+          "failure": null,
+          "unverified_spans": 0,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "ip_assignment",
+            "mutuality",
+            "term_survival"
+          ],
+          "expected": {
+            "non_compete_solicit": false,
+            "ip_assignment": true
+          },
+          "splice_hit": true
+        },
+        "fix-ip-06": {
+          "failure": null,
+          "unverified_spans": 0,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "governing_law",
+            "mutuality",
+            "non_compete_solicit",
+            "term_survival"
+          ],
+          "expected": {
+            "non_compete_solicit": false,
+            "ip_assignment": true
+          },
+          "splice_hit": false,
+          "miss_kind": "type_level_fn"
+        },
+        "fix-ip-07": {
+          "failure": null,
+          "unverified_spans": 0,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "governing_law",
+            "ip_assignment",
+            "mutuality",
+            "term_survival"
+          ],
+          "expected": {
+            "non_compete_solicit": false,
+            "ip_assignment": true
+          },
+          "splice_hit": true
+        },
+        "fix-ip-08": {
+          "failure": null,
+          "unverified_spans": 0,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "governing_law",
+            "ip_assignment",
+            "mutuality",
+            "non_compete_solicit",
+            "term_survival"
+          ],
+          "expected": {
+            "non_compete_solicit": false,
+            "ip_assignment": true
+          },
+          "splice_hit": true
+        },
+        "fix-ip-09": {
+          "failure": null,
+          "unverified_spans": 0,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "governing_law",
+            "ip_assignment",
+            "mutuality",
+            "non_compete_solicit",
+            "term_survival"
+          ],
+          "expected": {
+            "non_compete_solicit": false,
+            "ip_assignment": true
+          },
+          "splice_hit": true
+        },
+        "fix-ip-10": {
+          "failure": null,
+          "unverified_spans": 0,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "governing_law",
+            "ip_assignment",
+            "mutuality",
+            "term_survival"
+          ],
+          "expected": {
+            "non_compete_solicit": false,
+            "ip_assignment": true
+          },
+          "splice_hit": true
+        },
+        "fix-ip-11": {
+          "failure": null,
+          "unverified_spans": 0,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "governing_law",
+            "mutuality",
+            "non_compete_solicit",
+            "term_survival"
+          ],
+          "expected": {
+            "non_compete_solicit": false,
+            "ip_assignment": true
+          },
+          "splice_hit": false,
+          "miss_kind": "type_level_fn"
+        },
+        "fix-ip-12": {
+          "failure": null,
+          "unverified_spans": 0,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "governing_law",
+            "mutuality",
+            "term_survival"
+          ],
+          "expected": {
+            "non_compete_solicit": false,
+            "ip_assignment": true
+          },
+          "splice_hit": false,
+          "miss_kind": "type_level_fn"
+        },
+        "fix-ctl-01": {
+          "failure": null,
+          "unverified_spans": 0,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "governing_law",
+            "mutuality",
+            "term_survival"
+          ],
+          "expected": {
+            "non_compete_solicit": false,
+            "ip_assignment": false
+          },
+          "control_false_positives": []
+        },
+        "fix-ctl-02": {
+          "failure": null,
+          "unverified_spans": 0,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "governing_law",
+            "mutuality",
+            "term_survival"
+          ],
+          "expected": {
+            "non_compete_solicit": false,
+            "ip_assignment": false
+          },
+          "control_false_positives": []
+        },
+        "fix-ctl-03": {
+          "failure": null,
+          "unverified_spans": 0,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "ip_assignment",
+            "mutuality",
+            "term_survival"
+          ],
+          "expected": {
+            "non_compete_solicit": false,
+            "ip_assignment": false
+          },
+          "control_false_positives": [
+            "ip_assignment"
+          ]
+        },
+        "fix-ctl-04": {
+          "failure": null,
+          "unverified_spans": 0,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "mutuality"
+          ],
+          "expected": {
+            "non_compete_solicit": false,
+            "ip_assignment": false
+          },
+          "control_false_positives": []
+        },
+        "fix-ctl-05": {
+          "failure": null,
+          "unverified_spans": 0,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "governing_law",
+            "term_survival"
+          ],
+          "expected": {
+            "non_compete_solicit": false,
+            "ip_assignment": false
+          },
+          "control_false_positives": []
+        },
+        "fix-ctl-06": {
+          "failure": null,
+          "unverified_spans": 0,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "governing_law",
+            "mutuality",
+            "term_survival"
+          ],
+          "expected": {
+            "non_compete_solicit": false,
+            "ip_assignment": false
+          },
+          "control_false_positives": []
+        }
+      },
+      "cost_usd": 0.145991
+    },
+    "anthropic/claude-sonnet-5": {
+      "model": "anthropic/claude-sonnet-5",
+      "prompt_version": "v5",
+      "provider_pin": [
+        "Anthropic"
+      ],
+      "execution": "cached",
+      "spliced_fixtures": 24,
+      "splice_hits": 21,
+      "splice_hit_rate": 0.875,
+      "miss_kinds": {
+        "type_level_fn": 2,
+        "wrong_span": 1
+      },
+      "kill_criterion_misses": [
+        {
+          "fixture_id": "fix-nc-08",
+          "clause_type": "non_compete_solicit",
+          "cuad_category": "Non-Compete",
+          "miss_kind": "type_level_fn",
+          "extraction_failure": null,
+          "reported_present": false
+        },
+        {
+          "fixture_id": "fix-ip-01",
+          "clause_type": "ip_assignment",
+          "cuad_category": "Ip Ownership Assignment",
+          "miss_kind": "wrong_span",
+          "extraction_failure": null,
+          "reported_present": true
+        },
+        {
+          "fixture_id": "fix-ip-11",
+          "clause_type": "ip_assignment",
+          "cuad_category": "Ip Ownership Assignment",
+          "miss_kind": "type_level_fn",
+          "extraction_failure": null,
+          "reported_present": false
+        }
+      ],
+      "clears_kill_criterion": false,
+      "control_false_positives": [],
+      "per_fixture": {
+        "fix-nc-01": {
+          "failure": null,
+          "unverified_spans": 0,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "governing_law",
+            "mutuality",
+            "non_compete_solicit",
+            "term_survival"
+          ],
+          "expected": {
+            "non_compete_solicit": true,
+            "ip_assignment": false
+          },
+          "splice_hit": true
+        },
+        "fix-nc-02": {
+          "failure": null,
+          "unverified_spans": 0,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "governing_law",
+            "mutuality",
+            "non_compete_solicit",
+            "term_survival"
+          ],
+          "expected": {
+            "non_compete_solicit": true,
+            "ip_assignment": false
+          },
+          "splice_hit": true
+        },
+        "fix-nc-03": {
+          "failure": null,
+          "unverified_spans": 0,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "governing_law",
+            "mutuality",
+            "non_compete_solicit",
+            "term_survival"
+          ],
+          "expected": {
+            "non_compete_solicit": true,
+            "ip_assignment": false
+          },
+          "splice_hit": true
+        },
+        "fix-nc-04": {
+          "failure": null,
+          "unverified_spans": 0,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "governing_law",
+            "mutuality",
+            "non_compete_solicit",
+            "term_survival"
+          ],
+          "expected": {
+            "non_compete_solicit": true,
+            "ip_assignment": false
+          },
+          "splice_hit": true
+        },
+        "fix-nc-05": {
+          "failure": null,
+          "unverified_spans": 0,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "mutuality",
+            "non_compete_solicit",
+            "term_survival"
+          ],
+          "expected": {
+            "non_compete_solicit": true,
+            "ip_assignment": false
+          },
+          "splice_hit": true
+        },
+        "fix-nc-06": {
+          "failure": null,
+          "unverified_spans": 0,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "governing_law",
+            "mutuality",
+            "non_compete_solicit",
+            "term_survival"
+          ],
+          "expected": {
+            "non_compete_solicit": true,
+            "ip_assignment": false
+          },
+          "splice_hit": true
+        },
+        "fix-nc-07": {
+          "failure": null,
+          "unverified_spans": 0,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "mutuality",
+            "non_compete_solicit",
+            "term_survival"
+          ],
+          "expected": {
+            "non_compete_solicit": true,
+            "ip_assignment": false
+          },
+          "splice_hit": true
+        },
+        "fix-nc-08": {
+          "failure": null,
+          "unverified_spans": 0,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "governing_law",
+            "mutuality",
+            "term_survival"
+          ],
+          "expected": {
+            "non_compete_solicit": true,
+            "ip_assignment": false
+          },
+          "splice_hit": false,
+          "miss_kind": "type_level_fn"
+        },
+        "fix-nc-09": {
+          "failure": null,
+          "unverified_spans": 1,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "governing_law",
+            "mutuality",
+            "non_compete_solicit",
+            "term_survival"
+          ],
+          "expected": {
+            "non_compete_solicit": true,
+            "ip_assignment": false
+          },
+          "splice_hit": true
+        },
+        "fix-nc-10": {
+          "failure": null,
+          "unverified_spans": 0,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "governing_law",
+            "mutuality",
+            "non_compete_solicit",
+            "term_survival"
+          ],
+          "expected": {
+            "non_compete_solicit": true,
+            "ip_assignment": false
+          },
+          "splice_hit": true
+        },
+        "fix-nc-11": {
+          "failure": null,
+          "unverified_spans": 0,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "governing_law",
+            "mutuality",
+            "non_compete_solicit"
+          ],
+          "expected": {
+            "non_compete_solicit": true,
+            "ip_assignment": false
+          },
+          "splice_hit": true
+        },
+        "fix-nc-12": {
+          "failure": null,
+          "unverified_spans": 0,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "governing_law",
+            "mutuality",
+            "non_compete_solicit",
+            "term_survival"
+          ],
+          "expected": {
+            "non_compete_solicit": true,
+            "ip_assignment": false
+          },
+          "splice_hit": true
+        },
+        "fix-ip-01": {
+          "failure": null,
+          "unverified_spans": 0,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "governing_law",
+            "ip_assignment",
+            "mutuality",
+            "term_survival"
+          ],
+          "expected": {
+            "non_compete_solicit": false,
+            "ip_assignment": true
+          },
+          "splice_hit": false,
+          "miss_kind": "wrong_span"
+        },
+        "fix-ip-02": {
+          "failure": null,
+          "unverified_spans": 0,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "ip_assignment",
+            "mutuality",
+            "term_survival"
+          ],
+          "expected": {
+            "non_compete_solicit": false,
+            "ip_assignment": true
+          },
+          "splice_hit": true
+        },
+        "fix-ip-03": {
+          "failure": null,
+          "unverified_spans": 0,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "ip_assignment",
+            "mutuality",
+            "term_survival"
+          ],
+          "expected": {
+            "non_compete_solicit": false,
+            "ip_assignment": true
+          },
+          "splice_hit": true
+        },
+        "fix-ip-04": {
+          "failure": null,
+          "unverified_spans": 0,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "governing_law",
+            "ip_assignment",
+            "mutuality",
+            "term_survival"
+          ],
+          "expected": {
+            "non_compete_solicit": false,
+            "ip_assignment": true
+          },
+          "splice_hit": true
+        },
+        "fix-ip-05": {
+          "failure": null,
+          "unverified_spans": 0,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "ip_assignment",
+            "mutuality",
+            "non_compete_solicit",
+            "term_survival"
+          ],
+          "expected": {
+            "non_compete_solicit": false,
+            "ip_assignment": true
+          },
+          "splice_hit": true
+        },
+        "fix-ip-06": {
+          "failure": null,
+          "unverified_spans": 0,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "governing_law",
+            "ip_assignment",
+            "mutuality",
+            "non_compete_solicit",
+            "term_survival"
+          ],
+          "expected": {
+            "non_compete_solicit": false,
+            "ip_assignment": true
+          },
+          "splice_hit": true
+        },
+        "fix-ip-07": {
+          "failure": null,
+          "unverified_spans": 0,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "governing_law",
+            "ip_assignment",
+            "mutuality",
+            "term_survival"
+          ],
+          "expected": {
+            "non_compete_solicit": false,
+            "ip_assignment": true
+          },
+          "splice_hit": true
+        },
+        "fix-ip-08": {
+          "failure": null,
+          "unverified_spans": 0,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "governing_law",
+            "ip_assignment",
+            "mutuality",
+            "non_compete_solicit",
+            "term_survival"
+          ],
+          "expected": {
+            "non_compete_solicit": false,
+            "ip_assignment": true
+          },
+          "splice_hit": true
+        },
+        "fix-ip-09": {
+          "failure": null,
+          "unverified_spans": 0,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "governing_law",
+            "ip_assignment",
+            "mutuality",
+            "non_compete_solicit",
+            "term_survival"
+          ],
+          "expected": {
+            "non_compete_solicit": false,
+            "ip_assignment": true
+          },
+          "splice_hit": true
+        },
+        "fix-ip-10": {
+          "failure": null,
+          "unverified_spans": 0,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "governing_law",
+            "ip_assignment",
+            "mutuality",
+            "term_survival"
+          ],
+          "expected": {
+            "non_compete_solicit": false,
+            "ip_assignment": true
+          },
+          "splice_hit": true
+        },
+        "fix-ip-11": {
+          "failure": null,
+          "unverified_spans": 0,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "governing_law",
+            "mutuality",
+            "term_survival"
+          ],
+          "expected": {
+            "non_compete_solicit": false,
+            "ip_assignment": true
+          },
+          "splice_hit": false,
+          "miss_kind": "type_level_fn"
+        },
+        "fix-ip-12": {
+          "failure": null,
+          "unverified_spans": 0,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "governing_law",
+            "ip_assignment",
+            "mutuality",
+            "term_survival"
+          ],
+          "expected": {
+            "non_compete_solicit": false,
+            "ip_assignment": true
+          },
+          "splice_hit": true
+        },
+        "fix-ctl-01": {
+          "failure": null,
+          "unverified_spans": 0,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "governing_law",
+            "mutuality",
+            "term_survival"
+          ],
+          "expected": {
+            "non_compete_solicit": false,
+            "ip_assignment": false
+          },
+          "control_false_positives": []
+        },
+        "fix-ctl-02": {
+          "failure": null,
+          "unverified_spans": 0,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "governing_law",
+            "mutuality",
+            "term_survival"
+          ],
+          "expected": {
+            "non_compete_solicit": false,
+            "ip_assignment": false
+          },
+          "control_false_positives": []
+        },
+        "fix-ctl-03": {
+          "failure": null,
+          "unverified_spans": 0,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "mutuality",
+            "term_survival"
+          ],
+          "expected": {
+            "non_compete_solicit": false,
+            "ip_assignment": false
+          },
+          "control_false_positives": []
+        },
+        "fix-ctl-04": {
+          "failure": null,
+          "unverified_spans": 0,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "mutuality"
+          ],
+          "expected": {
+            "non_compete_solicit": false,
+            "ip_assignment": false
+          },
+          "control_false_positives": []
+        },
+        "fix-ctl-05": {
+          "failure": null,
+          "unverified_spans": 0,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "governing_law",
+            "mutuality",
+            "term_survival"
+          ],
+          "expected": {
+            "non_compete_solicit": false,
+            "ip_assignment": false
+          },
+          "control_false_positives": []
+        },
+        "fix-ctl-06": {
+          "failure": null,
+          "unverified_spans": 0,
+          "found_clause_types": [
+            "confidentiality_definition",
+            "governing_law",
+            "mutuality",
+            "term_survival"
+          ],
+          "expected": {
+            "non_compete_solicit": false,
+            "ip_assignment": false
+          },
+          "control_false_positives": []
+        }
+      },
+      "cost_usd": 0.695451
+    }
+  },
+  "cost": {
+    "ledger_spend_at_start_usd": 18.57106,
+    "ledger_spend_at_end_usd": 18.57106,
+    "new_spend_usd": 0.841441,
+    "new_spend_cap_usd": 2.0
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "source": "NDA Risk Extractor /runs/cost-ledger.jsonl",
+  "note": "Sum of estimated_cost_usd over every ledger entry, computed 2026-08-23. The ledger_total_spend_usd field in sweep.json predates phases F and G and is stale; this is the project-wide total the eval report cites.",
+  "entries": 1530,
+  "total_estimated_cost_usd": 21.8329,
+  "ceiling_usd": 50.0
+}

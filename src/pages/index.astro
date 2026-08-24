@@ -1,0 +1,65 @@
+---
+import Base from "../layouts/Base.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+import { PROJECTS } from "../lib/site";
+---
+<Base title="Amitesh Dwivedi">
+  <section class="hero">
+    <p class="eyebrow rise" style="margin:0 0 .65rem">Technical PM that builds and evaluates AI agents</p>
+    <h1 class="rise" style="font-size:clamp(1.9rem,4.2vw,2.45rem);line-height:1.16;letter-spacing:-.028em;margin:0 0 1.25rem;max-width:34rem">
+      Hi, I'm Amitesh. I build AI products.
+    </h1>
+
+    <div class="editorial-card glass rise" style="--delay:90ms">
+      <p style="margin:0 0 .85rem">I build agentic AI products. At Ellipsis Health I took a clinical voice
+      care management platform from zero to production across 10+ enterprise healthcare accounts, including
+      Aetna, Duke and Highmark, and founded the agent evaluation function: the check every clinical
+      agent passes before it launches.</p>
+      <p style="margin:0;color:var(--muted)">I turn high-stakes workflows into products teams can evaluate, trust, and improve. Each project shows the product logic, the prototype, and the evidence behind it.</p>
+    </div>
+
+    <div class="approach rise" style="--delay:140ms">
+      <p class="approach-label">How I work</p>
+      <p>I start with the decision someone needs to make, turn it into a focused agent workflow, and build the smallest useful product. Then I test it against real cases, edge conditions, and failure modes.</p>
+    </div>
+
+    <nav class="rise hero-actions" style="--delay:180ms" aria-label="Introduction links">
+      <a class="pill primary" href="#projects">View the work</a>
+      <a class="pill" href="/resume/">Resume</a>
+      <a class="pill" href="https://linkedin.com/in/amiteshdwivedi/" rel="me noopener" target="_blank">LinkedIn ↗</a>
+    </nav>
+  </section>
+
+  <section id="projects" style="scroll-margin-top:8rem">
+    <p class="eyebrow rise" style="--delay:240ms;margin:0 0 .55rem">Selected work</p>
+    <h2 class="rise work-title" style="--delay:260ms">Three working AI prototypes, from workflow design through evaluation.</h2>
+    <p class="rise work-intro" style="--delay:280ms">Healthcare, markets, and legal workflows. Each project includes the product strategy, a working prototype, and the full test record.</p>
+    <div class="project-grid">
+      {PROJECTS.map((p, i) => <ProjectCard project={p} delay={320 + i * 80} />)}
+    </div>
+  </section>
+</Base>
+<style>
+  .hero{padding-bottom:3rem}
+  .editorial-card{padding:1.55rem 1.7rem;max-width:45rem;margin:0 0 .9rem}
+  .approach{display:grid;grid-template-columns:7rem minmax(0,1fr);gap:1.2rem;max-width:45rem;padding:1rem 0;border-block:1px solid var(--hairline);margin:0 0 1.05rem}
+  .approach p{margin:0}
+  .approach-label{font-family:var(--mono);font-size:.72rem;line-height:1.6;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+  .approach p:last-child{font-size:.86rem;line-height:1.55;color:var(--muted)}
+  .hero-actions{display:flex;gap:.65rem;flex-wrap:wrap}
+  .work-title{font-size:clamp(1.55rem,3vw,2rem);line-height:1.2;letter-spacing:-.02em;margin:0 0 .65rem;max-width:38rem}
+  .work-intro{color:var(--muted);max-width:42rem;margin:0 0 1.4rem}
+  .project-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(265px,1fr));gap:1.1rem}
+  @media(max-width:620px){
+    .approach{grid-template-columns:1fr;gap:.45rem}
+  }
+</style>
+<script>
+  document.querySelectorAll<HTMLElement>(".card").forEach((c) =>
+    c.addEventListener("pointermove", (e) => {
+      const r = c.getBoundingClientRect();
+      c.style.setProperty("--mx", `${((e.clientX - r.left) / r.width) * 100}%`);
+      c.style.setProperty("--my", `${((e.clientY - r.top) / r.height) * 100}%`);
+    })
+  );
+</script>

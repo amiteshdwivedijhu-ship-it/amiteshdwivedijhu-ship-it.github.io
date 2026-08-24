@@ -1,0 +1,69 @@
+{
+ "model": "claude-haiku-4-5",
+ "passes": 3,
+ "issuers": [
+  {
+   "ticker": "PLD",
+   "claim_counts": [
+    189,
+    194,
+    194
+   ],
+   "new_counts": [
+    1,
+    2,
+    3
+   ],
+   "abstain_counts": [
+    0,
+    0,
+    0
+   ],
+   "mean_jaccard": 0.5,
+   "consensus_ratio": 0.3333,
+   "cost_usd": 2.0426
+  },
+  {
+   "ticker": "ED",
+   "claim_counts": [
+    93,
+    97,
+    91
+   ],
+   "new_counts": [
+    5,
+    8,
+    6
+   ],
+   "abstain_counts": [
+    0,
+    0,
+    0
+   ],
+   "mean_jaccard": 0.9167,
+   "consensus_ratio": 0.875,
+   "cost_usd": 1.0894
+  },
+  {
+   "ticker": "BA",
+   "claim_counts": [
+    198,
+    193,
+    198
+   ],
+   "new_counts": [
+    3,
+    1,
+    4
+   ],
+   "abstain_counts": [
+    1,
+    1,
+    1
+   ],
+   "mean_jaccard": 0.0952,
+   "consensus_ratio": 0.0,
+   "cost_usd": 2.2941
+  }
+ ]
+}

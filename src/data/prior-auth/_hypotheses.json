@@ -1,0 +1,203 @@
+{
+  "H1": {
+    "claim": "full context beats retrieval on met-recall by > 5pp",
+    "full_context": {
+      "value": 0.9553571428571429,
+      "k": 107,
+      "n": 112,
+      "wilson95": [
+        0.8997310305512356,
+        0.9807827421950184
+      ]
+    },
+    "retrieval": {
+      "value": 0.9107142857142857,
+      "k": 102,
+      "n": 112,
+      "wilson95": [
+        0.8434104229177722,
+        0.9507784701474765
+      ]
+    },
+    "delta_pp": 4.464285714285721,
+    "confirmed": false,
+    "note": "compared on golden Criteria Sets so the only difference is what the generator could see"
+  },
+  "H2": {
+    "claim": "escalating the lowest-confidence ~15% of pairs recovers >75% of the all-LLM catch-rate at <25% of its cost",
+    "threshold_used": 0.5,
+    "escalated_fraction": 0.13725490196078433,
+    "catch_rate_recovery": 1.0,
+    "cost_fraction": 0.13725490196078433,
+    "recovery_over_75pct": true,
+    "cost_under_25pct": true,
+    "confirmed": true,
+    "interpretation": {
+      "tier1_only_catch_rate": 0.9848484848484849,
+      "tier1_only_false_rejection_rate": 0.6666666666666666,
+      "escalated_false_rejection_rate": 0.5833333333333334,
+      "all_llm_false_rejection_rate": 0.09722222222222222,
+      "note": "catch-rate is already ~99% at zero LLM cost, so the pre-registered recovery threshold is nearly unfalsifiable here. The measurable benefit of escalation on this corpus is the false-rejection rate, which is NOT what H2 registered."
+    }
+  },
+  "H3": {
+    "claim": "Stage 1 error propagates sub-linearly: propagation delta < Stage 1 criteria error",
+    "propagation_delta": 0.027363184079602032,
+    "stage1_criteria_recall_error": 0.22784810126582278,
+    "stage1_criteria_precision_error": 0.3296703296703297,
+    "golden_accuracy": {
+      "value": 0.9577114427860697,
+      "k": 385,
+      "n": 402,
+      "wilson95": [
+        0.9333260433147886,
+        0.9734319823792689
+      ]
+    },
+    "extracted_accuracy": {
+      "value": 0.9303482587064676,
+      "k": 374,
+      "n": 402,
+      "wilson95": [
+        0.9011759200098822,
+        0.9513737454524652
+      ]
+    },
+    "confirmed": true
+  },
+  "H4": {
+    "claim": "met-precision is higher on clean and deficient strata than on borderline, by a margin exceeding the CI",
+    "by_stratum": {
+      "borderline": {
+        "value": 0.875,
+        "k": 21,
+        "n": 24,
+        "wilson95": [
+          0.6899611855484453,
+          0.9565566595380588
+        ],
+        "pass": false
+      },
+      "clean": {
+        "value": 0.9545454545454546,
+        "k": 42,
+        "n": 44,
+        "wilson95": [
+          0.8486500144514563,
+          0.9874448901635516
+        ],
+        "pass": false
+      },
+      "deficient": {
+        "value": 0.9565217391304348,
+        "k": 44,
+        "n": 46,
+        "wilson95": [
+          0.8546774086050316,
+          0.9879945545096221
+        ],
+        "pass": false
+      }
+    },
+    "clean_plus_deficient_pooled": {
+      "value": 0.9555555555555556,
+      "k": 86,
+      "n": 90,
+      "wilson95": [
+        0.891231448986594,
+        0.9825827582682745
+      ]
+    },
+    "borderline": {
+      "value": 0.875,
+      "k": 21,
+      "n": 24,
+      "wilson95": [
+        0.6899611855484453,
+        0.9565566595380588
+      ],
+      "pass": false
+    },
+    "confirmed": false,
+    "note": "confirmation requires non-overlapping Wilson intervals, which is what 'a margin exceeding the CI' means"
+  },
+  "H5": {
+    "claim": "routing deterministic Criteria away from the model cuts cost per Case by > 15% with no accuracy loss exceeding the CI",
+    "cost_proxy": "model calls per Case",
+    "routing_on": {
+      "model_calls": 307,
+      "determinations": 402,
+      "cases": 20,
+      "calls_per_case": 15.35
+    },
+    "routing_off": {
+      "model_calls": 402,
+      "determinations": 402,
+      "cases": 20,
+      "calls_per_case": 20.1
+    },
+    "model_call_reduction": 0.236318407960199,
+    "accuracy_routing_on": {
+      "value": 0.9577114427860697,
+      "k": 385,
+      "n": 402,
+      "wilson95": [
+        0.9333260433147886,
+        0.9734319823792689
+      ]
+    },
+    "accuracy_routing_off": {
+      "value": 0.9477611940298507,
+      "k": 381,
+      "n": 402,
+      "wilson95": [
+        0.9214640548767037,
+        0.9655818398240046
+      ]
+    },
+    "accuracy_intervals_overlap": true,
+    "reduction_over_15pct": true,
+    "confirmed": true
+  },
+  "H6": {
+    "claim": "identical therapy evidence yields different Determinations under Policies that differ on a criterion's strictness; the same Determination under both is a failure regardless of accuracy",
+    "pairs": [
+      {
+        "commercial": {
+          "case": "C004",
+          "criterion": "A06",
+          "returned": "unmet",
+          "golden": "unmet"
+        },
+        "medicare": {
+          "case": "C017",
+          "criterion": "K08",
+          "returned": "met",
+          "golden": "non-determinable"
+        },
+        "diverged": true,
+        "commercial_unmet_as_predicted": true,
+        "medicare_not_unmet_as_predicted": true
+      },
+      {
+        "commercial": {
+          "case": "C012",
+          "criterion": "G10",
+          "returned": "unmet",
+          "golden": "unmet"
+        },
+        "medicare": {
+          "case": "C018",
+          "criterion": "K08",
+          "returned": "met",
+          "golden": "non-determinable"
+        },
+        "diverged": true,
+        "commercial_unmet_as_predicted": true,
+        "medicare_not_unmet_as_predicted": true
+      }
+    ],
+    "confirmed": true,
+    "directionally_as_predicted": true
+  }
+}

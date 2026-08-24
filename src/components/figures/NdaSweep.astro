@@ -1,0 +1,50 @@
+---
+/* Absence precision and recall across search budgets, from the committed sweep. */
+import sweep from "../../data/nda-triage/sweep.json";
+
+const levels = Object.entries((sweep as any).levels)
+  .map(([b, l]: [string, any]) => ({
+    budget: Number(b),
+    precision: l.absence_precision as number,
+    recall: l.absence_recall as number,
+  }))
+  .sort((a, b) => a.budget - b.budget);
+
+const LO = 0.7, HI = 1.0;
+const X0 = 56, X1 = 596, Y0 = 18, Y1 = 196, W = 640, H = 232;
+const x = (i: number) => X0 + (i / (levels.length - 1)) * (X1 - X0);
+const y = (v: number) => Y1 - ((v - LO) / (HI - LO)) * (Y1 - Y0);
+const ticks = [0.7, 0.8, 0.9, 1.0];
+const pts = (k: "precision" | "recall") => levels.map((l, i) => `${x(i)},${y(l[k])}`).join(" ");
+---
+<svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label="Absence precision and recall across search budgets 3, 5, and 8">
+  {ticks.map((tv) => (
+    <g>
+      <line x1={X0} y1={y(tv)} x2={X1} y2={y(tv)} stroke="rgba(255,255,255,.07)" stroke-width="1" />
+      <text x={X0 - 8} y={y(tv) + 4} text-anchor="end" class="flbl" fill="var(--dim)">{tv.toFixed(1)}</text>
+    </g>
+  ))}
+  <polyline points={pts("precision")} fill="none" stroke="var(--accent)" stroke-width="2" />
+  <polyline points={pts("recall")} fill="none" stroke="var(--alarm)" stroke-width="2" />
+  {levels.map((l, i) => (
+    <g>
+      <circle cx={x(i)} cy={y(l.precision)} r="4.5" fill="var(--accent)" />
+      <circle cx={x(i)} cy={y(l.recall)} r="4.5" fill="var(--alarm)" />
+      {i === 0
+        ? <text x={x(i) + 11} y={y(l.precision) + 4} class="flbl" fill="var(--accent)">{l.precision.toFixed(3)}</text>
+        : <text x={x(i)} y={y(l.precision) - 10} text-anchor="middle" class="flbl" fill="var(--accent)">{l.precision.toFixed(3)}</text>}
+      <text x={x(i)} y={y(l.recall) + 18} text-anchor="middle" class="flbl" fill="var(--alarm)">{l.recall.toFixed(3)}</text>
+      <text x={x(i)} y={H - 6} text-anchor="middle" class="flbl" fill="var(--dim)">budget {l.budget}</text>
+    </g>
+  ))}
+  <g>
+    <line x1={X0} y1={4} x2={X0 + 16} y2={4} stroke="var(--accent)" stroke-width="2" />
+    <text x={X0 + 22} y={8} class="flbl" fill="var(--muted)">absence precision</text>
+    <line x1={X0 + 168} y1={4} x2={X0 + 184} y2={4} stroke="var(--alarm)" stroke-width="2" />
+    <text x={X0 + 190} y={8} class="flbl" fill="var(--muted)">absence recall</text>
+  </g>
+</svg>
+<style>
+  svg{width:100%;height:auto;display:block}
+  .flbl{font-family:var(--mono);font-size:10.5px;letter-spacing:.02em}
+</style>

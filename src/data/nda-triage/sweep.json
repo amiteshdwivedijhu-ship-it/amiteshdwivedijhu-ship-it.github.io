@@ -1,0 +1,109 @@
+{
+  "phase": "D \u2014 Search Budget sweep",
+  "model": "google/gemini-3.7-flash",
+  "provider_pin": [
+    "Google"
+  ],
+  "prompt_version": "v5",
+  "temperature": 0.0,
+  "split": "dev (40-doc stratified slice, seed=42 \u2014 same as phase C)",
+  "budgets": [
+    3,
+    5,
+    8
+  ],
+  "budget_3_note": "Budget 3 was not re-run: trajectories and cost are the phase-C bake-off cache for this model/prompt/slice, copied into runs/phase-d/flash/budget-3/.",
+  "levels": {
+    "3": {
+      "search_budget": 3,
+      "phase": "bakeoff-absence (phase C, reused)",
+      "documents": 40,
+      "absence_precision": 0.9791666666666666,
+      "absence_recall": 0.7833333333333333,
+      "gold_absent_items": 60,
+      "correctly_declared_absent": 47,
+      "false_absence_count": 1,
+      "budget_exhausted_runs": 11,
+      "scored_runs": 29,
+      "fabricated_spans": 1,
+      "termination_states": {
+        "exhaustive": 29,
+        "budget_exhausted": 11
+      },
+      "invariant_pass_rates": {
+        "INV-1": 1.0,
+        "INV-2": 0.15,
+        "INV-3": 1.0,
+        "INV-4": 1.0
+      },
+      "latency_per_doc": {
+        "p50_ms": 10661.0,
+        "p95_ms": 15882.0
+      },
+      "cost_usd_ledger": 0.349094,
+      "cost_per_doc_usd": 0.008727,
+      "run_failures": []
+    },
+    "5": {
+      "search_budget": 5,
+      "phase": "sweep-budget-5",
+      "documents": 40,
+      "absence_precision": 0.9827586206896551,
+      "absence_recall": 0.7916666666666666,
+      "gold_absent_items": 72,
+      "correctly_declared_absent": 57,
+      "false_absence_count": 1,
+      "budget_exhausted_runs": 2,
+      "scored_runs": 38,
+      "fabricated_spans": 1,
+      "termination_states": {
+        "exhaustive": 38,
+        "budget_exhausted": 2
+      },
+      "invariant_pass_rates": {
+        "INV-1": 1.0,
+        "INV-2": 0.225,
+        "INV-3": 1.0,
+        "INV-4": 1.0
+      },
+      "latency_per_doc": {
+        "p50_ms": 11070.0,
+        "p95_ms": 20298.0
+      },
+      "cost_usd_ledger": 0.383863,
+      "cost_per_doc_usd": 0.009597,
+      "run_failures": []
+    },
+    "8": {
+      "search_budget": 8,
+      "phase": "sweep-budget-8",
+      "documents": 40,
+      "absence_precision": 0.9833333333333333,
+      "absence_recall": 0.8082191780821918,
+      "gold_absent_items": 73,
+      "correctly_declared_absent": 59,
+      "false_absence_count": 1,
+      "budget_exhausted_runs": 1,
+      "scored_runs": 39,
+      "fabricated_spans": 1,
+      "termination_states": {
+        "exhaustive": 39,
+        "budget_exhausted": 1
+      },
+      "invariant_pass_rates": {
+        "INV-1": 1.0,
+        "INV-2": 0.175,
+        "INV-3": 1.0,
+        "INV-4": 1.0
+      },
+      "latency_per_doc": {
+        "p50_ms": 12297.0,
+        "p95_ms": 36351.0
+      },
+      "cost_usd_ledger": 0.501095,
+      "cost_per_doc_usd": 0.012527,
+      "run_failures": []
+    }
+  },
+  "ledger_total_spend_usd": 17.181783
+}

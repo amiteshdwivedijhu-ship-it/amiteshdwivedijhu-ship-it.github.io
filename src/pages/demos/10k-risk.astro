@@ -1,0 +1,359 @@
+---
+import Base from "../../layouts/Base.astro";
+import detail from "../../data/10k-risk/instability-detail.json";
+import stability from "../../data/10k-risk/stability.json";
+
+const issuers: any[] = (detail as any).issuers;
+const stabilityByTicker = (ticker: string) =>
+  (stability as any).issuers.find((issuer: any) => issuer.ticker === ticker)!;
+const pairwise = { BA: ["0.00", "0.00", "0.29"], ED: ["0.875", "1.00", "0.875"] };
+const issuerViews = [
+  {
+    ...issuers.find((issuer) => issuer.ticker === "BA")!, name: "Boeing", role: "Primary test", pairwise: pairwise.BA,
+    description: "Boeing's Item 1A is the instability case. The demo includes every passage the pipeline classified as newly disclosed risk in at least one of three otherwise identical runs.",
+    whySelected: "The three runs flag ten passages in total and disagree sharply about which ones matter. Boeing makes that inconsistency visible sentence by sentence.",
+  },
+  {
+    ...issuers.find((issuer) => issuer.ticker === "ED")!, name: "Consolidated Edison", role: "Stable control", pairwise: pairwise.ED,
+    description: "Consolidated Edison's Item 1A is the control. It goes through the same extraction, comparison, prompts, model, and three-pass protocol as Boeing.",
+    whySelected: "Most flagged passages persist across all three Consolidated Edison runs. The same method can therefore produce a stable result on another issuer.",
+  },
+].map((issuer) => {
+  const rows = issuer.ever_flagged.map((sentenceId: string) => {
+    const present = issuer.passes.map((pass: string[]) => pass.includes(sentenceId));
+    const appearances = present.filter(Boolean).length;
+    const state = appearances === 3 ? "survived" : appearances === 1 ? "once" : "changed";
+    return { sentenceId, text: issuer.sentences[sentenceId], present, appearances, state };
+  }).sort((a: any, b: any) => {
+    const disagreementRank: Record<string, number> = { once: 0, changed: 1, survived: 2 };
+    return disagreementRank[a.state] - disagreementRank[b.state] || a.sentenceId.localeCompare(b.sentenceId);
+  });
+  return {
+    ...issuer,
+    rows,
+    meanJaccard: stabilityByTicker(issuer.ticker).mean_jaccard,
+    counts: {
+      once: rows.filter((row: any) => row.state === "once").length,
+      changed: rows.filter((row: any) => row.state === "changed").length,
+      survived: rows.filter((row: any) => row.state === "survived").length,
+    },
+  };
+});
+const stateLabels: Record<string, string> = {
+  once: "Appeared once",
+  changed: "Changed between runs",
+  survived: "Survived all three",
+};
+---
+<Base title="Instability – 10-K Risk Extractor" description="Compare three runs of the same pipeline on Boeing and a stable control issuer.">
+  <header class="demo-shell" id="same-input">
+    <div class="shell-topline">
+      <a class="back-link" href="/projects/10k-risk/"><span aria-hidden="true">&larr;</span> Back to case study</a>
+      <span class="replay-status"><span aria-hidden="true">●</span> Recorded replay</span>
+    </div>
+    <p class="eyebrow">10-K Risk Extractor · Instability test</p>
+    <h1>Three passes on the same filing produced different alerts.</h1>
+    <p class="intro measure">Each pass uses the same input, model, and prompts. Only the cache salt changes, which forces a fresh model call. Across the three Boeing runs, ten passages are flagged as newly disclosed risk. Use the controls to compare them.</p>
+    <nav class="shell-links" aria-label="Demo resources">
+      <a href="/projects/10k-risk/metric-design/">Methodology</a>
+      <a href="/projects/10k-risk/report/">Evaluation evidence</a>
+    </nav>
+  </header>
+
+  <nav class="guide" aria-label="Guided comparison">
+    <ol>
+      <li><a href="#same-input"><span>1</span> Same input</a></li>
+      <li><a href="#demo-content" data-jump-to-comparison><span>2</span> Different flags</a></li>
+      <li><button type="button" data-select-control><span>3</span> Compare control</button></li>
+      <li><a href="/projects/10k-risk/launch-decision-memo/"><span>4</span> What we learned</a></li>
+    </ol>
+  </nav>
+
+  <section class="demo-content" id="demo-content" aria-labelledby="comparison-heading">
+    <div class="section-heading">
+      <div><p class="eyebrow">Interactive evidence</p><h2 id="comparison-heading">Compare what each pass flagged</h2></div>
+      <p>Passages are ordered by disagreement first, then by sentence ID.</p>
+    </div>
+
+    <div class="control-deck" aria-label="Comparison controls">
+      <fieldset class="control-group issuer-control">
+        <legend>Issuer</legend>
+        {issuerViews.map((issuer, index) => (
+          <button type="button" data-issuer-button={issuer.ticker} aria-pressed={index === 0 ? "true" : "false"}>
+            <span class="control-name">{issuer.name}</span><span class="control-meta">{issuer.role}</span>
+          </button>
+        ))}
+      </fieldset>
+      <fieldset class="control-group pass-control">
+        <legend>Pass view</legend>
+        {[["pass1", "Pass 1"], ["pass2", "Pass 2"], ["pass3", "Pass 3"], ["overlay", "Overlay all passes"]].map(([value, label]) => (
+          <button type="button" data-view-button={value} aria-pressed={value === "overlay" ? "true" : "false"}>{label}</button>
+        ))}
+      </fieldset>
+    </div>
+
+    <div class="issuer-contexts" aria-live="polite">
+      {issuerViews.map((issuer, index) => (
+        <section class="issuer-context" data-issuer-context={issuer.ticker} hidden={index !== 0} aria-labelledby={`${issuer.ticker.toLowerCase()}-context-title`}>
+          <div>
+            <p class="eyebrow">Selected filing context</p>
+            <h3 id={`${issuer.ticker.toLowerCase()}-context-title`}>{issuer.name} · {issuer.role}</h3>
+            <p>{issuer.description}</p>
+            <div class="filing-facts num" aria-label="Recorded comparison characteristics">
+              <span>{issuer.ever_flagged.length} passages ever flagged</span>
+              <span>3 identical-input passes</span>
+              <span>{issuer.model}</span>
+            </div>
+          </div>
+          <aside><span class="eyebrow">Why this issuer is included</span><p>{issuer.whySelected}</p></aside>
+        </section>
+      ))}
+    </div>
+
+    <div class="verdict-pin" aria-live="polite" aria-atomic="true">
+      {issuerViews.map((issuer, index) => (
+        <div class="verdict-summary" data-verdict={issuer.ticker} hidden={index !== 0}>
+          <div>
+            <span class={`verdict-status ${issuer.always_flagged.length === 0 ? "unstable" : "stable"}`}>
+              <span aria-hidden="true">{issuer.always_flagged.length === 0 ? "!" : "✓"}</span>
+              {issuer.always_flagged.length === 0 ? "Unstable result" : "Stable control"}
+            </span>
+            <strong>{issuer.always_flagged.length} of {issuer.ever_flagged.length} {issuer.name} alerts survived all three runs</strong>
+          </div>
+          <span class="mean-jaccard num">Mean Jaccard {issuer.meanJaccard.toFixed(3)}</span>
+        </div>
+      ))}
+    </div>
+    <p class="sr-only" id="state-announcement" aria-live="polite"></p>
+
+    {issuerViews.map((issuer, issuerIndex) => (
+      <article class={`comparison-panel ${issuer.always_flagged.length === 0 ? "is-unstable" : "is-stable"}`} data-issuer-panel={issuer.ticker} data-view="overlay" hidden={issuerIndex !== 0} aria-labelledby={`${issuer.ticker.toLowerCase()}-heading`}>
+        <div class="panel-heading">
+          <div><p class="eyebrow">{issuer.role} · {issuer.ticker}</p><h3 id={`${issuer.ticker.toLowerCase()}-heading`}>{issuer.name}</h3></div>
+          <div class="pass-counts num" aria-label="Flagged passage count by pass">
+            {issuer.passes.map((pass: string[], passIndex: number) => <span>Pass {passIndex + 1}: <strong>{pass.length}</strong></span>)}
+          </div>
+        </div>
+        <div class="state-key" aria-label="Passage stability states">
+          <span class="state-badge once"><span aria-hidden="true">●</span> {issuer.counts.once} appeared once</span>
+          <span class="state-badge changed"><span aria-hidden="true">↔</span> {issuer.counts.changed} changed between runs</span>
+          <span class="state-badge survived"><span aria-hidden="true">✓</span> {issuer.counts.survived} survived all three</span>
+        </div>
+        <div class="passage-list" role="list" aria-label={`${issuer.name} flagged passages`}>
+          {issuer.rows.map((row: any) => (
+            <div class={`passage-row state-${row.state}`} role="listitem">
+              <div class="passage-id num">{row.sentenceId}</div>
+              <p>{row.text}</p>
+              <div class="run-result">
+                <span class="mode-result mode-overlay" aria-label={`Pass 1 ${row.present[0] ? "flagged" : "not flagged"}; Pass 2 ${row.present[1] ? "flagged" : "not flagged"}; Pass 3 ${row.present[2] ? "flagged" : "not flagged"}`}>
+                  {row.present.map((present: boolean, passIndex: number) => <span class={present ? "run-chip flagged" : "run-chip absent"}><span aria-hidden="true">{present ? "●" : "—"}</span> P{passIndex + 1}</span>)}
+                </span>
+                {row.present.map((present: boolean, passIndex: number) => (
+                  <span class={`mode-result mode-pass${passIndex + 1} selected-pass ${present ? "flagged" : "absent"}`}><span aria-hidden="true">{present ? "●" : "—"}</span> Pass {passIndex + 1}: {present ? "Flagged" : "Not flagged"}</span>
+                ))}
+              </div>
+              <span class={`state-badge ${row.state}`}><span aria-hidden="true">{row.state === "once" ? "●" : row.state === "changed" ? "↔" : "✓"}</span>{stateLabels[row.state]}</span>
+            </div>
+          ))}
+        </div>
+        <div class="pairwise" aria-label={`${issuer.name} pairwise Jaccard scores`}>
+          <p>Pairwise agreement</p>
+          {["Pass 1 to 2", "Pass 1 to 3", "Pass 2 to 3"].map((label, index) => <div><span class="num">{issuer.pairwise[index]}</span><span>{label}</span></div>)}
+        </div>
+      </article>
+    ))}
+  </section>
+
+  <section class="interpretation" aria-labelledby="interpretation-heading">
+    <p class="eyebrow">What this means</p><h2 id="interpretation-heading">The alert changes when nothing else does.</h2>
+    <p class="measure">The first two Boeing runs have no flagged passages in common. Consolidated Edison is stable under the same setup, so the disagreement is specific to how the pipeline handles some filings. An analyst could not tell whether a Boeing alert would still exist on the next run.</p>
+    <div class="next-actions"><a class="primary-action" href="/projects/10k-risk/launch-decision-memo/">Read the recommendation <span aria-hidden="true">→</span></a><a href="/projects/10k-risk/">Return to case study</a></div>
+  </section>
+  <aside class="provenance" aria-label="Replay provenance"><span aria-hidden="true">ⓘ</span><p>Replayed from <span class="num">data/cache/llm.sqlite</span> at zero API cost. Salts are deterministic and the cache key is a content hash, so every call is a hit. Reproducible by anyone with the repo.</p></aside>
+</Base>
+
+<script>
+  const validIssuers = new Set(["BA", "ED"]);
+  const validViews = new Set(["pass1", "pass2", "pass3", "overlay"]);
+  const issuerNames = { BA: "Boeing", ED: "Consolidated Edison" };
+  const readUrlState = () => {
+    const params = new URLSearchParams(window.location.search);
+    const issuer = params.get("issuer") || "BA";
+    const view = params.get("view") || "overlay";
+    return { issuer: validIssuers.has(issuer) ? issuer : "BA", view: validViews.has(view) ? view : "overlay" };
+  };
+  const renderState = (issuer, view, updateUrl = true) => {
+    document.querySelectorAll("[data-issuer-button]").forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.issuerButton === issuer)));
+    document.querySelectorAll("[data-view-button]").forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.viewButton === view)));
+    document.querySelectorAll("[data-issuer-panel]").forEach((panel) => {
+      const selected = panel.dataset.issuerPanel === issuer;
+      panel.hidden = !selected;
+      if (selected) panel.dataset.view = view;
+    });
+    document.querySelectorAll("[data-issuer-context]").forEach((context) => context.hidden = context.dataset.issuerContext !== issuer);
+    document.querySelectorAll("[data-verdict]").forEach((verdict) => verdict.hidden = verdict.dataset.verdict !== issuer);
+    const viewName = view === "overlay" ? "all passes overlaid" : `pass ${view.slice(-1)}`;
+    const announcement = document.querySelector("#state-announcement");
+    if (announcement) announcement.textContent = `${issuerNames[issuer]} selected, ${viewName}.`;
+    if (updateUrl) {
+      const url = new URL(window.location.href);
+      url.searchParams.set("issuer", issuer);
+      url.searchParams.set("view", view);
+      window.history.replaceState({ issuer, view }, "", url);
+    }
+  };
+  const currentState = () => {
+    const selectedIssuer = document.querySelector("[data-issuer-button][aria-pressed='true']");
+    const selectedView = document.querySelector("[data-view-button][aria-pressed='true']");
+    return { issuer: selectedIssuer?.dataset.issuerButton || "BA", view: selectedView?.dataset.viewButton || "overlay" };
+  };
+  document.querySelectorAll("[data-issuer-button]").forEach((button) => button.addEventListener("click", () => renderState(button.dataset.issuerButton, currentState().view)));
+  document.querySelectorAll("[data-view-button]").forEach((button) => button.addEventListener("click", () => renderState(currentState().issuer, button.dataset.viewButton)));
+  document.querySelector("[data-select-control]")?.addEventListener("click", () => {
+    renderState("ED", currentState().view);
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    document.querySelector("#demo-content")?.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "start" });
+    document.querySelector("[data-issuer-button='ED']")?.focus({ preventScroll: true });
+  });
+  document.querySelector("[data-jump-to-comparison]")?.addEventListener("click", () => renderState(currentState().issuer, "overlay"));
+  window.addEventListener("popstate", () => { const { issuer, view } = readUrlState(); renderState(issuer, view, false); });
+  const initialState = readUrlState();
+  renderState(initialState.issuer, initialState.view, false);
+</script>
+
+<style>
+  :global(main.wrap) { padding-top: 0 !important; }
+  .demo-shell { padding: 2.4rem 0 1.8rem; }
+  .shell-topline, .shell-links, .section-heading, .panel-heading, .verdict-summary, .next-actions { display: flex; align-items: center; }
+  .shell-topline { justify-content: space-between; gap: 1rem; margin-bottom: 2.2rem; }
+  .back-link, .shell-links a, .next-actions a { min-height: 44px; display: inline-flex; align-items: center; }
+  .back-link { gap: .4rem; color: var(--ink); text-decoration: none; font-size: .88rem; }
+  .back-link:hover { text-decoration: underline; }
+  .replay-status { display: inline-flex; align-items: center; gap: .45rem; min-height: 32px; padding: .2rem .7rem; border: 1px solid rgba(128,194,164,.4); border-radius: 999px; color: #b8e1ce; background: rgba(75,148,116,.12); font: .68rem/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+  .demo-shell h1 { max-width: 45rem; margin: .7rem 0 .8rem; font-size: clamp(2.25rem,6vw,4.7rem); letter-spacing: -.045em; line-height: 1.02; }
+  .intro { margin: 0; color: #d3cfda; font-size: 1.04rem; }
+  .shell-links { gap: 1.2rem; margin-top: 1.2rem; font-size: .84rem; }
+
+  .guide { margin: .5rem 0 2.5rem; border-block: 1px solid var(--hairline); }
+  .guide ol { display: grid; grid-template-columns: repeat(4,1fr); margin: 0; padding: 0; list-style: none; }
+  .guide li { position: relative; }
+  .guide li:not(:last-child)::after { content: ""; position: absolute; top: 50%; right: -.45rem; width: .9rem; height: 1px; background: rgba(232,169,124,.42); }
+  .guide a, .guide button { width: 100%; min-height: 64px; display: flex; align-items: center; justify-content: center; gap: .55rem; border: 0; background: transparent; color: #cbc7d2; font: .72rem/1.3 var(--mono); text-decoration: none; cursor: pointer; }
+  .guide a:hover, .guide button:hover { color: var(--ink); background: rgba(255,255,255,.04); }
+  .guide span { width: 1.55rem; height: 1.55rem; display: inline-grid; place-items: center; border: 1px solid rgba(232,169,124,.5); border-radius: 50%; color: var(--accent); }
+
+  .demo-content { scroll-margin-top: 5.2rem; }
+  .section-heading { justify-content: space-between; gap: 2rem; margin-bottom: 1.2rem; }
+  .section-heading h2, .interpretation h2 { margin: .25rem 0 0; font-size: clamp(1.55rem,3vw,2.2rem); line-height: 1.15; }
+  .section-heading > p { max-width: 22rem; margin: 0; color: #c7c2cd; font-size: .84rem; line-height: 1.5; }
+  .control-deck { display: grid; grid-template-columns: minmax(16rem,.8fr) minmax(25rem,1.2fr); gap: 1rem; margin-bottom: 1rem; }
+  .control-group { min-width: 0; display: grid; gap: .45rem; margin: 0; padding: .75rem; border: 1px solid var(--glass-brd); border-radius: 14px; background: rgba(0,0,0,.2); }
+  .control-group legend { padding: 0 .35rem; color: #c7c2cd; font: .68rem/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; }
+  .issuer-control { grid-template-columns: repeat(2,1fr); }
+  .pass-control { grid-template-columns: repeat(4,1fr); }
+  .control-group button { min-width: 0; min-height: 50px; padding: .55rem .65rem; border: 1px solid transparent; border-radius: 9px; background: rgba(255,255,255,.045); color: #c7c2cd; font: .74rem/1.25 var(--mono); cursor: pointer; }
+  .control-group button:hover { background: rgba(255,255,255,.085); color: var(--ink); }
+  .control-group button[aria-pressed="true"] { border-color: rgba(232,169,124,.65); background: rgba(232,169,124,.14); color: var(--ink); box-shadow: inset 0 -3px 0 var(--accent); }
+  .issuer-control button { text-align: left; }
+  .control-name, .control-meta { display: block; overflow: hidden; text-overflow: ellipsis; }
+  .control-name { color: inherit; }
+  .control-meta { margin-top: .18rem; color: #aaa5b3; font-size: .62rem; }
+
+  .issuer-context { display: grid; grid-template-columns: minmax(0,1.4fr) minmax(250px,.7fr); gap: 1rem; margin-bottom: 1rem; padding: 1rem 1.1rem; border: 1px solid var(--hairline); border-radius: 13px; background: rgba(255,255,255,.03); }
+  .issuer-context[hidden] { display: none; }
+  .issuer-context h3 { margin: .2rem 0 .45rem; font-size: 1.15rem; }
+  .issuer-context p { margin: 0; color: #c7c2cd; font-size: .84rem; line-height: 1.58; }
+  .issuer-context aside { padding: .75rem .85rem; border-left: 2px solid var(--accent); border-radius: 0 8px 8px 0; background: rgba(232,169,124,.07); }
+  .issuer-context aside p { margin-top: .35rem; font-size: .78rem; }
+  .filing-facts { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .75rem; }
+  .filing-facts span { padding: .22rem .5rem; color: var(--ink); border: 1px solid var(--hairline); border-radius: 999px; background: rgba(255,255,255,.045); font-size: .65rem; }
+
+  .verdict-pin { position: sticky; z-index: 12; top: 7rem; margin: 1rem 0; }
+  .verdict-summary { justify-content: space-between; gap: 1rem; min-height: 74px; padding: .8rem 1rem; border: 1px solid rgba(255,117,99,.35); border-radius: 13px; background: rgba(35,21,25,.97); box-shadow: 0 14px 35px rgba(0,0,0,.38); backdrop-filter: blur(18px); }
+  .verdict-summary[hidden] { display: none; }
+  .verdict-summary > div { display: flex; flex-direction: column; gap: .25rem; }
+  .verdict-summary strong { font-size: 1.05rem; line-height: 1.35; }
+  .verdict-status, .state-badge, .run-chip, .selected-pass { display: inline-flex; align-items: center; gap: .35rem; width: max-content; border-radius: 999px; font-family: var(--mono); }
+  .verdict-status { color: #ffc2b8; font-size: .65rem; letter-spacing: .07em; text-transform: uppercase; }
+  .verdict-status.stable { color: #b8e1ce; }
+  .mean-jaccard { flex: 0 0 auto; color: #c9c5d0; font-size: .72rem; }
+
+  .comparison-panel { overflow: hidden; border: 1px solid var(--hairline); border-radius: 16px; background: rgba(0,0,0,.24); }
+  .comparison-panel[hidden] { display: none; }
+  .panel-heading { justify-content: space-between; gap: 1rem; padding: 1.3rem; border-bottom: 1px solid var(--hairline); }
+  .panel-heading .eyebrow { margin: 0; }
+  .panel-heading h3 { margin: .25rem 0 0; font-size: 1.45rem; line-height: 1.2; }
+  .pass-counts { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: .55rem 1rem; color: #bbb6c3; font-size: .68rem; }
+  .pass-counts strong { color: var(--ink); }
+  .state-key { display: flex; flex-wrap: wrap; gap: .55rem; padding: .85rem 1.3rem; border-bottom: 1px solid var(--hairline); }
+  .state-badge { padding: .25rem .55rem; border: 1px solid; font-size: .62rem; line-height: 1.3; }
+  .state-badge.once { color: #ffd1c8; border-color: rgba(255,117,99,.38); background: rgba(255,117,99,.1); }
+  .state-badge.changed { color: #f3c79f; border-color: rgba(232,169,124,.4); background: rgba(232,169,124,.1); }
+  .state-badge.survived { color: #b8e1ce; border-color: rgba(128,194,164,.38); background: rgba(75,148,116,.1); }
+
+  .passage-row { display: grid; grid-template-columns: 4rem minmax(16rem,1fr) minmax(11rem,auto) minmax(8.6rem,auto); gap: .8rem; align-items: center; min-height: 94px; padding: .85rem 1.3rem; border-bottom: 1px solid rgba(255,255,255,.065); border-left: 3px solid transparent; }
+  .passage-row.state-once { border-left-color: var(--alarm); }
+  .passage-row.state-changed { border-left-color: var(--accent); }
+  .passage-row.state-survived { border-left-color: #80c2a4; }
+  .passage-id { align-self: start; padding-top: .2rem; color: #b5b0bd; font-size: .69rem; }
+  .passage-row p { margin: 0; color: #d5d1da; font-size: .8rem; line-height: 1.5; }
+  .run-result { min-width: 0; }
+  .mode-result { display: none; }
+  [data-view="overlay"] .mode-overlay, [data-view="pass1"] .mode-pass1, [data-view="pass2"] .mode-pass2, [data-view="pass3"] .mode-pass3 { display: flex; }
+  .mode-overlay { flex-wrap: wrap; gap: .3rem; }
+  .run-chip, .selected-pass { padding: .25rem .45rem; border: 1px solid; font-size: .61rem; line-height: 1.3; }
+  .flagged { color: #ffd1c8; border-color: rgba(255,117,99,.34); background: rgba(255,117,99,.09); }
+  .is-stable .flagged { color: #b8e1ce; border-color: rgba(128,194,164,.34); background: rgba(75,148,116,.09); }
+  .absent { color: #aaa5b3; border-color: rgba(255,255,255,.11); background: rgba(255,255,255,.035); }
+  .pairwise { display: grid; grid-template-columns: 1fr repeat(3,auto); gap: 1.4rem; align-items: center; padding: 1.1rem 1.3rem; }
+  .pairwise p { margin: 0; color: #c7c2cd; font-size: .8rem; }
+  .pairwise > div { display: flex; flex-direction: column; text-align: right; }
+  .pairwise .num { color: var(--ink); font-size: 1rem; }
+  .pairwise div span:last-child { color: #aaa5b3; font: .6rem/1.4 var(--mono); text-transform: uppercase; }
+
+  .interpretation { padding: 3.6rem 0 1.6rem; }
+  .interpretation > p:not(.eyebrow) { color: #d3cfda; }
+  .next-actions { flex-wrap: wrap; gap: 1.2rem; margin-top: 1.2rem; font-size: .86rem; }
+  .primary-action { justify-content: center; gap: .5rem; padding: .6rem 1rem; border: 1px solid rgba(232,169,124,.5); border-radius: 999px; background: rgba(232,169,124,.12); color: var(--ink); text-decoration: none; }
+  .primary-action:hover { background: rgba(232,169,124,.2); transform: translateY(-1px); }
+  .provenance { display: flex; gap: .7rem; align-items: flex-start; padding: 1rem 1.1rem; border: 1px solid rgba(137,164,219,.25); border-radius: 12px; background: rgba(89,116,173,.08); color: #bbb7c4; font-size: .73rem; line-height: 1.55; }
+  .provenance p { margin: 0; }
+  button:focus-visible, a:focus-visible { outline: 3px solid #ffd2b4; outline-offset: 3px; border-radius: 5px; }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+
+  @media (max-width: 860px) {
+    .control-deck, .issuer-context { grid-template-columns: 1fr; }
+    .passage-row { grid-template-columns: 3.5rem minmax(0,1fr) auto; }
+    .passage-row p { grid-column: 2 / -1; grid-row: 1; }
+    .passage-id { grid-column: 1; grid-row: 1; }
+    .run-result { grid-column: 2; grid-row: 2; }
+    .passage-row > .state-badge { grid-column: 3; grid-row: 2; }
+  }
+  @media (max-width: 700px) {
+    .demo-shell { padding-top: 1.4rem; }
+    .shell-topline, .section-heading, .panel-heading, .verdict-summary { align-items: flex-start; flex-direction: column; }
+    .shell-topline { margin-bottom: 1.5rem; }
+    .demo-shell h1 { font-size: clamp(2.1rem,12vw,3.2rem); }
+    .guide ol { grid-template-columns: repeat(2,1fr); }
+    .guide li:nth-child(2)::after { display: none; }
+    .guide a, .guide button { min-height: 58px; }
+    .pass-control { grid-template-columns: repeat(2,1fr); }
+    .verdict-pin { top: 7rem; }
+    .mean-jaccard { white-space: normal; }
+    .panel-heading { padding: 1.05rem; }
+    .pass-counts { justify-content: flex-start; }
+    .state-key { padding: .8rem 1rem; }
+    .passage-row { grid-template-columns: 1fr; gap: .55rem; padding: 1rem; }
+    .passage-id, .passage-row p, .run-result, .passage-row > .state-badge { grid-column: 1; grid-row: auto; }
+    .passage-row > .state-badge { margin-top: .1rem; }
+    .pairwise { grid-template-columns: repeat(3,1fr); gap: .7rem; }
+    .pairwise p { grid-column: 1 / -1; }
+    .pairwise > div { text-align: left; }
+  }
+  @media (max-width: 440px) {
+    .issuer-control { grid-template-columns: 1fr; }
+    .shell-links { align-items: flex-start; flex-direction: column; gap: .1rem; }
+    .state-badge { width: auto; white-space: normal; }
+  }
+  @media (prefers-reduced-motion: reduce) { .primary-action:hover { transform: none; } }
+</style>

@@ -1,0 +1,27 @@
+---
+import type { Table } from "../lib/site";
+interface Props { table: Table }
+const { table } = Astro.props;
+const cls = (c: any) => [c.mono ? "num" : "", c.dim ? "dim" : "", c.r ? "r" : ""].filter(Boolean).join(" ");
+/* Right-align a header only when every cell under it is right-aligned, so text
+   columns keep left-aligned headers. */
+const headR = (i: number) => i > 0 && table.rows.length > 0 && table.rows.every((row) => row[i] && row[i].r);
+---
+<div class="well">
+  {table.caption && <p class="cap">{table.caption}</p>}
+  <div class="scroll">
+    <table>
+      <thead><tr>{table.head.map((h, i) => <th class={headR(i) ? "r" : ""}>{h}</th>)}</tr></thead>
+      <tbody>
+        {table.rows.map((row) => (
+          <tr>{row.map((c) => (
+            <td class={cls(c)}>
+              {c.badge ? <span class={c.badge}>{c.text}</span> : c.text}
+            </td>
+          ))}</tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+  {table.note && <p class="cap">{table.note}</p>}
+</div>

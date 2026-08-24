@@ -1,0 +1,43 @@
+---
+/* Run-to-run agreement (mean Jaccard) per issuer in the stability benchmark.
+   Read from the committed benchmark artifact at build time. */
+import stability from "../../data/10k-risk/stability.json";
+
+const rows = (stability as any).issuers.map((i: any) => ({
+  ticker: i.ticker as string,
+  jaccard: i.mean_jaccard as number,
+  survives: Math.round(i.consensus_ratio * 100),
+}));
+
+const X0 = 74, X1 = 470, W = 720;
+const x = (v: number) => X0 + v * (X1 - X0);
+const rh = 40, top = 16, axisH = 26;
+const H = top + rows.length * rh + axisH;
+const ticks = [0, 0.25, 0.5, 0.75, 1];
+---
+<svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label="Mean Jaccard agreement across three identical runs, per issuer">
+  {ticks.map((tv) => (
+    <line x1={x(tv)} y1={top - 4} x2={x(tv)} y2={top + rows.length * rh} stroke="rgba(255,255,255,.07)" stroke-width="1" />
+  ))}
+  {rows.map((r: any, i: number) => {
+    const y = top + i * rh + rh / 2;
+    const unstable = r.survives === 0;
+    const col = unstable ? "var(--alarm)" : "var(--accent)";
+    return (
+      <g>
+        <text x={0} y={y + 4} class="flbl" fill="var(--muted)">{r.ticker}</text>
+        <line x1={x(0)} y1={y} x2={x(r.jaccard)} y2={y} stroke={col} stroke-width="2" opacity=".4" />
+        <circle cx={x(r.jaccard)} cy={y} r="5" fill={col} />
+        <text x={x(r.jaccard) + 11} y={y + 4} class="flbl" fill="var(--ink)">{r.jaccard.toFixed(3)}</text>
+        <text x={W - 8} y={y + 4} text-anchor="end" class="flbl" fill="var(--dim)">{r.survives}% of flags survive all 3 runs</text>
+      </g>
+    );
+  })}
+  {ticks.map((tv) => (
+    <text x={x(tv)} y={H - 6} text-anchor="middle" class="flbl" fill="var(--dim)">{tv.toFixed(2)}</text>
+  ))}
+</svg>
+<style>
+  svg{width:100%;height:auto;display:block}
+  .flbl{font-family:var(--mono);font-size:10.5px;letter-spacing:.02em}
+</style>

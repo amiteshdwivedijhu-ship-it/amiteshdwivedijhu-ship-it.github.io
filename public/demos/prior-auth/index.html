@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Explore recorded prior authorization agent runs across synthetic patient profiles and payer policies.">
+<title>Prior Auth Agent · Recorded Demo</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to demo</a>
+
+<header class="site-header">
+  <nav class="global-nav shell" aria-label="Portfolio navigation">
+    <a class="back-link" href="/projects/prior-auth/">← Back to case study</a>
+    <div class="nav-links">
+      <a href="/">Amitesh Dwivedi</a>
+      <a href="/#projects">Work</a>
+      <a href="/resume/">Résumé</a>
+    </div>
+  </nav>
+  <div class="hero shell">
+    <p class="eyebrow">Clinical AI · interactive evidence replay</p>
+    <div class="title-row">
+      <h1>Prior Auth Agent</h1>
+      <span id="mode-pill" class="pill">Recorded runs</span>
+    </div>
+    <p class="tagline">Choose a synthetic patient scenario, confirm its fixed policy, and inspect a precomputed evidence-cited authorization request. No model runs in this browser.</p>
+    <div class="scope-note" role="note">
+      <strong>What you can change:</strong> the recorded case. Payer, policy, and service stay fixed to that evaluation. This prototype is not for clinical use and makes no approval prediction.
+      <a href="/projects/prior-auth/report/">Read the methodology →</a>
+    </div>
+  </div>
+</header>
+
+<main id="main-content" class="shell">
+  <section id="step-persona" aria-labelledby="persona-title">
+    <div class="step-heading">
+      <span class="step-number" aria-hidden="true">1</span>
+      <div>
+        <p class="eyebrow">Choose a recorded run</p>
+        <h2 id="persona-title" tabindex="-1">Start with a scenario</h2>
+      </div>
+    </div>
+
+    <div class="filter-panel panel" aria-label="Case filters">
+      <label for="scenario-filter">Scenario
+        <select id="scenario-filter">
+          <option value="all">All scenarios</option>
+          <option value="clean_support">Clean support</option>
+          <option value="missing_evidence">Missing evidence</option>
+          <option value="policy_mismatch">Policy mismatch</option>
+          <option value="safety_failure">Safety failure</option>
+        </select>
+      </label>
+      <label for="payer-filter">Payer
+        <select id="payer-filter"><option value="all">All payers</option></select>
+      </label>
+      <label for="outcome-filter">Recorded outcome
+        <select id="outcome-filter">
+          <option value="all">All outcomes</option>
+          <option value="satisfied">Criteria satisfied</option>
+          <option value="not_satisfied">Criteria not satisfied</option>
+          <option value="non-determinable">Non-determinable</option>
+        </select>
+      </label>
+      <button id="clear-filters" class="button button-quiet" type="button">Clear filters</button>
+    </div>
+
+    <p id="case-count" class="result-count" role="status" aria-live="polite"></p>
+    <div id="persona-grid" class="grid"></div>
+    <div id="empty-cases" class="empty-state panel hidden">
+      <p>No cases match these filters.</p>
+      <button class="button button-secondary" type="button" data-action="clear-filters">Show all cases</button>
+    </div>
+  </section>
+
+  <section id="step-coverage" class="hidden" aria-labelledby="coverage-title">
+    <div class="step-heading">
+      <span class="step-number" aria-hidden="true">2</span>
+      <div>
+        <p class="eyebrow">Review fixed inputs</p>
+        <h2 id="coverage-title" tabindex="-1">Confirm coverage</h2>
+      </div>
+    </div>
+    <div id="case-context" class="case-context panel" aria-live="polite"></div>
+    <div class="coverage-panel panel">
+      <div class="coverage-fields">
+        <label for="payer-select">Payer and policy
+          <select id="payer-select"></select>
+        </label>
+        <label for="service-select">Requested service
+          <select id="service-select"></select>
+        </label>
+      </div>
+      <p class="hint" id="payer-note"></p>
+      <button id="generate-btn" class="button button-primary" type="button">Generate recorded request →</button>
+    </div>
+  </section>
+
+  <section id="step-result" class="hidden" aria-labelledby="result-title">
+    <div id="selected-summary" class="selected-summary" aria-label="Selected case summary"></div>
+
+    <div class="step-heading result-heading">
+      <span class="step-number" aria-hidden="true">3</span>
+      <div>
+        <p class="eyebrow">Recorded result</p>
+        <h2 id="result-title" tabindex="-1">Prior authorization request</h2>
+      </div>
+    </div>
+
+    <div id="decision-banner" class="decision-banner" role="status"></div>
+
+    <section class="result-section" aria-labelledby="decisive-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Why this outcome</p>
+          <h3 id="decisive-title">Decisive criteria</h3>
+        </div>
+        <p class="section-note">The branches that determine the recorded policy-expression result. Open source evidence only when needed.</p>
+      </div>
+      <div id="decisive-criteria"></div>
+    </section>
+
+    <section class="result-section" aria-labelledby="gaps-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">What remains unknown</p>
+          <h3 id="gaps-title">Unresolved gaps</h3>
+        </div>
+      </div>
+      <div id="gaps"></div>
+    </section>
+
+    <section class="result-section" aria-labelledby="criteria-title">
+      <div class="section-heading criteria-heading">
+        <div>
+          <p class="eyebrow">Complete audit trail</p>
+          <h3 id="criteria-title">All criteria</h3>
+        </div>
+        <p class="section-note">Non-decisive rows stay collapsed by default.</p>
+      </div>
+      <div id="criterion-filters" class="status-filters" aria-label="Filter criteria by status">
+        <button class="status-filter active" type="button" data-status="all" aria-pressed="true">All</button>
+        <button class="status-filter" type="button" data-status="met" aria-pressed="false">Met</button>
+        <button class="status-filter" type="button" data-status="unmet" aria-pressed="false">Unmet</button>
+        <button class="status-filter" type="button" data-status="non-determinable" aria-pressed="false">Non-determinable</button>
+        <button class="status-filter" type="button" data-status="ungrounded" aria-pressed="false">Ungrounded</button>
+      </div>
+      <p id="criterion-count" class="result-count" role="status" aria-live="polite"></p>
+      <div id="criteria"></div>
+    </section>
+
+    <section class="result-section" aria-labelledby="request-title">
+      <div class="section-heading request-heading">
+        <div>
+          <p class="eyebrow">Generated artifact</p>
+          <h3 id="request-title">Request text</h3>
+        </div>
+        <div class="action-row">
+          <button id="copy-request" class="button button-secondary" type="button">Copy request</button>
+          <button id="copy-link" class="button button-secondary" type="button">Copy link</button>
+          <button id="choose-another" class="button button-quiet" type="button">Choose another case</button>
+        </div>
+      </div>
+      <pre id="pa-text" class="request-text panel" tabindex="0"></pre>
+    </section>
+  </section>
+</main>
+
+<footer class="shell">
+  <p>Every determination is backed by a verbatim source span from the chart when evidence was recorded. Assertions that fail the entailment gate are flagged for human review, never rewritten. Coverage decisions belong to the payer.</p>
+  <button id="reset-demo" class="button button-quiet" type="button">Reset demo</button>
+</footer>
+
+<div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+<script src="app.js"></script>
+</body>
+</html>

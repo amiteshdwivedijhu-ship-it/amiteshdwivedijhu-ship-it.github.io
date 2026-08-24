@@ -1,0 +1,72 @@
+---
+import { getCollection, render } from "astro:content";
+import Base from "../../../layouts/Base.astro";
+import Mermaid from "../../../components/Mermaid.astro";
+import { bySlug } from "../../../lib/site";
+
+export async function getStaticPaths() {
+  const all = await getCollection("artifacts");
+  return all.map((a) => ({
+    params: { slug: a.data.project, artifact: a.id.split("/").pop() },
+    props: { entry: a },
+  }));
+}
+const { entry } = Astro.props;
+const p = bySlug(entry.data.project);
+const { Content } = await render(entry);
+const artifacts = (await getCollection("artifacts", (a) => a.data.project === p.slug)).sort((a, b) => a.data.order - b.data.order);
+const index = artifacts.findIndex((a) => a.id === entry.id);
+const previous = index > 0 ? artifacts[index - 1] : undefined;
+const next = index < artifacts.length - 1 ? artifacts[index + 1] : undefined;
+const minutes = Math.max(3, Math.ceil(entry.body.trim().split(/\s+/).length / 220));
+const updated = entry.body.match(/Last updated:\*\*\s*([^\n]+)/i)?.[1]?.trim() ?? "Aug 22, 2026";
+const hrefFor = (a: typeof entry) => `/projects/${p.slug}/${a.id.split("/").pop()}/`;
+---
+<Base title={`${entry.data.title} – ${p.name}`} description={entry.data.hook}>
+  <header class="document-header" id="document-top">
+    <p class="eyebrow"><a href={`/projects/${p.slug}/#artifacts`}>&larr; All {p.name} artifacts</a></p>
+    <div class="document-meta num">{entry.data.title} · {minutes} min · Updated {updated}</div>
+    <div class="takeaway"><span class="eyebrow">Executive takeaway</span><p>{entry.data.hook}</p></div>
+  </header>
+  <div class="document-shell">
+    <aside class="document-rail glass">
+      <span class="eyebrow">Project record</span>
+      <p>{p.name}</p>
+      <div class="doc-progress" aria-hidden="true"><span></span></div>
+      <a href={`/projects/${p.slug}/`}>Back to project</a>
+      {p.demo && <a href={p.demo.href}>Open demo</a>}
+      <a href={`/projects/${p.slug}/report/`}>Evaluation report</a>
+    </aside>
+    <div>
+      <article class="prose"><Content /></article>
+      <p class="num source">Source: {entry.data.source}</p>
+      <Mermaid />
+      <nav class="document-nav" aria-label="Artifact sequence">
+        {previous ? <a href={hrefFor(previous)}><span>Previous</span><strong>← {previous.data.title}</strong></a> : <span></span>}
+        {next ? <a class="next" href={hrefFor(next)}><span>Next</span><strong>{next.data.title} →</strong></a> : <a class="next" href={p.report}><span>Next</span><strong>Eval report →</strong></a>}
+      </nav>
+      <details class="all-artifacts glass">
+        <summary>All artifacts in recommended order</summary>
+        <ol>{artifacts.map((artifact) => <li><a href={hrefFor(artifact)} aria-current={artifact.id === entry.id ? "page" : undefined}>{artifact.data.title}</a><small>{artifact.data.hook}</small></li>)}</ol>
+      </details>
+    </div>
+  </div>
+</Base>
+<style>
+  .document-header{max-width:48rem;margin-bottom:1.5rem}.document-header>.eyebrow a{text-decoration:none;color:var(--muted)}
+  .document-meta{margin:.8rem 0;color:var(--dim);font-size:.7rem;text-transform:uppercase;letter-spacing:.08em}
+  .takeaway{border-left:3px solid var(--accent);padding:.9rem 1.15rem;background:rgba(239,177,134,.07);border-radius:0 10px 10px 0}
+  .takeaway span{display:block;margin-bottom:.3rem}.takeaway p{font-family:var(--serif);font-size:1.05rem;color:var(--ink);margin:0;line-height:1.5}
+  .document-shell{display:grid;grid-template-columns:160px minmax(0,1fr);gap:2rem;align-items:start}
+  .document-rail{position:sticky;top:126px;padding:1rem}.document-rail p{font-size:.75rem;color:var(--muted);line-height:1.4}.document-rail a{display:block;padding:.4rem 0;font-size:.76rem;text-decoration:none;border-top:1px solid var(--hairline)}
+  .doc-progress{height:3px;background:var(--hairline);margin:.75rem 0}.doc-progress span{display:block;width:0;height:100%;background:var(--accent)}
+  .source{color:var(--dim);font-size:.7rem;margin-top:3rem}
+  .document-nav{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:3rem 0}.document-nav a{display:flex;flex-direction:column;gap:.25rem;padding:1rem;border:1px solid var(--hairline);border-radius:12px;text-decoration:none}.document-nav span{font-family:var(--mono);font-size:.65rem;text-transform:uppercase;color:var(--dim)}.document-nav strong{font-family:var(--serif);color:var(--ink)}.document-nav .next{text-align:right}
+  .all-artifacts{padding:1rem 1.2rem}.all-artifacts summary{cursor:pointer;min-height:44px;display:flex;align-items:center;font-weight:700;color:var(--ink)}.all-artifacts ol{padding-left:1.4rem}.all-artifacts li{padding:.45rem 0}.all-artifacts a{display:block}.all-artifacts a[aria-current="page"]{color:var(--ink);font-weight:700}.all-artifacts small{display:block;color:var(--muted);line-height:1.4}
+  @media(max-width:760px){.document-shell{display:block}.document-rail{position:sticky;top:113px;z-index:9;display:flex;align-items:center;gap:.75rem;overflow:auto;margin-bottom:1.4rem;padding:.5rem .7rem}.document-rail p,.doc-progress{display:none}.document-rail a{white-space:nowrap;border:0}.document-nav{grid-template-columns:1fr}}
+</style>
+<script>
+  const bar = document.querySelector<HTMLElement>(".doc-progress span");
+  const update = () => { const max = document.documentElement.scrollHeight - innerHeight; if (bar) bar.style.width = `${max ? Math.min(100, scrollY / max * 100) : 0}%`; };
+  addEventListener("scroll", update, { passive: true }); update();
+</script>

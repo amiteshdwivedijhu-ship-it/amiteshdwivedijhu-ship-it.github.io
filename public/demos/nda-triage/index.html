@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#100f15">
+<title>NDA Triage – Static Replay Demo</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="skip-link" href="#workspace">Skip to demo</a>
+
+<nav class="site-nav" aria-label="Portfolio">
+  <div class="nav-wrap">
+    <a class="brand" href="/">Amitesh Dwivedi</a>
+    <a href="/#projects">Projects</a>
+    <a href="/projects/prior-auth/">Prior Auth</a>
+    <a href="/projects/10k-risk/">10-K</a>
+    <a href="/projects/nda-triage/" aria-current="page">NDA</a>
+  </div>
+</nav>
+
+<header class="demo-header">
+  <div>
+    <p class="eyebrow">Recorded-data product demo</p>
+    <h1>NDA Triage</h1>
+    <p class="lede">Change the intake context to see how the same extracted NDA routes. Extraction ran once; the playbook rules replay locally with no model or server calls.</p>
+  </div>
+  <a class="back-link" href="/projects/nda-triage/" aria-label="Return to the NDA Triage case study">← Return to case study</a>
+</header>
+
+<main id="workspace" tabindex="-1">
+  <aside id="sidebar" aria-labelledby="nda-picker-title">
+    <div class="sidebar-heading">
+      <p class="eyebrow">Recorded NDAs</p>
+      <h2 id="nda-picker-title">Choose a document</h2>
+    </div>
+    <ul id="doc-list"></ul>
+  </aside>
+
+  <section id="content" aria-label="NDA triage workspace">
+    <section id="document-context" class="document-context" aria-labelledby="document-context-title"></section>
+
+    <section id="decision-dock" aria-label="Context and routing">
+      <div class="dock-topline">
+        <div>
+          <p class="eyebrow">Context-dependent</p>
+          <h2>Deal context</h2>
+          <p class="section-intro">Supplied at intake, never inferred from the NDA.</p>
+        </div>
+        <div class="action-row">
+          <button class="quiet-button" id="copy-link" type="button">Copy link</button>
+          <button class="quiet-button" id="reset-state" type="button">Reset</button>
+        </div>
+      </div>
+      <div id="controls"></div>
+      <div class="routing-row">
+        <div id="routing-banner" role="status" aria-live="polite"></div>
+        <p id="routing-why" class="routing-why"></p>
+      </div>
+      <div id="change-summary" class="change-summary" role="status" aria-live="polite" hidden></div>
+      <p id="copy-status" class="sr-only" role="status" aria-live="polite"></p>
+      <div class="compare-actions">
+        <button class="quiet-button" id="save-compare" type="button">Save context to compare</button>
+        <button class="text-button" id="clear-compare" type="button" hidden>Clear comparison</button>
+        <span class="helper">Save this cell, then change any intake field to compare outcomes.</span>
+      </div>
+      <div id="comparison" hidden></div>
+    </section>
+
+    <section class="content-group" aria-labelledby="dependent-title">
+      <div class="group-heading">
+        <div>
+          <p class="eyebrow">Context-dependent</p>
+          <h2 id="dependent-title">Playbook result</h2>
+        </div>
+        <p>Role, data, and counterparty can change tiers. Bargaining power changes only routing and negotiation strategy.</p>
+      </div>
+      <div class="two-col result-grid">
+        <section id="tiers" class="panel" aria-labelledby="tiers-title">
+          <h3 id="tiers-title">Clause types</h3>
+          <div class="table-scroll" tabindex="0" aria-label="Clause type results, horizontally scrollable">
+            <table>
+              <thead><tr><th>Clause type</th><th>Tier</th><th>Rule</th></tr></thead>
+              <tbody id="tier-rows"></tbody>
+            </table>
+          </div>
+          <p class="note">Bargaining power never changes a tier: a clause does not become safer because it is easier to negotiate.</p>
+        </section>
+
+        <section id="plan" class="panel" aria-labelledby="plan-title">
+          <h3 id="plan-title">Negotiation plan</h3>
+          <div id="plan-body"></div>
+        </section>
+      </div>
+    </section>
+
+    <section id="findings" class="content-group invariant-group" aria-labelledby="findings-title">
+      <div class="group-heading">
+        <div>
+          <p class="eyebrow">Held constant across contexts</p>
+          <h2 id="findings-title">Extracted findings</h2>
+        </div>
+        <p>These recorded findings change only when you choose another NDA.</p>
+      </div>
+      <div class="two-col">
+        <section class="panel">
+          <h3>Absence findings <span class="count" id="absence-count"></span></h3>
+          <div id="absence-body"></div>
+        </section>
+        <section class="panel">
+          <h3>Unmodeled risks <span class="count" id="risk-count"></span></h3>
+          <div id="risk-body"></div>
+        </section>
+      </div>
+    </section>
+
+    <details id="across" class="aggregate">
+      <summary>
+        <span>
+          <span class="eyebrow">Secondary analysis</span>
+          Across all 144 deal-context cells
+        </span>
+        <span class="summary-action">View aggregate</span>
+      </summary>
+      <div id="across-body"></div>
+    </details>
+  </section>
+</main>
+
+<footer>
+  <p>Data: <a href="https://stanfordnlp.github.io/contract-nli/">ContractNLI</a> dev split, CC BY 4.0. Pipeline: extraction Gemini 3.7 Flash (v5) · Absence Detector Gemini 3.7 Flash, Search Budget 5 (v5) · Shadow Judge Claude Opus 5, batched (v1) · Playbook in code. This is a replay of pre-computed pipeline output, rendered locally. It is not legal advice.</p>
+</footer>
+
+<script src="manifest.js"></script>
+<script src="data/doc-610.js"></script>
+<script src="data/doc-12.js"></script>
+<script src="data/doc-9.js"></script>
+<script src="data/doc-20.js"></script>
+<script src="data/doc-7.js"></script>
+<script src="data/doc-152.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

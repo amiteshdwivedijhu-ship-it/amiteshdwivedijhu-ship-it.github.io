@@ -1,0 +1,43 @@
+---
+/* Renders any <pre class="mermaid"> blocks (lifted from ```mermaid fences at sync
+   time) into inline SVG, themed to the house palette. If a diagram fails to parse,
+   the source block stays visible as plain text. */
+---
+<script>
+  import mermaid from "mermaid";
+
+  mermaid.initialize({
+    startOnLoad: false,
+    securityLevel: "strict",
+    theme: "base",
+    themeVariables: {
+      background: "#17161e",
+      primaryColor: "#211e2c",
+      primaryBorderColor: "#4a4458",
+      primaryTextColor: "#ece9f0",
+      secondaryColor: "#1a1822",
+      tertiaryColor: "#17161e",
+      lineColor: "#928d9e",
+      textColor: "#ece9f0",
+      mainBkg: "#211e2c",
+      nodeBorder: "#4a4458",
+      clusterBkg: "rgba(255,255,255,.03)",
+      clusterBorder: "rgba(255,255,255,.11)",
+      edgeLabelBackground: "#17161e",
+      fontFamily: "ui-serif, Georgia, serif",
+      fontSize: "15px",
+    },
+  });
+
+  document.querySelectorAll("pre.mermaid").forEach(async (el, i) => {
+    try {
+      const { svg } = await mermaid.render(`mmd-${i}`, el.textContent ?? "");
+      const div = document.createElement("div");
+      div.className = "mermaid-diagram";
+      div.innerHTML = svg;
+      el.replaceWith(div);
+    } catch {
+      /* leave the source visible */
+    }
+  });
+</script>

@@ -1,0 +1,192 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../../../layouts/Base.astro";
+import ResultsTable from "../../../components/ResultsTable.astro";
+import PaGates from "../../../components/figures/PaGates.astro";
+import StabilityDots from "../../../components/figures/StabilityDots.astro";
+import NdaSweep from "../../../components/figures/NdaSweep.astro";
+import { PROJECTS, TABLES, bySlug } from "../../../lib/site";
+
+export async function getStaticPaths() {
+  return PROJECTS.map((p) => ({ params: { slug: p.slug } }));
+}
+const { slug } = Astro.params;
+const p = bySlug(slug!);
+const tables = TABLES[p.slug] ?? [];
+const figures: Record<string, { caption: string; note: string }> = {
+  "prior-auth": {
+    caption: "Met-precision on every configuration, with the Wilson 95% confidence range. The dashed line is the bar set before the run.",
+    note: "Every configuration lands under the bar, including the out of distribution row with a perfect point estimate on ten observations.",
+  },
+  "10k-risk": {
+    caption: "Run-to-run agreement on identical input, one row per issuer in the stability benchmark. Only the cache salt changes between runs.",
+    note: "Boeing agrees with itself on almost nothing. Consolidated Edison, the control, is stable: the method is not rigged.",
+  },
+  "nda-triage": {
+    caption: "Absence precision and recall across the three search budgets tested. Recall is the metric that matters: a missed absence sails toward auto-approval looking clean.",
+    note: "More search buys recall, and not enough of it. The full pricing is in the tradeoff memo.",
+  },
+};
+const fig = figures[p.slug];
+const artifacts = (await getCollection("artifacts", (a) => a.data.project === p.slug))
+  .sort((a, b) => a.data.order - b.data.order);
+const readMinutes = (body: string) => Math.max(3, Math.ceil(body.trim().split(/\s+/).length / 220));
+const intentLinks = [
+  ...(p.demo ? [{ eyebrow: "See the behavior", title: "Try the demo", note: "Replay the product on recorded runs.", href: p.demo.href, primary: true }] : []),
+  { eyebrow: "Follow the thinking", title: "Read the product strategy", note: "The user, workflow, scope, and tradeoffs.", href: `/projects/${p.slug}/prd/` },
+  { eyebrow: "Inspect the evidence", title: "Open the eval report", note: "Metrics, denominators, and uncertainty.", href: p.report },
+  { eyebrow: "See what I learned", title: "Read the conclusion", note: "How the evidence shaped the recommendation.", href: `/projects/${p.slug}/launch-decision-memo/` },
+];
+---
+<Base title={`${p.name} – Amitesh Dwivedi`} description={p.blurb}>
+  <p class="eyebrow rise">{p.domain}</p>
+  <h1 class="rise" style="--delay:60ms;font-size:clamp(1.7rem,4.5vw,2.3rem);letter-spacing:-.024em;line-height:1.2;margin:.5rem 0 1.1rem;max-width:36rem">{p.name}</h1>
+  <p class="rise measure" style="--delay:110ms;font-size:1.08rem;margin:0 0 1.2rem">{p.blurb}</p>
+  <div class="tldr rise" style="--delay:180ms">
+    <p class="eyebrow" style="margin:0 0 .5rem">Project brief</p>
+    <ul>{p.tldr.slice(0, 3).map((b) => <li set:html={b} />)}</ul>
+  </div>
+  <nav class="entry-grid rise" style="--delay:220ms" aria-label="Choose how to explore this project">
+    {intentLinks.map((item) => (
+      <a class:list={["entry-card", "glass", { primary: item.primary }]} href={item.href}>
+        <span class="eyebrow">{item.eyebrow}</span><strong>{item.title} →</strong><small>{item.note}</small>
+      </a>
+    ))}
+  </nav>
+
+  <div class="page-shell">
+    <aside class="reading-rail glass rise" style="--delay:260ms">
+      <p class="eyebrow" style="margin:0 0 .6rem">On this page</p>
+      <div class="progress" aria-hidden="true"><span></span></div>
+      <nav class="toc-list">
+        <a href="#problem">The problem</a>
+        <a href="#built">What I built</a>
+        <a href="#decisions">Decisions</a>
+        <a href="#results">Results</a>
+        <a href="#finding">The finding</a>
+        <a href="#artifacts">Artifacts</a>
+      </nav>
+      <div class="rail-shortcuts">
+        {p.demo && <a href={p.demo.href}>Demo →</a>}
+        <a href={`/projects/${p.slug}/prd/`}>Product strategy →</a>
+      </div>
+    </aside>
+    <div class="page-content">
+
+  {p.demo && (
+    <figure class="shot rise" style="--delay:240ms">
+      <a href={p.demo.href}><img src={p.shot.src} alt={p.shot.alt} loading="lazy" /></a>
+      <figcaption>{p.shot.caption} <a href={p.demo.href}>Open it</a></figcaption>
+    </figure>
+  )}
+
+  <h2 class="sec" id="problem">The problem</h2>
+  <p class="measure">{p.problem}</p>
+  <p class="measure" style="color:var(--accent)">{p.people}</p>
+
+  <h2 class="sec" id="built">What I built</h2>
+  <p class="measure">{p.built}</p>
+
+  <h2 class="sec" id="decisions">Decisions worth defending</h2>
+  <ol class="measure decisions">{p.decisions.map((d) => <li>{d}</li>)}</ol>
+
+  <h2 class="sec" id="results">Results</h2>
+  {fig && (
+    <div class="well rise">
+      <p class="cap">{fig.caption}</p>
+      {p.slug === "prior-auth" && <PaGates />}
+      {p.slug === "10k-risk" && <StabilityDots />}
+      {p.slug === "nda-triage" && <NdaSweep />}
+      <p class="cap">{fig.note}</p>
+    </div>
+  )}
+  {tables.map((t) => <ResultsTable table={t} />)}
+
+  <h2 class="sec" id="finding">What the evaluation found</h2>
+  <p class="measure finding">{p.finding}</p>
+  <section class="decision-banner conclusion" aria-label="Evaluation conclusion">
+    <div><p class="eyebrow">Evaluation conclusion</p><span class={`status ${p.launch.tone}`}>{p.launch.label}</span></div>
+    <div><strong>{p.launch.gate}</strong><p>{p.launch.reason}</p></div>
+    <a href={`/projects/${p.slug}/launch-decision-memo/`}>Read the reasoning →</a>
+  </section>
+
+  <h2 class="sec" id="artifacts">Artifacts</h2>
+  <p class="cap">The product record: strategy, metrics, tradeoffs, safety review, and the recommendation.</p>
+  <div class="rail">
+    {artifacts.map((a, index) => (
+      <a class="art glass" href={`/projects/${p.slug}/${a.id.split("/").pop()}/`}>
+        <span class="art-meta num">{String(index + 1).padStart(2, "0")} · {readMinutes(a.body)} min</span>
+        <span class="art-t">{a.data.title} →</span>
+        <span class="art-h">{a.data.hook}</span>
+      </a>
+    ))}
+    <a class="art glass" href={p.report}>
+      <span class="art-meta num">{String(artifacts.length + 1).padStart(2, "0")} · Full evidence</span>
+      <span class="art-t">Eval report →</span>
+      <span class="art-h">Every number, with its denominator and its confidence interval.</span>
+    </a>
+  </div>
+
+  {p.demo && (
+    <p style="margin:2.4rem 0 0"><a class="pill" href={p.demo.href}>{p.demo.label}</a></p>
+  )}
+    </div>
+  </div>
+</Base>
+<style>
+  .shot{margin:0 0 2.8rem;max-width:52rem}
+  .shot a{display:block}
+  .shot img{width:100%;display:block;border-radius:14px;border:1px solid var(--glass-brd);
+    box-shadow:0 16px 50px rgba(0,0,0,.4)}
+  .shot figcaption{margin-top:.65rem;color:var(--muted);font-size:.86rem;line-height:1.55;max-width:44rem}
+  .sec{font-size:1.3rem;letter-spacing:-.016em;margin:3rem 0 .8rem;padding-top:1.1rem;border-top:1px solid var(--hairline)}
+  .decision-banner{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:1.25rem;max-width:52rem;padding:1rem 1.2rem;margin:1.4rem 0 0;background:rgba(255,255,255,.035);border:1px solid var(--hairline);border-radius:14px}
+  .decision-banner .eyebrow{margin:0 0 .4rem}.decision-banner strong{display:block;font-family:var(--serif);color:var(--ink)}
+  .decision-banner p{margin:.15rem 0 0;color:var(--muted);font-size:.86rem;line-height:1.45}.decision-banner a{white-space:nowrap;font-size:.82rem}
+  .entry-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin:0 0 2rem}
+  .entry-card{display:flex;flex-direction:column;gap:.35rem;min-height:145px;padding:1rem;text-decoration:none;color:inherit;transition:transform var(--d1) var(--ease),border-color var(--d1) var(--ease)}
+  .entry-card:hover{transform:translateY(-3px);border-color:rgba(239,177,134,.45)}.entry-card.primary{background:rgba(239,177,134,.1);border-color:rgba(239,177,134,.32)}
+  .entry-card strong{font-family:var(--serif);color:var(--ink);line-height:1.25}.entry-card small{color:var(--muted);line-height:1.45;margin-top:auto}
+  .page-shell{display:grid;grid-template-columns:180px minmax(0,1fr);gap:2rem;align-items:start}
+  .reading-rail{position:sticky;top:126px;padding:1rem;max-height:calc(100vh - 146px);overflow:auto}
+  .progress{height:3px;background:var(--hairline);margin-bottom:.55rem}.progress span{display:block;width:0;height:100%;background:var(--accent)}
+  .toc-panel{padding:1.2rem 1.3rem}
+  .toc-list a{display:block;padding:.42rem 0;font-size:.8rem;text-decoration:none;color:var(--muted);
+    transition:color var(--d1) var(--ease),border-color var(--d1) var(--ease)}
+  .toc-list a + a{border-top:1px solid var(--hairline)}
+  .toc-list a:hover,.toc-list a.active{color:var(--accent)}
+  .rail-shortcuts{border-top:1px solid var(--hairline);margin-top:.65rem;padding-top:.65rem}.rail-shortcuts a{display:block;font-size:.76rem;margin:.35rem 0;text-decoration:none}
+  .tldr{margin:0 0 1.1rem;padding:1rem 1.3rem;border:1px solid var(--hairline);border-radius:12px;background:rgba(0,0,0,.2);max-width:44rem}
+  .tldr ul{margin:0;padding-left:1.1rem}
+  .tldr li{margin:.42rem 0;padding-left:.25rem;line-height:1.55}
+  .tldr li::marker{color:var(--accent)}
+  .decisions{padding-left:1.1rem}
+  .decisions li{margin:.7rem 0;padding-left:.3rem}
+  .decisions li::marker{font-family:var(--mono);font-size:.8rem;color:var(--accent)}
+  .finding{font-size:1.05rem;border-left:2px solid var(--accent);padding:.2rem 0 .2rem 1.1rem}
+  .rail{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:.8rem;margin-top:1.2rem}
+  .art{display:flex;flex-direction:column;gap:.35rem;padding:1.1rem 1.2rem;text-decoration:none;color:inherit;
+    transition:transform var(--d1) var(--ease),background var(--d1) var(--ease),border-color var(--d1) var(--ease)}
+  .art:hover{transform:translateY(-3px);background:var(--glass-hi);border-color:rgba(232,169,124,.30)}
+  .art-t{font-weight:600;font-size:.98rem}
+  .art-h{color:var(--muted);font-size:.85rem;line-height:1.5}
+  .art-meta{color:var(--dim);font-size:.66rem;text-transform:uppercase;letter-spacing:.08em}
+  @media(max-width:900px){.entry-grid{grid-template-columns:repeat(2,1fr)}.page-shell{display:block}.reading-rail{position:sticky;top:113px;z-index:10;display:flex;align-items:center;gap:.8rem;overflow-x:auto;margin-bottom:1.4rem;padding:.55rem .75rem}.reading-rail>.eyebrow,.reading-rail>.progress,.rail-shortcuts{display:none}.toc-list{display:flex;gap:.25rem}.toc-list a{white-space:nowrap;border:0!important;padding:.4rem .55rem}}
+  @media(max-width:560px){.decision-banner{grid-template-columns:1fr}.decision-banner a{white-space:normal}.entry-grid{grid-template-columns:1fr}.entry-card{min-height:110px}}
+</style>
+<script>
+  const sections = [...document.querySelectorAll<HTMLElement>(".page-content [id]")];
+  const links = [...document.querySelectorAll<HTMLAnchorElement>(".reading-rail .toc-list a")];
+  const progress = document.querySelector<HTMLElement>(".reading-rail .progress span");
+  const updateReadingRail = () => {
+    const marker = window.scrollY + 190;
+    let current = sections[0]?.id;
+    sections.forEach((section) => { if (section.offsetTop <= marker) current = section.id; });
+    links.forEach((link) => link.classList.toggle("active", link.hash === `#${current}`));
+    if (progress) {
+      const max = document.documentElement.scrollHeight - innerHeight;
+      progress.style.width = `${max ? Math.min(100, (scrollY / max) * 100) : 0}%`;
+    }
+  };
+  addEventListener("scroll", updateReadingRail, { passive: true }); updateReadingRail();
+</script>

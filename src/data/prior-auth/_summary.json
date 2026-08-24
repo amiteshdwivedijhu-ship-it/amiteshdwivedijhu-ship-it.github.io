@@ -1,0 +1,127 @@
+{
+  "gate_definitions": {
+    "met_precision": ">= 0.95 AND lower Wilson bound > 0.90",
+    "grounded_citation": "= 1.00"
+  },
+  "in_distribution": {
+    "fc-golden": {
+      "met_precision": {
+        "value": 0.9385964912280702,
+        "k": 107,
+        "n": 114,
+        "wilson95": [
+          0.8786570583728529,
+          0.9699407182443897
+        ],
+        "pass": false
+      },
+      "grounded_citation": {
+        "value": 1.0,
+        "k": 200,
+        "n": 200,
+        "wilson95": [
+          0.9811546733310369,
+          0.9999999999999999
+        ],
+        "pass": true
+      }
+    },
+    "fc-extracted": {
+      "met_precision": {
+        "value": 0.9375,
+        "k": 105,
+        "n": 112,
+        "wilson95": [
+          0.8765857430438903,
+          0.9693980778299617
+        ],
+        "pass": false
+      },
+      "grounded_citation": {
+        "value": 1.0,
+        "k": 203,
+        "n": 203,
+        "wilson95": [
+          0.9814280033506216,
+          1.0
+        ],
+        "pass": true
+      }
+    },
+    "retr-golden": {
+      "met_precision": {
+        "value": 0.9026548672566371,
+        "k": 102,
+        "n": 113,
+        "wilson95": [
+          0.8340616197904854,
+          0.9447715176188191
+        ],
+        "pass": false
+      },
+      "grounded_citation": {
+        "value": 1.0,
+        "k": 224,
+        "n": 224,
+        "wilson95": [
+          0.9831397722778042,
+          1.0
+        ],
+        "pass": true
+      }
+    },
+    "retr-extracted": {
+      "met_precision": {
+        "value": 0.9215686274509803,
+        "k": 94,
+        "n": 102,
+        "wilson95": [
+          0.8528127269148545,
+          0.9597233143395586
+        ],
+        "pass": false
+      },
+      "grounded_citation": {
+        "value": 1.0,
+        "k": 197,
+        "n": 197,
+        "wilson95": [
+          0.9808731777657199,
+          0.9999999999999999
+        ],
+        "pass": true
+      }
+    },
+    "fc-golden-norouting": {
+      "met_precision": {
+        "value": 0.9385964912280702,
+        "k": 107,
+        "n": 114,
+        "wilson95": [
+          0.8786570583728529,
+          0.9699407182443897
+        ],
+        "pass": false
+      },
+      "grounded_citation": {
+        "value": 1.0,
+        "k": 194,
+        "n": 194,
+        "wilson95": [
+          0.9805831451960689,
+          0.9999999999999998
+        ],
+        "pass": true
+      }
+    }
+  },
+  "ood": null,
+  "hypotheses_confirmed": {
+    "H1": false,
+    "H2": true,
+    "H3": true,
+    "H4": false,
+    "H5": true,
+    "H6": true
+  }
+}

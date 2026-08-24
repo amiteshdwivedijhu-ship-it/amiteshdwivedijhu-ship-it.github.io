@@ -1,0 +1,49 @@
+---
+import { getCollection, render } from "astro:content";
+import Base from "../../../layouts/Base.astro";
+import Mermaid from "../../../components/Mermaid.astro";
+import { bySlug } from "../../../lib/site";
+
+export async function getStaticPaths() {
+  const reports = await getCollection("reports");
+  return reports.map((r) => ({ params: { slug: r.data.project }, props: { entry: r } }));
+}
+const { entry } = Astro.props;
+const p = bySlug(entry.data.project);
+const { Content } = await render(entry);
+const minutes = Math.max(5, Math.ceil(entry.body.trim().split(/\s+/).length / 220));
+---
+<Base title={`Eval report – ${p.name}`} description={`Full evaluation report for ${p.name}.`}>
+  <header class="report-header">
+    <p class="eyebrow"><a href={`/projects/${p.slug}/#artifacts`}>&larr; All {p.name} artifacts</a></p>
+    <div class="num meta">Evaluation report · {minutes} min · Complete evidence record</div>
+    <div class="report-takeaway"><span class="eyebrow">Executive takeaway</span><p>{p.finding}</p></div>
+  </header>
+  <div class="report-shell">
+    <aside class="report-rail glass">
+      <span class="eyebrow">Evidence record</span><p>{p.name}</p>
+      <div class="report-progress"><span></span></div>
+      <a href={`/projects/${p.slug}/`}>Back to project</a>
+      {p.demo && <a href={p.demo.href}>Open demo</a>}
+      <a href={`/projects/${p.slug}/prd/`}>Product strategy</a>
+    </aside>
+    <div>
+      <article class="prose"><Content /></article>
+      <p class="num source">Source: {entry.data.source}</p>
+      <Mermaid />
+      <nav class="report-end"><a href={`/projects/${p.slug}/#artifacts`}>← All artifacts</a>{p.demo && <a href={p.demo.href}>Open the demo →</a>}</nav>
+    </div>
+  </div>
+</Base>
+<style>
+  .report-header{max-width:48rem;margin-bottom:1.5rem}.report-header>.eyebrow a{text-decoration:none;color:var(--muted)}.meta{font-size:.7rem;color:var(--dim);text-transform:uppercase;letter-spacing:.08em;margin:.8rem 0}
+  .report-takeaway{padding:1rem 1.2rem;border-left:3px solid var(--accent);background:rgba(239,177,134,.07);border-radius:0 10px 10px 0}.report-takeaway p{font-family:var(--serif);color:var(--ink);font-size:1.05rem;line-height:1.5;margin:.35rem 0 0}
+  .report-shell{display:grid;grid-template-columns:160px minmax(0,1fr);gap:2rem;align-items:start}.report-rail{position:sticky;top:126px;padding:1rem}.report-rail p{font-size:.75rem;color:var(--muted);line-height:1.4}.report-rail a{display:block;padding:.4rem 0;font-size:.76rem;text-decoration:none;border-top:1px solid var(--hairline)}
+  .report-progress{height:3px;background:var(--hairline);margin:.75rem 0}.report-progress span{display:block;height:100%;width:0;background:var(--accent)}.source{color:var(--dim);font-size:.7rem;margin-top:3rem}.report-end{display:flex;justify-content:space-between;gap:1rem;margin-top:3rem;padding-top:1rem;border-top:1px solid var(--hairline)}
+  @media(max-width:760px){.report-shell{display:block}.report-rail{position:sticky;top:113px;z-index:9;display:flex;align-items:center;gap:.75rem;overflow:auto;margin-bottom:1.4rem;padding:.5rem .7rem}.report-rail p,.report-progress{display:none}.report-rail a{white-space:nowrap;border:0}}
+</style>
+<script>
+  const bar = document.querySelector<HTMLElement>(".report-progress span");
+  const update = () => { const max = document.documentElement.scrollHeight - innerHeight; if (bar) bar.style.width = `${max ? Math.min(100, scrollY / max * 100) : 0}%`; };
+  addEventListener("scroll", update, { passive: true }); update();
+</script>

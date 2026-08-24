@@ -1,0 +1,147 @@
+{
+ "issuers": [
+  {
+   "ticker": "BA",
+   "model": "claude-haiku-4-5",
+   "passes": [
+    [
+     "s0081",
+     "s0149",
+     "s0286"
+    ],
+    [
+     "s0150",
+     "s0151"
+    ],
+    [
+     "s0033",
+     "s0034",
+     "s0150",
+     "s0151",
+     "s0185",
+     "s0250",
+     "s0251"
+    ]
+   ],
+   "ever_flagged": [
+    "s0033",
+    "s0034",
+    "s0081",
+    "s0149",
+    "s0150",
+    "s0151",
+    "s0185",
+    "s0250",
+    "s0251",
+    "s0286"
+   ],
+   "always_flagged": [],
+   "sentences": {
+    "s0033": "We have plans to increase production rates on several of our commercial aircraft programs, while continuing ongoing development and production of new or derivative aircraft.",
+    "s0034": "These plans include increasing the 737 production rate to 47 per month in 2026, as well as further production rate increases that will require a new production line.",
+    "s0081": "During 2025, employees represented by IAM District 837, which represents approximately 3,200 employees at our St. Louis area sites, went out on strike for 101 days, disrupting our St. Louis operations and impacting programs including F/A-18, F-15, T-7A, MQ-25 and Weapons.",
+    "s0149": "In connection with acquisitions or divestitures, we may have obligations to, or rely on the performance of, unrelated third parties, including pursuant to transitional or longer-term services agreements and/or guarantees or other financial arrangements, and nonperformance or underperformance of such agreements could affect our future financial results.",
+    "s0150": "For example, in connection with the Spirit Acquisition, we are required to provide services to buyers of divested Spirit businesses, including",
+    "s0151": "Airbus, and if we are unable to satisfy our obligations to these third parties or if they assert claims against us, our business and financial condition could be adversely affected.",
+    "s0185": "The outcome of customer and/or supplier contractual negotiations could increase costs and lower margins.",
+    "s0250": "From time to time, in alignment with our sustainability priorities, we establish and publicly announce goals and commitments to improve our environmental performance, within our products and/or operations.",
+    "s0251": "If we fail to achieve or inadequately report our progress toward achieving such goals and commitments, the resulting negative publicity could adversely affect our reputation and/or our access to capital.",
+    "s0286": "We may also issue shares of our common stock upon the exchange of the $230 million of 3.250% Exchangeable Notes, maturing November 1, 2028 (the Spirit Exchangeable Notes), that we assumed in connection with the Spirit Acquisition."
+   }
+  },
+  {
+   "ticker": "PLD",
+   "model": "claude-haiku-4-5",
+   "passes": [
+    [
+     "s0015"
+    ],
+    [
+     "s0015",
+     "s0125"
+    ],
+    [
+     "s0015",
+     "s0099",
+     "s0125"
+    ]
+   ],
+   "ever_flagged": [
+    "s0015",
+    "s0099",
+    "s0125"
+   ],
+   "always_flagged": [
+    "s0015"
+   ],
+   "sentences": {
+    "s0015": "changes in technological advances, including the increasing adoption of AI;",
+    "s0099": "At December 31, 2025, our top 10 customers accounted for 16.3% of our consolidated NER and 15.2% of our O&M NER.",
+    "s0125": "even if power is secured for our data center developments, unanticipated disruptions to the supply of such power (including initial delivery delays) or increases in the cost of such power due to impacts from local regulatory changes, availability of fuel sources, or natural disasters, could impact our ability to lease or sell such assets as intended;"
+   }
+  },
+  {
+   "ticker": "ED",
+   "model": "claude-haiku-4-5",
+   "passes": [
+    [
+     "s0065",
+     "s0066",
+     "s0067",
+     "s0068",
+     "s0069",
+     "s0070",
+     "s0071"
+    ],
+    [
+     "s0065",
+     "s0066",
+     "s0067",
+     "s0068",
+     "s0069",
+     "s0070",
+     "s0071",
+     "s0073"
+    ],
+    [
+     "s0065",
+     "s0066",
+     "s0067",
+     "s0068",
+     "s0069",
+     "s0070",
+     "s0071"
+    ]
+   ],
+   "ever_flagged": [
+    "s0065",
+    "s0066",
+    "s0067",
+    "s0068",
+    "s0069",
+    "s0070",
+    "s0071",
+    "s0073"
+   ],
+   "always_flagged": [
+    "s0065",
+    "s0066",
+    "s0067",
+    "s0068",
+    "s0069",
+    "s0070",
+    "s0071"
+   ],
+   "sentences": {
+    "s0065": "AI is an emerging area of technology that has the potential to impact various aspects of the Companies\u2019 business operations and customer interactions.",
+    "s0066": "Generative AI technologies are still in their early stages of development and deployment.",
+    "s0067": "Ineffective or inadequate AI development or deployment practices by the Companies or third-party vendors could result in unintended consequences.",
+    "s0068": "While the Companies seek contractual protections with third-party vendors regarding the use of AI technology, the Companies may not have full awareness of, or control or visibility over, the quality, performance, security or compliance of the products and services that incorporate AI-related technology used by such vendors.",
+    "s0069": "AI algorithms that the Companies or their third-party vendors use may be flawed or may be based on datasets that are biased or insufficient.",
+    "s0070": "These limitations or failures, or inaccurate results generated as a result of the Companies\u2019 employees\u2019, contractors\u2019 or vendors\u2019 use or misuse of AI technologies could lead to operational interruptions or otherwise adversely affect the Companies\u2019 businesses, reputation or financial results.",
+    "s0071": "Developing, testing, and deploying resource-intensive AI systems may require additional investment and increase the Companies\u2019 costs.",
+    "s0073": "The future development of AI technologies and the nature of any related new laws and regulations, and their costs and consequences, cannot be reasonably predicted at this time."
+   }
+  }
+ ]
+}

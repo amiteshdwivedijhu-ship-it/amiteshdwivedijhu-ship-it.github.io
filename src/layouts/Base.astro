@@ -1,0 +1,61 @@
+---
+import "../styles/house.css";
+import { PROJECTS } from "../lib/site";
+interface Props { title: string; description?: string; }
+const { title, description = "Amitesh Dwivedi. AI product manager. Agentic AI in healthcare, and three prototypes with the evidence attached." } = Astro.props;
+const path = Astro.url.pathname;
+const activeProject = PROJECTS.find((project) => path.includes(`/${project.slug}`));
+const socialImage = new URL("/og.png", Astro.site ?? Astro.url.origin).toString();
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content={socialImage} />
+  <meta property="og:image:alt" content="Amitesh Dwivedi. High-stakes AI, measured before it ships." />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={socialImage} />
+  <meta name="theme-color" content="#100f15" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='26' font-size='26'%3E%E2%97%89%3C/text%3E%3C/svg%3E" />
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <nav class="nav" aria-label="Global navigation">
+    <div class="wrap">
+      <a class="home" href="/">Amitesh Dwivedi</a>
+      <a href="/#projects" aria-current={path === "/" ? "page" : undefined}>Work</a>
+      <a href="/resume/" aria-current={path.startsWith("/resume") ? "page" : undefined}>Resume</a>
+      <a class="linkedin" href="https://linkedin.com/in/amiteshdwivedi/" rel="me noopener" target="_blank">LinkedIn ↗</a>
+    </div>
+  </nav>
+  {activeProject && (
+    <nav class="project-nav" aria-label={`${activeProject.name} navigation`}>
+      <div class="wrap">
+        <a class="project-name" href={`/projects/${activeProject.slug}/`}>{activeProject.name}</a>
+        <a href={`/projects/${activeProject.slug}/`} aria-current={path === `/projects/${activeProject.slug}/` ? "page" : undefined}>Overview</a>
+        {activeProject.demo && <a href={activeProject.demo.href}>Demo</a>}
+        <a href={`/projects/${activeProject.slug}/prd/`}>Product</a>
+        <a href={`/projects/${activeProject.slug}/report/`}>Evidence</a>
+        <a href={`/projects/${activeProject.slug}/launch-decision-memo/`}>Learnings</a>
+        <a href={`/projects/${activeProject.slug}/#artifacts`}>Artifacts</a>
+      </div>
+    </nav>
+  )}
+  <main id="main-content" class="wrap" style="padding-top:3rem" tabindex="-1">
+    <slot />
+  </main>
+  <footer>
+    <div class="wrap">
+      <p style="margin:0">Built by Amitesh Dwivedi. Every number on this site is read at build time from a committed run artifact, never typed by hand.</p>
+    </div>
+  </footer>
+</body>
+</html>

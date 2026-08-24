@@ -1,0 +1,34 @@
+---
+import type { Project } from "../lib/site";
+interface Props { project: Project; delay?: number }
+const { project: p, delay = 0 } = Astro.props;
+---
+<a class="card glass rise" href={`/projects/${p.slug}/`} style={`--delay:${delay}ms`}>
+  <div class="thumb"><img src={p.shot.src} alt="" loading="lazy" /></div>
+  <p class="eyebrow" style="margin:0 0 .7rem">{p.domain}</p>
+  <h3>{p.name}</h3>
+  <p class="desc">{p.blurb}</p>
+  <p class="stat"><span class="num">{p.scale.value}</span> {p.scale.label}</p>
+  <span class="go">View case study →</span>
+</a>
+<style>
+.thumb{margin:0 0 1.1rem;border-radius:10px;overflow:hidden;aspect-ratio:16/9;border:1px solid var(--hairline);background:var(--ground-1)}
+.thumb img{width:100%;height:100%;object-fit:cover;object-position:top;display:block;
+  filter:brightness(1.16) contrast(1.04);transition:transform var(--d2) var(--ease),filter var(--d2) var(--ease)}
+.card:hover .thumb img{transform:scale(1.035);filter:brightness(1.25) contrast(1.06)}
+.card{display:flex;flex-direction:column;padding:1.6rem;text-decoration:none;color:inherit;position:relative;overflow:hidden;
+  transition:transform var(--d2) var(--ease),background var(--d2) var(--ease),box-shadow var(--d2) var(--ease),border-color var(--d2) var(--ease)}
+.card::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:radial-gradient(420px 200px at var(--mx,50%) var(--my,0%),rgba(232,169,124,.13),transparent 62%);
+  opacity:0;transition:opacity var(--d2) var(--ease)}
+.card:hover{transform:translateY(-4px);background:var(--glass-hi);border-color:rgba(232,169,124,.30);
+  box-shadow:0 20px 60px rgba(0,0,0,.48), inset 0 1px 0 rgba(255,255,255,.14)}
+.card:hover::after{opacity:1}
+.card h3{margin:0 0 .55rem;font-size:1.22rem;letter-spacing:-.015em}
+.desc{margin:0 0 1.1rem;color:var(--muted);font-size:.95rem;line-height:1.58;max-width:32em}
+.stat{margin:0 0 1.1rem;margin-top:auto;font-size:.86rem;color:var(--muted)}
+.stat .num{color:var(--accent);font-size:1rem}
+.go{font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);
+  transition:color var(--d1) var(--ease)}
+.card:hover .go{color:var(--accent)}
+</style>

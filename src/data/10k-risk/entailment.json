@@ -1,0 +1,329 @@
+{
+ "verifier_model": "gpt-4.1",
+ "extractor_model": "claude-haiku-4-5",
+ "issuers": [
+  {
+   "ticker": "NVDA",
+   "claims": 402,
+   "checked": 402,
+   "unverified": 0,
+   "entailment_rate": 0.9876,
+   "unsupported": [
+    {
+     "claim_id": "NVDA-FY2025-rf008-c0147",
+     "why": "Claim adds 'disruptions could harm business', which is not stated; only 'impact is unknown' is."
+    },
+    {
+     "claim_id": "NVDA-FY2025-rf014-c0223",
+     "why": "Cited sentence lists ability to adjust spending, but does not state impact on operating results."
+    },
+    {
+     "claim_id": "NVDA-FY2025-rf014-c0224",
+     "why": "Cited sentence mentions ability to comply, but not its effect on operating results."
+    },
+    {
+     "claim_id": "NVDA-FY2025-rf015-c0315",
+     "why": "Claim adds 'including the issuer's products' not found in cited text."
+    },
+    {
+     "claim_id": "NVDA-FY2025-rf016-c0335",
+     "why": "Claim adds 'creating compliance challenges,' which is not stated in source."
+    }
+   ]
+  },
+  {
+   "ticker": "CRWD",
+   "claims": 580,
+   "checked": 580,
+   "unverified": 0,
+   "entailment_rate": 0.9931,
+   "unsupported": [
+    {
+     "claim_id": "CRWD-FY2025-rf007-c0067",
+     "why": "'May also experience' is hypothetical, but the claim asserts a definite expectation."
+    },
+    {
+     "claim_id": "CRWD-FY2025-rf011-c0117",
+     "why": "Cited text omits issuer's ability to anticipate or implement measures."
+    },
+    {
+     "claim_id": "CRWD-FY2025-rf038-c0411",
+     "why": "The source does not mention service level commitments or link disruptions to them."
+    },
+    {
+     "claim_id": "CRWD-FY2025-rf040-c0447",
+     "why": "Source does not say the issuer may face litigation, only past patterns."
+    }
+   ]
+  },
+  {
+   "ticker": "BA",
+   "claims": 188,
+   "checked": 188,
+   "unverified": 0,
+   "entailment_rate": 0.9787,
+   "unsupported": [
+    {
+     "claim_id": "BA-FY2025-rf000-c0011",
+     "why": "Claim adds effect on issuer's aircraft demand, which the source does not state."
+    },
+    {
+     "claim_id": "BA-FY2025-rf006-c0062",
+     "why": "Source does not specify 'non-U.S. jurisdictions'; limitation added."
+    },
+    {
+     "claim_id": "BA-FY2025-rf008-c0097",
+     "why": "Claim asserts adverse impact; source only says 'impact,' not adverse."
+    },
+    {
+     "claim_id": "BA-FY2025-rf010-c0114",
+     "why": "Claim adds 'cash flows' impact; cited source only mentions 'reported results'."
+    }
+   ]
+  },
+  {
+   "ticker": "MRNA",
+   "claims": 743,
+   "checked": 743,
+   "unverified": 0,
+   "entailment_rate": 0.9825,
+   "unsupported": [
+    {
+     "claim_id": "MRNA-FY2025-rf002-c0022",
+     "why": "'Exclusive' contract is added; source only states 'contract.'"
+    },
+    {
+     "claim_id": "MRNA-FY2025-rf004-c0046",
+     "why": "Cited text is only a bullet fragment, not a complete reason for market acceptance."
+    },
+    {
+     "claim_id": "MRNA-FY2025-rf005-c0061",
+     "why": "Claim says 'may be adversely affected'; source lists regulatory/policy changes but not effect direction."
+    },
+    {
+     "claim_id": "MRNA-FY2025-rf005-c0062",
+     "why": "Claim adds possible adverse effect; source lists 'pressure' but not consequences."
+    },
+    {
+     "claim_id": "MRNA-FY2025-rf007-c0078",
+     "why": "The source only says the issuer \"may face decisions\" with possible impacts; claim restates possibility as actual fact."
+    },
+    {
+     "claim_id": "MRNA-FY2025-rf013-c0179",
+     "why": "Claim asserts adverse effect on business, which the source does not say\u2014only that legislation/regulation could be passed."
+    },
+    {
+     "claim_id": "MRNA-FY2025-rf019-c0240",
+     "why": "Claim adds 'lower than desired shelf life'; source does not specify shelf life."
+    },
+    {
+     "claim_id": "MRNA-FY2025-rf026-c0336",
+     "why": "Claim adds 'if a collaboration agreement is terminated'; source omits this condition."
+    },
+    {
+     "claim_id": "MRNA-FY2025-rf029-c0349",
+     "why": "May be unable to do so effectively is added; source does not declare inability."
+    },
+    {
+     "claim_id": "MRNA-FY2025-rf043-c0486",
+     "why": "Claim adds issuer exposure; the source only refers to past enforcement actions in general."
+    },
+    {
+     "claim_id": "MRNA-FY2025-rf051-c0552",
+     "why": "Claim adds 'creating precedent for claims against the issuer,' not stated in source."
+    },
+    {
+     "claim_id": "MRNA-FY2025-rf053-c0580",
+     "why": "The cited sentence does not mention adverse impact on issuer's revenues/results."
+    },
+    {
+     "claim_id": "MRNA-FY2025-rf067-c0708",
+     "why": "Claim says judgments may be less favorable to shareholders; source says could be more or less favorable."
+    }
+   ]
+  },
+  {
+   "ticker": "FSLR",
+   "claims": 270,
+   "checked": 270,
+   "unverified": 0,
+   "entailment_rate": 0.9889,
+   "unsupported": [
+    {
+     "claim_id": "FSLR-FY2025-rf004-c0053",
+     "why": "Source does not mention test predictions proving different from actual performance."
+    },
+    {
+     "claim_id": "FSLR-FY2025-rf019-c0181",
+     "why": "Claim says all materials are regulated as hazardous; source only states elemental cadmium and some compounds are regulated."
+    },
+    {
+     "claim_id": "FSLR-FY2025-rf028-c0254",
+     "why": "Claim asserts the issuer 'is subject to' provisions; source only states IRA provisions were enacted, does not affirm issuer is subject."
+    }
+   ]
+  },
+  {
+   "ticker": "PG",
+   "claims": 126,
+   "checked": 126,
+   "unverified": 0,
+   "entailment_rate": 0.9921,
+   "unsupported": [
+    {
+     "claim_id": "PG-FY2025-rf016-c0122",
+     "why": "Cited sentences do not mention exposure to changes in tax laws across multiple jurisdictions."
+    }
+   ]
+  },
+  {
+   "ticker": "RSG",
+   "claims": 205,
+   "checked": 205,
+   "unverified": 0,
+   "entailment_rate": 0.9854,
+   "unsupported": [
+    {
+     "claim_id": "RSG-FY2025-rf000-c0009",
+     "why": "Missing \"if the issuer loses market share\"; source only mentions lowering prices."
+    },
+    {
+     "claim_id": "RSG-FY2025-rf016-c0116",
+     "why": "Claim says 'materially impact'; source omits 'materially,' only says 'may impact.'"
+    },
+    {
+     "claim_id": "RSG-FY2025-rf028-c0185",
+     "why": "Cited sentence doesn't say issuer's ability to raise prices is limited."
+    }
+   ]
+  },
+  {
+   "ticker": "ED",
+   "claims": 93,
+   "checked": 93,
+   "unverified": 0,
+   "entailment_rate": 0.9247,
+   "unsupported": [
+    {
+     "claim_id": "ED-FY2025-rf000-c0001",
+     "why": "'May seek to impose' is weaker than 'may impose.' Source adds possibility, not certainty."
+    },
+    {
+     "claim_id": "ED-FY2025-rf000-c0002",
+     "why": "'May limit' is weaker than 'may limit.' Source adds possibility, not certainty."
+    },
+    {
+     "claim_id": "ED-FY2025-rf007-c0054",
+     "why": "The sentence refers only to CECONY, not 'the issuer' in general."
+    },
+    {
+     "claim_id": "ED-FY2025-rf007-c0056",
+     "why": "Source mentions 'The Utilities,' not 'the issuer.' 'Issuer' scope is broader."
+    },
+    {
+     "claim_id": "ED-FY2025-rf008-c0060",
+     "why": "The claim omits 'with certain exceptions,' which is present in the source."
+    },
+    {
+     "claim_id": "ED-FY2025-rf013-c0082",
+     "why": "Claim specifies reduced reliance on gas and steam, which source does not."
+    },
+    {
+     "claim_id": "ED-FY2025-rf014-c0088",
+     "why": "Claim adds 'that impact the issuer'; source does not directly link to issuer."
+    }
+   ]
+  },
+  {
+   "ticker": "JPM",
+   "claims": 415,
+   "checked": 415,
+   "unverified": 0,
+   "entailment_rate": 0.9639,
+   "unsupported": [
+    {
+     "claim_id": "JPM-FY2025-rf003-c0048",
+     "why": "Adds 'resolution requirements' and 'heightened regulatory expectations' not mentioned in the cited sentence."
+    },
+    {
+     "claim_id": "JPM-FY2025-rf005-c0066",
+     "why": "Source only mentions reputational harm, not the causes (government policies). Claim adds unstated specifics."
+    },
+    {
+     "claim_id": "JPM-FY2025-rf010-c0107",
+     "why": "Source does not state reduced earnings\u2014it addresses impaired repayment ability, not earnings impact."
+    },
+    {
+     "claim_id": "JPM-FY2025-rf010-c0108",
+     "why": "Claim adds reduction in JPMorganChase's earnings, not stated in source."
+    },
+    {
+     "claim_id": "JPM-FY2025-rf012-c0125",
+     "why": "Cited sentence is only a list fragment without context about higher interest rates."
+    },
+    {
+     "claim_id": "JPM-FY2025-rf012-c0126",
+     "why": "Cited sentence is a list fragment with no context about higher interest rates."
+    },
+    {
+     "claim_id": "JPM-FY2025-rf012-c0127",
+     "why": "Cited sentence is a fragment\u2014it lacks context attributing the effects to higher interest rates."
+    },
+    {
+     "claim_id": "JPM-FY2025-rf012-c0128",
+     "why": "Fragment only; no mention that higher interest rates are the cause."
+    },
+    {
+     "claim_id": "JPM-FY2025-rf012-c0129",
+     "why": "Fragment only; context about higher interest rates is missing."
+    },
+    {
+     "claim_id": "JPM-FY2025-rf012-c0130",
+     "why": "Fragment; does not explicitly connect less liquidity to higher interest rates."
+    },
+    {
+     "claim_id": "JPM-FY2025-rf012-c0131",
+     "why": "Fragment; does not attribute higher funding costs to higher interest rates."
+    },
+    {
+     "claim_id": "JPM-FY2025-rf025-c0275",
+     "why": "Source lists dependencies and 'staffing shortages', but does not say these could materially and adversely affect outcomes."
+    },
+    {
+     "claim_id": "JPM-FY2025-rf033-c0341",
+     "why": "Cited sentences list requirements, not the negative consequence of failing to do them."
+    },
+    {
+     "claim_id": "JPM-FY2025-rf033-c0342",
+     "why": "Claim adds 'business could be adversely affected', which is not in cited sentences."
+    },
+    {
+     "claim_id": "JPM-FY2025-rf033-c0343",
+     "why": "Claim adds 'adversely affected' outcome missing from cited sentences."
+    }
+   ]
+  },
+  {
+   "ticker": "PLD",
+   "claims": 196,
+   "checked": 196,
+   "unverified": 0,
+   "entailment_rate": 0.9847,
+   "unsupported": [
+    {
+     "claim_id": "PLD-FY2025-rf010-c0085",
+     "why": "Claim adds 'extended timeframe'; source only says 'within the anticipated timeframe.'"
+    },
+    {
+     "claim_id": "PLD-FY2025-rf012-c0108",
+     "why": "'may choose' is not the same as 'may be required'."
+    },
+    {
+     "claim_id": "PLD-FY2025-rf023-c0185",
+     "why": "Cited text does not mention state tax timing (\"ten years\") for acquired assets, only federal."
+    }
+   ]
+  }
+ ],
+ "entailment_rate": 0.982
+}
