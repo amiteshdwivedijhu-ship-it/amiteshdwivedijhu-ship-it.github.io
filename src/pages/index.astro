@@ -88,7 +88,7 @@ const method = [
   <section class="band" aria-label="Background">
     <div class="split">
       <div>
-        <h2 class="display display-s cut">At Ellipsis Health</h2>
+        <h2 class="display display-s cut has-icon"><Icon name="voice" size={26} />At Ellipsis Health</h2>
         <p class="cut" style="--d:80ms">
           I took a clinical voice care-management platform from zero to production
           across 10+ enterprise healthcare accounts, including Aetna, Duke and
@@ -97,7 +97,7 @@ const method = [
         </p>
       </div>
       <div>
-        <h2 class="display display-s cut" style="--d:60ms">What I am after</h2>
+        <h2 class="display display-s cut has-icon" style="--d:60ms"><Icon name="diamond" size={26} />What I am after</h2>
         <p class="cut" style="--d:140ms">
           Product roles where the hard part is judging whether an AI system is good
           enough to put in front of someone, and where being right about that
@@ -109,6 +109,7 @@ const method = [
 
   <section class="band close" aria-labelledby="close-title">
     <div class="inner">
+      <Icon class="close-icon" name="gate" size={44} />
       <h2 id="close-title" class="display display-m">
         The evidence is the point.
       </h2>
@@ -174,7 +175,14 @@ const method = [
   .method strong{font-variation-settings:"wdth" 104,"wght" 750;font-size:.95rem;line-height:1.2}
   .method small{color:var(--ink-soft);font-size:.84rem;line-height:1.45}
 
-  .close .inner{padding-block:clamp(2.75rem,6vw,4.25rem)}
+  .close .inner{
+    padding-block:clamp(2.75rem,6vw,4.25rem);
+    display:grid;justify-items:center;text-align:center;
+  }
+  .close .measure{margin-inline:auto;max-width:var(--measure)}
+  .close-icon{color:var(--ink);margin-bottom:1.2rem}
+  .has-icon{display:flex;align-items:center;gap:.75rem}
+  .has-icon .ico{color:var(--ink)}
 
   @media (max-width:1000px){
     .hero-say{grid-template-columns:1fr;gap:1.75rem;align-items:start}
