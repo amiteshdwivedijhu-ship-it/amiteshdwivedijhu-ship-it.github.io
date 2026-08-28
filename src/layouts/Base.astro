@@ -57,9 +57,9 @@ const on = (test: boolean) => (test ? "page" : undefined);
 
   <nav class="nav" aria-label="Global">
     <div class="inner">
-            <a class="wordmark" href="/">Amitesh Dwivedi</a>
+      <a class="wordmark" href="/">Amitesh Dwivedi</a>
+      <a class="pill" href="/#work" aria-current={on(path === "/")}>Work</a>
       <a class="pill" href="/resume/" aria-current={on(path.startsWith("/resume"))}><Icon name="resume" size={16} />Resume</a>
-            <a class="pill" href="/resume/" aria-current={on(path.startsWith("/resume"))}><Icon name="resume" size={16} />Resume</a>
       <a class="pill hide-s" href="https://linkedin.com/in/amiteshdwivedi/" rel="me noopener" target="_blank"><Icon name="linkedin" size={16} />LinkedIn</a>
       <a class="pill hide-s" href="https://github.com/amiteshdwivedijhu-ship-it" rel="me noopener" target="_blank"><Icon name="github" size={16} />GitHub</a>
     </div>
