@@ -105,47 +105,38 @@ stacked above a heading. There are no eyebrows in this system.
   `--rule` background, so the seams draw themselves.
 - `.poster-frame` — holds the five project posters.
 
-## The five marks, and the homepage order
+## The marks, and the homepage order
 
-`ProjectMark.astro` draws each project's evaluation signature as a glyph small
-enough to sit together in the hero: configurations against a fixed gate, three
-repeat passes, splice fixtures, check firing rates on the entropy curve, and grader
-routes from expected to actual diagnoses. They
-use the same measurement apparatus and committed artifacts as the full posters,
-so a mark is never a logo. They draw in `currentColor`, so a tile inverts to that
-project's own field colour on hover or focus.
+The landing page once carried a five-glyph contact sheet of project marks, one
+signature per project drawn from the same measurement apparatus as the posters
+(a never-a-logo rule). It is retired: five glyphs above five drenched fields
+said the same five names twice, so the fields are now the single project
+presentation and the glyph machinery was removed with the sheet. The
+evaluation signatures still live at full size as the posters in each case
+study.
 
-The landing page is a Persuade surface, so each mark is followed by one short
-sentence explaining what the product does, then one proof line naming its strongest
-demonstrated capability. Metrics stay in the case study, where their denominators
-and release gates are visible. The complete case study carries the verdict and the
-inconvenient evidence. This is sequence, not omission: product first on the index,
-measurement in the record one click away.
+The landing page is a Persuade surface, so each field card carries one short
+sentence explaining what the product does, a proof line naming its strongest
+demonstrated capability, and one measured scale figure, then links to the case
+study. Each card is drenched in its project's ink: the say side reads domain label,
+name, blurb, proof, and the view-case-study link, with the measured figure and
+scale label set beside it on desktop and stacked below it under 820px. Metrics and
+verdicts stay in the case study, where denominators and release gates are
+visible. This is sequence, not omission: product first on the index, measurement
+in the record one click away.
 
-Every tile uses the same internal rows: a fixed optical stage for the mark, a
-reserved title row, a short description, and the proof line pinned to the bottom.
-The marks share a `132 × 92` drawing canvas but not identical visible bounds, so
-each kind receives a small optical scale correction. Explanatory captions do not
-live inside the marks; the description below owns that work.
-
-One decision worth keeping: the gate mark plots the **Wilson lower bound**, not
-the point estimate. The point estimate puts the out-of-distribution row past the
-rule, which at glyph size reads as a pass when it is not one; the lower bound is
-the quantity the release rule actually tests and every configuration falls short
-on it.
+One decision worth keeping: the gate poster plots the **Wilson lower bound**,
+not the point estimate. The point estimate sometimes lands past the rule, which
+reads as a pass when it is not one; the lower bound is the quantity the release
+rule actually tests and every configuration falls short on it.
 
 The homepage order is deliberate and was arrived at by fixing a real problem: the
 first screen used to be type on empty paper with three text bands before any
 colour, which is a drop-off page. It now runs hero (sentence, gate rule, proof and
-inventory, then a full-width contact sheet of five equal marks), work intro, the five
-colour fields, how-I-work, background, close. Colour and pictures land in the
-first two viewports, and the bio sits after the work rather than before it.
-
-The five-mark sheet is never a two-column grid. Five equal things need five equal
-cells on a wide surface; putting four in a square and stretching the fifth across
-the row turns one project into an accidental hero and leaves dead space beside the
-sheet. Below 900px, every mark becomes a compact horizontal row in the same source
-order, preserving equal weight without manufacturing an empty sixth cell.
+inventory), work intro, the five colour fields, how-I-work, background, close.
+The first field card starts directly below the work intro, so colour and pictures
+still land in the first two viewports, and the bio sits after the work rather
+than before it.
 
 ## Icons and pipelines
 

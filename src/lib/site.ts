@@ -154,43 +154,6 @@ export const LEARNING = {
   recall: learningRecall,
 };
 
-/* ---------- The project marks -------------------------------------------------
-   Each project's finding, compressed to a glyph small enough to sit in the hero.
-   These are the same shapes as the full posters and they are fed by the same
-   committed artifacts, so the mark is never a logo: it is the result, small. */
-export type Mark =
-  | { kind: "gate"; values: number[]; gate: number; lo: number }
-  | { kind: "venn"; passes: number }
-  | { kind: "punch"; total: number; cut: number }
-  | { kind: "hill"; points: number[] }
-  | { kind: "recall"; values: boolean[] };
-
-export const MARKS: Record<string, Mark> = {
-  "prior-auth": {
-    kind: "gate",
-    /* The lower bound of the 95% interval, not the point estimate: it is the
-       worst case the evidence supports, it is one quantity rather than three,
-       and every configuration falls short of the bar on it. */
-    values: [
-      ...Object.values((paSummary as any).in_distribution).map((m: any) => m.met_precision.wilson95[0] as number),
-      (paOod as any).slices.ood.gates.met_precision.wilson95[0] as number,
-    ],
-    gate: 0.95,
-    lo: 0.6,
-  },
-  "10k-risk": (() => {
-    const ba = (instability as any).issuers.find((i: any) => i.ticker === "BA");
-    return { kind: "venn" as const, passes: ba.passes.length };
-  })(),
-  "nda-triage": {
-    kind: "punch",
-    total: (ndaSplice as any).extraction.spliced_fixtures,
-    cut: (ndaSplice as any).extraction.kill_criterion_misses.length,
-  },
-  "calibration": { kind: "hill", points: CAL_CHECKS.map((c: any) => c.diagnostics.base_rate as number) },
-  "learning-harness": { kind: "recall", values: learningTarget.map((r) => r.pass) },
-};
-
 export const TABLES: Record<string, Table[]> = {
   "prior-auth": [
     {
@@ -351,7 +314,7 @@ export const PIPELINES: Record<string, Stage[]> = {
 };
 
 export interface Project {
-  slug: string; name: string; domain: string; blurb: string; tileDescription: string;
+  slug: string; name: string; domain: string; blurb: string;
   /* The ink this project's field is drenched in, and the measured fact that
      earns it. The house rule: a colour on this site stands for something the
      evidence says, or it is not used. */
@@ -376,7 +339,6 @@ export const PROJECTS: Project[] = [
     domain: "Clinical",
     ink: "vermilion", inkMeans: "a gate that was missed",
     blurb: "Reads a chart, checks the payer's published policy, and drafts an evidence-cited authorization request. Every claim carries the passage it came from.",
-    tileDescription: "Checks charts against payer policy and drafts cited requests.",
     scale: { value: (402).toString(), label: "determinations, 20 cases across 6 payer policies" },
     result: { value: `${(paCitationFloor * 100).toFixed(0)}%`, label: `citation grounding across ${paCitationMetrics.length} evaluated configurations` },
     proof: "Grounded by construction",
@@ -415,7 +377,6 @@ export const PROJECTS: Project[] = [
     domain: "Markets",
     ink: "chrome", inkMeans: "a result that will not hold still",
     blurb: "Turns Item 1A prose into a comparable, diffable, source-cited dataset, then grades its own output.",
-    tileDescription: "Turns 10-K risk prose into comparable, source-linked claims.",
     scale: { value: "3,216", label: "risk claims extracted across 20 filings" },
     result: { value: (diffRouted as any).totals.claims.toLocaleString(), label: "source-linked risk claims made comparable across 20 filings" },
     proof: "Every record traceable to source",
@@ -454,7 +415,6 @@ export const PROJECTS: Project[] = [
     domain: "Legal",
     ink: "cobalt", inkMeans: "a decision that was taken",
     blurb: "Compares inbound NDAs against a company playbook to decide who, if anyone, needs to read them. Built around proving a clause is absent.",
-    tileDescription: "Finds missing protections and routes unusual NDAs for legal review.",
     scale: { value: "0.983", label: "absence precision on real annotated NDAs" },
     result: { value: `${(ndaBudget5.absence_precision * 100).toFixed(1)}%`, label: "precision detecting absent clauses against expert annotations" },
     proof: "Scored without an LLM judge",
@@ -493,7 +453,6 @@ export const PROJECTS: Project[] = [
     domain: "Evaluation",
     ink: "ink", inkMeans: "a measurement that could not be made",
     blurb: "Decides whether a quality check can be measured at all, before anyone spends weeks building a labelled dataset to find out.",
-    tileDescription: "Tests whether quality checks are measurable before teams label data.",
     scale: { value: calTraces.toLocaleString(), label: `conversations, ${CAL_CHECKS.length} checks, each phrased two ways and asked three times` },
     result: { value: String(CAL_CHECKS.length), label: "quality checks triaged before any labeling spend" },
     proof: "No labeled dataset required",
@@ -536,7 +495,6 @@ export const PROJECTS: Project[] = [
     domain: "Learning",
     ink: "violet", inkMeans: "a diagnosis that diverged",
     blurb: "Turns a complex topic into a map of principles and boundaries, then uses free-response cases to locate where a learner's reasoning breaks.",
-    tileDescription: "Maps complex topics and diagnoses where a learner's reasoning breaks.",
     scale: { value: String((learningRun as any).cases), label: "committed fixtures in the first recorded grader run" },
     result: { value: `${(learningRecall * 100).toFixed(0)}%`, label: "recall on the false-confidence class" },
     proof: "Reasoning graded, not answers",

@@ -1,10 +1,9 @@
 ---
 import Base from "../layouts/Base.astro";
 import ProjectCard from "../components/ProjectCard.astro";
-import ProjectMark from "../components/ProjectMark.astro";
 import Icon from "../components/Icon.astro";
 import { getCollection } from "astro:content";
-import { PROJECTS, MARKS } from "../lib/site";
+import { PROJECTS } from "../lib/site";
 const count = PROJECTS.length;
 
 /* Counted, not claimed: what is actually published on this site. */
@@ -57,20 +56,6 @@ const method = [
           </dl>
         </div>
 
-        <!-- Every project at a glance. Each glyph is drawn from the same committed
-             artifact as its full-size poster; the case study carries the verdict. -->
-        <ul class="sheet" aria-label={`${spelled} projects and their evidence, in brief`}>
-          {PROJECTS.map((p, i) => (
-            <li class="cut" style={`--d:${340 + i * 70}ms`}>
-              <a class="tile" data-ink={p.ink} href={`/projects/${p.slug}/`}>
-                <span class="tile-art"><ProjectMark mark={MARKS[p.slug]} /></span>
-                <span class="tile-name">{p.name}</span>
-                <span class="tile-description">{p.tileDescription}</span>
-                <span class="tile-proof">{p.proof}</span>
-              </a>
-            </li>
-          ))}
-        </ul>
       </div>
     </div>
   </section>
@@ -175,44 +160,6 @@ const method = [
   }
   .inventory dd{margin:0;font-size:.8rem;line-height:1.35;color:var(--ink-soft);max-width:11ch}
 
-  /* The contact sheet: five equal results, full width, with every seam shown. */
-  .sheet{
-    display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:1px;
-    background:var(--rule);border:1px solid var(--rule);
-    margin:0;padding:0;list-style:none;
-  }
-  .sheet li{margin:0;display:flex}
-  .tile{
-    display:grid;grid-template-rows:8.5rem 2.2rem minmax(3.4rem,1fr) 2.9rem;
-    gap:.55rem;width:100%;
-    background:var(--paper);color:var(--ink);
-    padding:.95rem 1rem 1rem;text-decoration:none;
-    transition:background var(--t1) var(--cut),color var(--t1) var(--cut);
-  }
-  .tile-art{display:flex;align-items:center;justify-content:center;height:8.5rem}
-  .tile-art :global(.mark-svg){width:100%;height:100%;transform-origin:center}
-  .tile-art :global(.mark-svg[data-kind="gate"]){transform:scale(.84)}
-  .tile-art :global(.mark-svg[data-kind="venn"]){transform:scale(.9)}
-  .tile-art :global(.mark-svg[data-kind="punch"]){transform:scale(.94)}
-  .tile-art :global(.mark-svg[data-kind="hill"]){transform:translateY(-.2rem) scale(.94)}
-  .tile-art :global(.mark-svg[data-kind="recall"]){transform:scale(.96)}
-  .tile-name{font-variation-settings:"wdth" 104,"wght" 750;font-size:.9rem;line-height:1.15}
-  .tile-description{font-size:.76rem;line-height:1.4;color:var(--ink-soft);max-width:25ch}
-  .tile-proof{
-    padding-top:.55rem;border-top:1px solid var(--rule);
-    font-family:var(--mono);font-size:.7rem;font-variation-settings:"wght" 600;
-    letter-spacing:.11em;text-transform:uppercase;
-  }
-  .tile:hover,.tile:focus-visible{color:var(--paper);outline:none}
-  .tile:hover .tile-description,.tile:focus-visible .tile-description{color:inherit}
-  .tile:hover .tile-proof,.tile:focus-visible .tile-proof{border-top-color:currentColor}
-  .tile[data-ink="vermilion"]:hover,.tile[data-ink="vermilion"]:focus-visible{background:var(--vermilion-deep)}
-  .tile[data-ink="cobalt"]:hover,.tile[data-ink="cobalt"]:focus-visible{background:var(--cobalt-deep)}
-  .tile[data-ink="violet"]:hover,.tile[data-ink="violet"]:focus-visible{background:var(--violet-deep)}
-  .tile[data-ink="ink"]:hover,.tile[data-ink="ink"]:focus-visible{background:var(--ink)}
-  .tile[data-ink="chrome"]:hover,.tile[data-ink="chrome"]:focus-visible{background:var(--chrome);color:var(--ink)}
-  .tile:focus-visible{box-shadow:inset 0 0 0 3px var(--paper)}
-
   /* How I work, as four steps rather than a paragraph. */
   .method{
     display:grid;grid-template-columns:repeat(4,1fr);gap:1px;
@@ -234,23 +181,9 @@ const method = [
     .hero-copy{max-width:38rem}
     .method{grid-template-columns:repeat(2,1fr)}
   }
-  @media (max-width:900px){
-    .sheet{grid-template-columns:1fr}
-    .tile{
-      display:grid;grid-template-columns:minmax(7.5rem,.32fr) minmax(0,1fr);
-      grid-template-rows:auto;grid-template-areas:"art name" "art description" "art proof";
-      column-gap:clamp(1rem,4vw,2rem);row-gap:.35rem;align-items:center;
-      padding:.8rem 1rem;
-    }
-    .tile-art{grid-area:art;align-self:stretch;height:auto;min-height:6.5rem}
-    .tile-name{grid-area:name;margin-top:0;align-self:end}
-    .tile-description{grid-area:description;align-self:center;max-width:34ch}
-    .tile-proof{grid-area:proof;align-self:start}
-  }
   @media (max-width:520px){
     .hero .inner{padding-top:2rem}
     .inventory{grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}
-    .tile{grid-template-columns:7rem minmax(0,1fr);column-gap:.8rem;padding:.7rem .8rem}
     .method{grid-template-columns:1fr}
     .method li{padding:.95rem 1rem}
   }
