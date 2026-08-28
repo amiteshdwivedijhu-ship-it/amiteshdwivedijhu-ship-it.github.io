@@ -123,20 +123,15 @@ const method = [
   </section>
 
   <section class="band close" aria-labelledby="close-title">
-    <div class="split">
-      <div>
-        <h2 id="close-title" class="display display-m">
-          The evidence is the point.
-        </h2>
-        <p class="measure" style="margin:1rem 0 0">
-          Every figure on this site is read at build time from a committed run
-          artifact. Nothing is typed by hand, and a number that cannot be sourced
-          does not appear.
-        </p>
-      </div>
-      <div class="close-do">
-        <a class="pill" href="mailto:amitesh.dwivedi.jhu@gmail.com">Email</a>
-      </div>
+    <div class="inner">
+      <h2 id="close-title" class="display display-m">
+        The evidence is the point.
+      </h2>
+      <p class="measure" style="margin:1rem 0 0">
+        Every figure on this site is read at build time from a committed run
+        artifact. Nothing is typed by hand, and a number that cannot be sourced
+        does not appear.
+      </p>
     </div>
   </section>
 </Base>
@@ -232,8 +227,7 @@ const method = [
   .method strong{font-variation-settings:"wdth" 104,"wght" 750;font-size:.95rem;line-height:1.2}
   .method small{color:var(--ink-soft);font-size:.84rem;line-height:1.45}
 
-  .close-do{display:flex;flex-wrap:wrap;gap:.6rem;align-content:center}
-  .close .split > *{padding-block:clamp(2.75rem,6vw,4.25rem)}
+  .close .inner{padding-block:clamp(2.75rem,6vw,4.25rem)}
 
   @media (max-width:1000px){
     .hero-say{grid-template-columns:1fr;gap:1.75rem;align-items:start}

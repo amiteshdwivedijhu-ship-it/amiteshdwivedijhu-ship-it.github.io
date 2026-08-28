@@ -435,7 +435,7 @@ footer.site p{margin:0;max-width:36rem;font-size:.9rem;color:var(--ink-soft);lin
   .nav .inner{gap:.35rem}
   .nav .pill{padding:.5rem .8rem;font-size:.66rem;letter-spacing:.07em}
 @media (max-width:560px){
-  /* With all four pills visible the nav wraps to two rows; the rail and
+  /* With all five pills visible the nav wraps to two rows; the rail and
      anchor targets must clear the taller sticky stack. */
   .rail-nav{top:113px}
   .band[id],[id].band,section[id],header[id]{scroll-margin-top:13rem}
