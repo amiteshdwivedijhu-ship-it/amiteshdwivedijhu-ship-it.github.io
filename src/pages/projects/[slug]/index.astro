@@ -48,6 +48,47 @@ const FIXES: Record<string, string[]> = {
   ],
 };
 
+/* The two-minute walkthrough: five one-line stops per project, each sourced
+   from the committed launch-decision memo. The skim layer; the full record
+   stays one scroll below. */
+const WALK: Record<string, { label: string; text: string; anchor: string }[]> = {
+  "prior-auth": [
+    { label: "The problem", text: "Prior authorization is a paperwork tax on care: staff hunt through charts to prove a patient meets criteria written by the payer.", anchor: "problem" },
+    { label: "What I built", text: "A four-stage agent that reads the chart, checks the payer's published policy, and drafts the evidence-cited request every claim traces to.", anchor: "built" },
+    { label: "The decision", text: "No ship: met-precision missed its pre-registered 0.95 bar on all six configurations, and the safety banner fired on 100 of 100 requests.", anchor: "finding" },
+    { label: "The result", text: "Citation grounding held at 1.000 on every configuration, by construction: a claim with no locatable passage is downgraded.", anchor: "results" },
+    { label: "The fix", text: "Stop the cheap checker rejecting on its own authority: 89.2% of its rejections are citations the recorded answer calls met.", anchor: "fixes" },
+  ],
+  "10k-risk": [
+    { label: "The problem", text: "Item 1A runs 20 to 50 pages of litigation-drafted disclosure, and the two or three changes that matter are buried in recycled text.", anchor: "problem" },
+    { label: "What I built", text: "Every risk factor is split into source-cited claims and compared with the prior year across 20 filings and 3,216 claims.", anchor: "built" },
+    { label: "The decision", text: "No ship for alerting: identical runs agree between 0.10 and 0.92, and on Boeing none of the flagged passages survive all three.", anchor: "finding" },
+    { label: "The result", text: "Zero invented quotations in 3,216 claims, by construction, and 98.2% of claims supported by the sentence they cite.", anchor: "results" },
+    { label: "The fix", text: "Break both years into claims in one pass, then report only what all three passes agree on.", anchor: "fixes" },
+  ],
+  "nda-triage": [
+    { label: "The problem", text: "The dangerous NDA is the one missing a standard protection, or carrying a quiet rider, in a queue of forty.", anchor: "problem" },
+    { label: "What I built", text: "Reads each NDA, proves which expected clauses are absent, and routes by playbook, scored against ContractNLI's own expert annotations.", anchor: "built" },
+    { label: "The decision", text: "Kill: no model tier cleared the unacceptable-clause criterion at these prices, so nothing ships at any autonomy setting.", anchor: "finding" },
+    { label: "The result", text: "When it declares a clause absent it is right 98.3% of the time, and it finds 79.2% of the absences that are really there.", anchor: "results" },
+    { label: "The fix", text: "Classify the misses, add a targeted second pass for the unacceptable clause types, then spend the held-out test set once.", anchor: "fixes" },
+  ],
+  "calibration": [
+    { label: "The problem", text: "A product manager owns what good means for an AI agent, and the labelled dataset the standard answer requires is what her team cannot afford.", anchor: "problem" },
+    { label: "What I built", text: "One command turns a prose rubric and a folder of conversations into a coverage table: which checks are measurable, with zero labels.", anchor: "built" },
+    { label: "The decision", text: "Partial ship: the coverage table goes to one design partner, the arbitration queue does not, and the thirty-minute claim is dropped.", anchor: "finding" },
+    { label: "The result", text: "Six checks triaged across 300 conversations with no human labels, and no accuracy number printed by design.", anchor: "results" },
+    { label: "The fix", text: "The blocker: give the four hidden honesty items their own screen, so saying the ensemble is wrong becomes possible.", anchor: "fixes" },
+  ],
+  "learning-harness": [
+    { label: "The problem", text: "Most learning tools grade answers, so a learner who reaches the right number by fragile reasoning leaves more confident and less able.", anchor: "problem" },
+    { label: "What I built", text: "A local-first loop that maps principles and their boundaries, then cases the edge with free-prose answers graded by a closed taxonomy.", anchor: "built" },
+    { label: "The decision", text: "No ship: the first recorded baseline caught 1 of 5 false-confidence fixtures, and four open P1s still let the served state lie.", anchor: "finding" },
+    { label: "The result", text: "127 of 127 contract tests green, with zero learner sessions served: the record is honest because it is thin.", anchor: "results" },
+    { label: "The fix", text: "Close the four P1s and calibrate the pinned grader against a pre-registered recall bar before one real session.", anchor: "fixes" },
+  ],
+};
+
 export async function getStaticPaths() {
   return PROJECTS.map((p) => ({ params: { slug: p.slug } }));
 }
@@ -111,6 +152,23 @@ const entries = [
       </p>
     </div>
   </header>
+
+  <section class="band walk" data-ink={p.ink} aria-labelledby="walk-t">
+    <div class="inner">
+      <h2 id="walk-t" class="display display-s cut">Two-minute walkthrough</h2>
+      <ul class="walk-list">
+        {WALK[p.slug].map((stop, i) => (
+          <li class="cut" style={`--d:${100 + i * 60}ms`}>
+            <a class="walk-cell" href={`/projects/${p.slug}/#${stop.anchor}`}>
+              <span class="walk-n num">{String(i + 1).padStart(2, "0")}</span>
+              <span class="walk-label">{stop.label}</span>
+              <p>{stop.text}</p>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
 
   <section class="band tight" aria-label="Project brief">
     <div class="inner">
@@ -262,7 +320,39 @@ const entries = [
   .head-fig{font-size:clamp(2rem,5vw,3rem);font-variation-settings:"wght" 700;letter-spacing:-.04em;line-height:1}
   .head-scale span:last-child{font-size:.95rem;line-height:1.4}
 
+  /* The two-minute walkthrough: one skim layer, five stops, seams drawn. */
+  .walk .inner{padding-block:clamp(1.75rem,3.5vw,2.75rem)}
+  .walk-list{
+    margin:1.3rem 0 0;padding:0;list-style:none;
+    display:grid;grid-template-columns:repeat(5,1fr);gap:1px;
+    background:var(--rule);border:1px solid var(--rule);
+  }
+  .walk-list li{margin:0;display:flex}
+  .walk-cell{
+    display:flex;flex-direction:column;gap:.45rem;width:100%;
+    background:var(--paper);padding:1.05rem 1.1rem 1.15rem;
+    min-height:11rem;text-decoration:none;
+    transition:background var(--t1) var(--cut),color var(--t1) var(--cut);
+  }
+  .walk-n{font-size:.7rem;color:var(--ink-soft);letter-spacing:.08em}
+  .walk-label{
+    font-family:var(--mono);font-size:.66rem;font-variation-settings:"wght" 600;
+    letter-spacing:.11em;text-transform:uppercase;
+  }
+  [data-ink="vermilion"] .walk-label{color:var(--vermilion-deep)}
+  [data-ink="chrome"] .walk-label{color:#6b5000}
+  [data-ink="cobalt"] .walk-label{color:var(--cobalt-deep)}
+  [data-ink="violet"] .walk-label{color:var(--violet-deep)}
+  [data-ink="ink"] .walk-label{color:var(--ink)}
+  .walk-cell p{margin:0;font-size:.9rem;line-height:1.5}
+  .walk-cell:hover,.walk-cell:focus-visible{background:var(--ink);color:var(--paper)}
+  .walk-cell:hover .walk-n,.walk-cell:hover .walk-label,
+  .walk-cell:focus-visible .walk-n,.walk-cell:focus-visible .walk-label{color:inherit}
+  .walk-cell:focus-visible{outline:3px solid var(--cobalt);outline-offset:-3px}
+  [data-ink="chrome"] .walk-cell:focus-visible{outline-color:var(--ink)}
+
   .brief{margin:0;padding:0;list-style:none;display:grid;gap:1px;background:var(--rule);border:1px solid var(--rule)}
+	
   .brief li{background:var(--paper);padding:1.1rem 1.25rem;line-height:1.55;font-size:.98rem}
   .brief :global(strong){font-variation-settings:"wght" 750}
 
@@ -336,9 +426,12 @@ const entries = [
   .cell.wide{grid-column:span 2}
 
   @media (max-width:900px){
+    .walk-list{grid-template-columns:repeat(2,1fr)}
     .entry-grid{grid-template-columns:repeat(2,1fr)}
   }
   @media (max-width:560px){
+    .walk-list{grid-template-columns:1fr}
+    .walk-cell{min-height:0}
     .entry-grid{grid-template-columns:1fr}
     .entry{min-height:0}
     .cell.wide{grid-column:span 1}
