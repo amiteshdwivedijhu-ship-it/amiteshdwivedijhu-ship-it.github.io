@@ -198,7 +198,7 @@ a:hover{text-decoration-color:currentColor}
 .nav .inner{
   max-width:var(--wrap);margin-inline:auto;
   padding:.6rem var(--gut);
-  display:flex;align-items:center;gap:.5rem;
+  display:flex;align-items:center;flex-wrap:wrap;gap:.5rem;row-gap:.3rem;
   min-height:60px;
 }
 .nav .wordmark{
@@ -424,7 +424,6 @@ footer.site .inner{
   display:flex;flex-wrap:wrap;gap:1.5rem;justify-content:space-between;align-items:end;
 }
 footer.site p{margin:0;max-width:36rem;font-size:.9rem;color:var(--ink-soft);line-height:1.55}
-footer.site nav{display:flex;flex-wrap:wrap;gap:.5rem}
 
 /* ---------------------------------------------------------- responsive -- */
 
@@ -435,7 +434,12 @@ footer.site nav{display:flex;flex-wrap:wrap;gap:.5rem}
   [data-field="chrome"] .split > * + *{border-top-color:rgba(0,0,0,.22)}
   .nav .inner{gap:.35rem}
   .nav .pill{padding:.5rem .8rem;font-size:.66rem;letter-spacing:.07em}
-  .nav .hide-s{display:none}
+@media (max-width:560px){
+  /* With all four pills visible the nav wraps to two rows; the rail and
+     anchor targets must clear the taller sticky stack. */
+  .rail-nav{top:113px}
+  .band[id],[id].band,section[id],header[id]{scroll-margin-top:13rem}
+}
   .well{padding:.9rem}
   .well table{font-size:.84rem}
 }

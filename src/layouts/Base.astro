@@ -60,8 +60,8 @@ const on = (test: boolean) => (test ? "page" : undefined);
       <a class="wordmark" href="/">Amitesh Dwivedi</a>
       <a class="pill" href="/#work" aria-current={on(path === "/")}>Work</a>
       <a class="pill" href="/resume/" aria-current={on(path.startsWith("/resume"))}><Icon name="resume" size={16} />Resume</a>
-      <a class="pill hide-s" href="https://linkedin.com/in/amiteshdwivedi/" rel="me noopener" target="_blank"><Icon name="linkedin" size={16} />LinkedIn</a>
-      <a class="pill hide-s" href="https://github.com/amiteshdwivedijhu-ship-it" rel="me noopener" target="_blank"><Icon name="github" size={16} />GitHub</a>
+            <a class="pill" href="https://linkedin.com/in/amiteshdwivedi/" rel="me noopener" target="_blank"><Icon name="linkedin" size={16} />LinkedIn</a>
+      <a class="pill" href="https://github.com/amiteshdwivedijhu-ship-it" rel="me noopener" target="_blank"><Icon name="github" size={16} />GitHub</a>
     </div>
   </nav>
 
@@ -87,11 +87,6 @@ const on = (test: boolean) => (test ? "page" : undefined);
   <footer class="site">
     <div class="inner">
       <p>Every number on this site is read at build time from a committed run artifact. None of them is typed by hand. If a figure cannot be sourced, it does not appear.</p>
-      <nav aria-label="Elsewhere">
-        <a class="pill" href="/resume/"><Icon name="resume" size={16} />Resume</a>
-        <a class="pill" href="https://linkedin.com/in/amiteshdwivedi/" rel="me noopener" target="_blank"><Icon name="linkedin" size={16} />LinkedIn</a>
-        <a class="pill" href="https://github.com/amiteshdwivedijhu-ship-it" rel="me noopener" target="_blank"><Icon name="github" size={16} />GitHub</a>
-      </nav>
     </div>
   </footer>
 
