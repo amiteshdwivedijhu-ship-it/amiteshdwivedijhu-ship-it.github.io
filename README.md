@@ -1,6 +1,6 @@
 # Amitesh Dwivedi's AI Product Portfolio
 
-This is the source for my portfolio website and three working AI product case studies:
+This is the source for my portfolio website and five working AI product case studies:
 
 - **Prior Auth Agent:** checks a patient record against payer policy and drafts an
   evidence-cited authorization request.
@@ -8,6 +8,14 @@ This is the source for my portfolio website and three working AI product case st
   be compared across fiscal years.
 - **NDA Triage:** compares inbound NDAs with a review playbook and searches for
   expected clauses that are missing.
+- **Rubric Lens:** tests whether evaluation rubrics are measurable before a team
+  invests in labeling data.
+- **Reasoning Atlas:** maps case-based learning patterns and surfaces where a
+  learner's reasoning breaks.
+
+The two evaluation projects are also available as standalone repositories:
+[Rubric Lens](https://github.com/amiteshdwivedijhu-ship-it/rubric-lens) and
+[Reasoning Atlas](https://github.com/amiteshdwivedijhu-ship-it/reasoning-atlas).
 
 Each case study includes the product decisions, a recorded prototype, and the
 evaluation artifacts behind the reported numbers.
