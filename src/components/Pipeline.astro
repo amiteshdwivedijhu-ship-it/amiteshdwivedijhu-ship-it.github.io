@@ -1,0 +1,69 @@
+---
+/* The shape of the thing, drawn. One cell per stage, laid left to right with the
+   seams visible, the way every other grid on this site is built. Each cell states
+   what that stage does and what it refuses to do, so the drawing carries the
+   argument rather than decorating it.
+
+   Hovering or focusing a stage lifts it out of the row; the whole row is
+   keyboard reachable in order. */
+import Icon from "./Icon.astro";
+import type { Stage } from "../lib/site";
+interface Props { stages: Stage[]; label: string }
+const { stages, label } = Astro.props;
+---
+<figure class="pipe" role="group" aria-label={label}>
+  <ol style={`--cols:${stages.length}`}>
+    {stages.map((s, i) => (
+      <li class="stage cut" style={`--d:${i * 90}ms`} tabindex="0">
+        <span class="n num">{String(i + 1).padStart(2, "0")}</span>
+        <Icon name={s.icon} />
+        <strong>{s.name}</strong>
+        <small>{s.detail}</small>
+      </li>
+    ))}
+  </ol>
+</figure>
+
+<style>
+  .pipe{margin:1.6rem 0 0}
+  .pipe ol{
+    display:grid;grid-template-columns:repeat(var(--cols,5),1fr);
+    gap:1px;background:var(--rule);border:1px solid var(--rule);
+    margin:0;padding:0;list-style:none;counter-reset:none;
+  }
+  .stage{
+    position:relative;background:var(--paper);
+    display:flex;flex-direction:column;gap:.5rem;
+    padding:1.05rem 1rem 1.15rem;min-height:11rem;
+    transition:background var(--t1) var(--cut),color var(--t1) var(--cut);
+  }
+  .stage .n{font-size:.66rem;letter-spacing:.12em;color:var(--ink-soft)}
+  .stage :global(.ico){color:var(--ink);margin:.15rem 0 .1rem}
+  .stage strong{font-variation-settings:"wdth" 104,"wght" 750;font-size:.95rem;line-height:1.2}
+  .stage small{color:var(--ink-soft);font-size:.82rem;line-height:1.45;margin-top:auto}
+
+  /* The flow between stages, drawn once per seam rather than per cell. */
+  .stage + .stage::before{
+    content:"";position:absolute;left:-1px;top:2.15rem;
+    width:1px;height:1.1rem;background:var(--ink);
+  }
+
+  .stage:hover,.stage:focus-visible{background:var(--ink);color:var(--paper);outline:none}
+  .stage:hover .n,.stage:focus-visible .n,
+  .stage:hover small,.stage:focus-visible small{color:inherit;opacity:.82}
+  .stage:hover :global(.ico),.stage:focus-visible :global(.ico){color:inherit}
+  .stage:focus-visible{box-shadow:inset 0 0 0 3px var(--vermilion)}
+
+  @media (max-width:1000px){
+    .pipe ol{grid-template-columns:repeat(2,1fr)}
+    /* Two up, the row breaks mean a left tick would connect nothing. */
+    .stage + .stage::before{display:none}
+  }
+  @media (max-width:560px){
+    .pipe ol{grid-template-columns:1fr}
+    /* Stacked, the flow runs downward, so the tick turns with it. */
+    .stage + .stage::before{display:block;left:1rem;top:-1px;width:1.1rem;height:1px}
+    .stage{min-height:0;padding:.95rem 1rem}
+    .stage small{margin-top:.1rem}
+  }
+</style>

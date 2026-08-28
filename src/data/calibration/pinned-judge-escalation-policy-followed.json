@@ -1,0 +1,23 @@
+{
+  "criterion": {
+    "id": "escalation-policy-followed",
+    "name": "Escalation policy followed",
+    "question": "If the case is outside the agent\u2019s authority according to the retrieved escalation policy, does the reply follow that escalation policy?"
+  },
+  "renderings": [
+    "If the case is outside the agent\u2019s authority according to the retrieved escalation policy, does the reply follow that escalation policy? (rendering A)",
+    "If the case is outside the agent\u2019s authority according to the retrieved escalation policy, does the reply follow that escalation policy? (rendering B)"
+  ],
+  "model": "qwen/qwen3.8-flash",
+  "k": 3,
+  "temperature": 0.7,
+  "aggregation_rule": "strict majority, referee (different family) breaks splits",
+  "diagnostics": {
+    "base_rate": 0.0367,
+    "self_consistency": 0.9517,
+    "rendering_stability": 0.99,
+    "redaction_shift_pp": 0.0,
+    "recall_ceiling": 0.3045,
+    "call": "Too Rare"
+  }
+}

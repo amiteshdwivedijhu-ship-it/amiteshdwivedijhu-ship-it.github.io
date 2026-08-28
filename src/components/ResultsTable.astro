@@ -16,7 +16,7 @@ const headR = (i: number) => i > 0 && table.rows.length > 0 && table.rows.every(
         {table.rows.map((row) => (
           <tr>{row.map((c) => (
             <td class={cls(c)}>
-              {c.badge ? <span class={c.badge}>{c.text}</span> : c.text}
+              {c.badge ? <span class={`mark ${c.badge === "fail" ? "missed" : "held"}`}>{c.text}</span> : c.text}
             </td>
           ))}</tr>
         ))}

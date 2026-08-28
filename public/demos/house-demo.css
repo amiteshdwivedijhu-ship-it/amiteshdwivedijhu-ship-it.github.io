@@ -1,0 +1,12 @@
+/* The house world, for the three standalone demos. Same paper, same inks, same
+   rule: a colour stands for something the evidence says, or it is not used. */
+@font-face{
+  font-family:"Archivo Variable";font-style:normal;font-display:swap;
+  font-weight:100 900;font-stretch:62% 125%;
+  src:url(/fonts/archivo-latin-wdth-normal.woff2) format("woff2-variations");
+}
+@font-face{
+  font-family:"Chivo Mono Variable";font-style:normal;font-display:swap;
+  font-weight:100 900;
+  src:url(/fonts/chivo-mono-latin-wght-normal.woff2) format("woff2-variations");
+}

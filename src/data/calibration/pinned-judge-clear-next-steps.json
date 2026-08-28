@@ -1,0 +1,23 @@
+{
+  "criterion": {
+    "id": "clear-next-steps",
+    "name": "Clear next steps",
+    "question": "Does the reply close with clear next steps the customer can act on?"
+  },
+  "renderings": [
+    "Does the reply close with clear next steps the customer can act on? (rendering A)",
+    "Does the reply close with clear next steps the customer can act on? (rendering B)"
+  ],
+  "model": "qwen/qwen3.8-flash",
+  "k": 3,
+  "temperature": 0.7,
+  "aggregation_rule": "strict majority, referee (different family) breaks splits",
+  "diagnostics": {
+    "base_rate": 0.0233,
+    "self_consistency": 0.9717,
+    "rendering_stability": 0.98,
+    "redaction_shift_pp": 0.0,
+    "recall_ceiling": 0.2155,
+    "call": "Too Rare"
+  }
+}

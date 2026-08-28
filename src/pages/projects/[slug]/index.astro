@@ -5,7 +5,48 @@ import ResultsTable from "../../../components/ResultsTable.astro";
 import PaGates from "../../../components/figures/PaGates.astro";
 import StabilityDots from "../../../components/figures/StabilityDots.astro";
 import NdaSweep from "../../../components/figures/NdaSweep.astro";
-import { PROJECTS, TABLES, bySlug } from "../../../lib/site";
+import CoverageBand from "../../../components/figures/CoverageBand.astro";
+import GraderPaths from "../../../components/figures/GraderPaths.astro";
+import Pipeline from "../../../components/Pipeline.astro";
+import { PROJECTS, TABLES, PIPELINES, bySlug } from "../../../lib/site";
+/* The fix plan per project, taken in order from each launch-decision memo's
+   "what would change the decision" section. First step is always the cheapest
+   discriminating experiment. Loaded with the verdict: same field, same run. */
+const FIXES: Record<string, string[]> = {
+  "prior-auth": [
+    "Stop the cheap checker rejecting on its own authority: the first-pass model wrongly rejects 89.2% of the citations the recorded answer calls met, and the large model upholds 92.7% of what reaches it. Escalate everything the first pass doubts.",
+    "Watch what that does to the precision gate. The large model is already the mechanism that could pull an unsupported assertion down to non-determinable, the same move the system already makes for a met with no locatable quote.",
+    "Fix the over-commitment defect: non-binding policy language cannot license a met on its own. Two cases under Medicare's usually-three-months wording are the whole sample of the class, and both went wrong.",
+    "Rebuild the corpus so it contains genuine ambiguity: 2 of 402 fictional answers are non-determinable, so whether the system declines well is unmeasured. Real notes decline 16.0% and are right 87.5% of those times.",
+    "Fix what the policy reader gets wrong, not how much it misses. Counting near-matches lifts precision from 0.670 to 0.846; it almost always finds the right subject and gets the threshold, qualifier, or scope wrong, and on a prior auth criterion the threshold is the whole decision.",
+    "Then get clinician labels or stop quoting accuracy numbers externally. Two labelers from one model family agree at 0.982; two physicians agree at 0.381. Agreement of 0.98 is more likely shared blind spots.",
+  ],
+  "10k-risk": [
+    "Break both years into claims in one pass, so a section boundary is chosen once instead of independently for each year. The 189-to-194 claim wobble upstream is what propagates into false change downstream, and this removes the mechanism instead of compensating for it.",
+    "Then, only if the drift survives, ship confidence instead of a yes or no: run three passes and surface what all three agree on. Real disclosures survive every pass; marginal judgment calls survive about one in three.",
+    "Stop reporting tiny sets as percentages, and never sell the newly-disclosed flag as foresight until something links a flag to a later outcome. Sell it on analyst time saved, which the filings prove.",
+  ],
+  "nda-triage": [
+    "Classify the splice misses first: every miss is a whole clause the reading stage never found, and the two unacceptable clause types are the entire launch decision. Sonnet 5 already catches 21 of 24.",
+    "Add a dedicated second pass for those two clause types before touching any other model. It is cheaper than upgrading every document, and the gap between 21 and 24 is the decision.",
+    "Make the search a required part of a valid answer rather than a suggestion: 6 of 10 hidden-evidence failures answered without ever going to look, and more search steps do not move that number.",
+    "Rewrite the Shadow Judge's instructions with a severity threshold and suppression of what the Playbook already covers, or kill its veto entirely. A judge that is never silent makes every autonomy number meaningless.",
+    "Only then score the untouched test set once, about $8.65 against the $28.17 left under the ceiling. Spending it now buys a post-mortem; spending it later buys a confirmation.",
+  ],
+  "calibration": [
+    "Give the honesty items their own screen. On a consensus item both rationales argue the same verdict, so no keystroke says the ensemble is wrong, and four of the twelve minutes buy nothing. This is the blocker.",
+    "Put a ceiling on the firing rate, symmetric with the floor. A check firing on 99% of conversations is as unmeasurable as one firing on 1%, and today the tool congratulates the first: three of five rewrites were mislabelled on this run alone.",
+    "Derive the verdict sentence from the actual count, and add a check that runs the tool at a size other than the default. Both defects that survived all 61 checks survived because every check runs at the default.",
+    "Fix format detection, and check the path a user actually takes: two of four formats fail through the one command, while every reader passes when called by name.",
+    "Then measure the ninety seconds with one real product manager. The machine half works; the human half has never been run, and nothing above is worth doing if that number is three minutes instead of ninety seconds.",
+  ],
+  "learning-harness": [
+    "Close the four open P1s before any learner runs: retries that duplicate a session, Ready labels on nodes that cannot case, revision mixing scopes, and a draft step that hangs past three minutes with no timeout.",
+    "Record the pinned grader's calibration on the same 15 fixtures with a pre-registered recall bar. The recorded 0.20 is a budget-transport baseline and is labelled exactly that; the pinned grader has never been calibrated.",
+    "Add the stability arm: three identical runs on the cheapest tier, pairwise agreement recorded. Two attempts have already flipped class or verdict between runs, and verdict instability is a grader-readiness metric on its own.",
+    "Then take one real session. The live database holds zero sessions, and QA-017 is the only blocker between this code and that first datum.",
+  ],
+};
 
 export async function getStaticPaths() {
   return PROJECTS.map((p) => ({ params: { slug: p.slug } }));
@@ -13,180 +54,294 @@ export async function getStaticPaths() {
 const { slug } = Astro.params;
 const p = bySlug(slug!);
 const tables = TABLES[p.slug] ?? [];
+
 const figures: Record<string, { caption: string; note: string }> = {
   "prior-auth": {
-    caption: "Met-precision on every configuration, with the Wilson 95% confidence range. The dashed line is the bar set before the run.",
-    note: "Every configuration lands under the bar, including the out of distribution row with a perfect point estimate on ten observations.",
+    caption:
+      "Met-precision on every configuration, with its 95% confidence range. The heavy rule is the release bar, set before the run.",
+    note: "Every configuration lands to the left of the rule, the out-of-distribution row included: a perfect point estimate on ten observations cannot lift the lower bound over 0.90.",
   },
   "10k-risk": {
-    caption: "Run-to-run agreement on identical input, one row per issuer in the stability benchmark. Only the cache salt changes between runs.",
-    note: "Boeing agrees with itself on almost nothing. Consolidated Edison, the control, is stable: the method is not rigged.",
+    caption:
+      "The same pipeline over the same filing, three times. Only the cache salt changes between passes, so every pass makes real calls rather than replaying the last one.",
+    note: "Boeing agrees with itself on nothing: ten passages were flagged as newly disclosed risk and not one survives all three passes. Consolidated Edison, run identically, keeps seven of eight. The method is not rigged; the output on Boeing is not stable.",
   },
   "nda-triage": {
-    caption: "Absence precision and recall across the three search budgets tested. Recall is the metric that matters: a missed absence sails toward auto-approval looking clean.",
-    note: "More search buys recall, and not enough of it. The full pricing is in the tradeoff memo.",
+    caption:
+      "Every cell is a splice fixture: a real NDA body with an unacceptable clause of known type planted inside it, so ground truth holds by construction.",
+    note: "The holes are the product. This system exists to prove a clause is absent, and a planted clause it never reports is exactly the harm the kill criterion was written to catch.",
+  },
+  "calibration": {
+    caption:
+      "The height of the curve is the most a yes-or-no check can tell you at a given firing rate. It is arithmetic, not a threshold anyone chose: a check that fires on nothing and a check that fires on everything both carry the same amount, which is none.",
+    note: "The tool had a floor on how rarely a check may fire and no ceiling at all. So three rewrites crossed the entire sheet, from one end where a check says nothing to the other end where it says nothing, and collected the strongest verdict the tool prints on the way.",
+  },
+  "learning-harness": {
+    caption:
+      "Five known false-confidence cases entered with the same expected diagnosis. Each route shows what the recorded grader returned instead.",
+    note: "One route lands where it should. The other four change the lesson: a neighbouring rule, a mechanical slip, a missing foundation, or a sound verdict recorded after validation rejected the model's claim.",
   },
 };
 const fig = figures[p.slug];
+
 const artifacts = (await getCollection("artifacts", (a) => a.data.project === p.slug))
   .sort((a, b) => a.data.order - b.data.order);
 const readMinutes = (body: string) => Math.max(3, Math.ceil(body.trim().split(/\s+/).length / 220));
-const intentLinks = [
-  ...(p.demo ? [{ eyebrow: "See the behavior", title: "Try the demo", note: "Replay the product on recorded runs.", href: p.demo.href, primary: true }] : []),
-  { eyebrow: "Follow the thinking", title: "Read the product strategy", note: "The user, workflow, scope, and tradeoffs.", href: `/projects/${p.slug}/prd/` },
-  { eyebrow: "Inspect the evidence", title: "Open the eval report", note: "Metrics, denominators, and uncertainty.", href: p.report },
-  { eyebrow: "See what I learned", title: "Read the conclusion", note: "How the evidence shaped the recommendation.", href: `/projects/${p.slug}/launch-decision-memo/` },
+const hrefFor = (a: (typeof artifacts)[number]) => `/projects/${p.slug}/${a.id.split("/").pop()}/`;
+
+const entries = [
+  ...(p.demo ? [{ title: "Open the prototype", note: "Replays recorded runs in the browser. No keys, no server.", href: p.demo.href }] : []),
+  ...(p.repo ? [{ title: p.repo.label, note: "Code, tests, calibration fixtures, and the complete project record.", href: p.repo.href }] : []),
+  { title: "Read the product strategy", note: "The user, the workflow, the scope, and what was cut.", href: `/projects/${p.slug}/prd/` },
+  p.hasReport === false
+    ? { title: "Inspect the evidence", note: "The corpus, the protocol, and what each check was allowed to see.", href: p.report }
+    : { title: "Inspect the eval report", note: "Every metric with its denominator and its uncertainty.", href: p.report },
+  { title: "Read the decision", note: "How the evidence settled the recommendation.", href: `/projects/${p.slug}/launch-decision-memo/` },
 ];
 ---
 <Base title={`${p.name} – Amitesh Dwivedi`} description={p.blurb}>
-  <p class="eyebrow rise">{p.domain}</p>
-  <h1 class="rise" style="--delay:60ms;font-size:clamp(1.7rem,4.5vw,2.3rem);letter-spacing:-.024em;line-height:1.2;margin:.5rem 0 1.1rem;max-width:36rem">{p.name}</h1>
-  <p class="rise measure" style="--delay:110ms;font-size:1.08rem;margin:0 0 1.2rem">{p.blurb}</p>
-  <div class="tldr rise" style="--delay:180ms">
-    <p class="eyebrow" style="margin:0 0 .5rem">Project brief</p>
-    <ul>{p.tldr.slice(0, 3).map((b) => <li set:html={b} />)}</ul>
-  </div>
-  <nav class="entry-grid rise" style="--delay:220ms" aria-label="Choose how to explore this project">
-    {intentLinks.map((item) => (
-      <a class:list={["entry-card", "glass", { primary: item.primary }]} href={item.href}>
-        <span class="eyebrow">{item.eyebrow}</span><strong>{item.title} →</strong><small>{item.note}</small>
-      </a>
-    ))}
-  </nav>
-
-  <div class="page-shell">
-    <aside class="reading-rail glass rise" style="--delay:260ms">
-      <p class="eyebrow" style="margin:0 0 .6rem">On this page</p>
-      <div class="progress" aria-hidden="true"><span></span></div>
-      <nav class="toc-list">
-        <a href="#problem">The problem</a>
-        <a href="#built">What I built</a>
-        <a href="#decisions">Decisions</a>
-        <a href="#results">Results</a>
-        <a href="#finding">The finding</a>
-        <a href="#artifacts">Artifacts</a>
-      </nav>
-      <div class="rail-shortcuts">
-        {p.demo && <a href={p.demo.href}>Demo →</a>}
-        <a href={`/projects/${p.slug}/prd/`}>Product strategy →</a>
-      </div>
-    </aside>
-    <div class="page-content">
-
-  {p.demo && (
-    <figure class="shot rise" style="--delay:240ms">
-      <a href={p.demo.href}><img src={p.shot.src} alt={p.shot.alt} loading="lazy" /></a>
-      <figcaption>{p.shot.caption} <a href={p.demo.href}>Open it</a></figcaption>
-    </figure>
-  )}
-
-  <h2 class="sec" id="problem">The problem</h2>
-  <p class="measure">{p.problem}</p>
-  <p class="measure" style="color:var(--accent)">{p.people}</p>
-
-  <h2 class="sec" id="built">What I built</h2>
-  <p class="measure">{p.built}</p>
-
-  <h2 class="sec" id="decisions">Decisions worth defending</h2>
-  <ol class="measure decisions">{p.decisions.map((d) => <li>{d}</li>)}</ol>
-
-  <h2 class="sec" id="results">Results</h2>
-  {fig && (
-    <div class="well rise">
-      <p class="cap">{fig.caption}</p>
-      {p.slug === "prior-auth" && <PaGates />}
-      {p.slug === "10k-risk" && <StabilityDots />}
-      {p.slug === "nda-triage" && <NdaSweep />}
-      <p class="cap">{fig.note}</p>
+  <header class="band head" data-field={p.ink}>
+    <div class="inner">
+      <p class="label">{p.domain}</p>
+      <h1 class="display display-l cut">{p.name}</h1>
+      <p class="lede cut measure" style="--d:90ms;margin:1.1rem 0 0">{p.blurb}</p>
+      <p class="head-scale cut" style="--d:170ms">
+        <span class="num head-fig">{p.scale.value}</span>
+        <span>{p.scale.label}</span>
+      </p>
     </div>
-  )}
-  {tables.map((t) => <ResultsTable table={t} />)}
+  </header>
 
-  <h2 class="sec" id="finding">What the evaluation found</h2>
-  <p class="measure finding">{p.finding}</p>
-  <section class="decision-banner conclusion" aria-label="Evaluation conclusion">
-    <div><p class="eyebrow">Evaluation conclusion</p><span class={`status ${p.launch.tone}`}>{p.launch.label}</span></div>
-    <div><strong>{p.launch.gate}</strong><p>{p.launch.reason}</p></div>
-    <a href={`/projects/${p.slug}/launch-decision-memo/`}>Read the reasoning →</a>
+  <section class="band tight" aria-label="Project brief">
+    <div class="inner">
+      <ul class="brief">
+        {p.tldr.slice(0, 3).map((point) => <li set:html={point} />)}
+      </ul>
+    </div>
   </section>
 
-  <h2 class="sec" id="artifacts">Artifacts</h2>
-  <p class="cap">The product record: strategy, metrics, tradeoffs, safety review, and the recommendation.</p>
-  <div class="rail">
-    {artifacts.map((a, index) => (
-      <a class="art glass" href={`/projects/${p.slug}/${a.id.split("/").pop()}/`}>
-        <span class="art-meta num">{String(index + 1).padStart(2, "0")} · {readMinutes(a.body)} min</span>
-        <span class="art-t">{a.data.title} →</span>
-        <span class="art-h">{a.data.hook}</span>
-      </a>
-    ))}
-    <a class="art glass" href={p.report}>
-      <span class="art-meta num">{String(artifacts.length + 1).padStart(2, "0")} · Full evidence</span>
-      <span class="art-t">Eval report →</span>
-      <span class="art-h">Every number, with its denominator and its confidence interval.</span>
-    </a>
-  </div>
-
-  {p.demo && (
-    <p style="margin:2.4rem 0 0"><a class="pill" href={p.demo.href}>{p.demo.label}</a></p>
-  )}
+  <nav class="band tight entries" aria-label="Ways into this project">
+    <div class="inner">
+      <div class="entry-grid">
+        {entries.map((entry) => (
+          <a class="entry" href={entry.href} target={entry.href.startsWith("https://") ? "_blank" : undefined} rel={entry.href.startsWith("https://") ? "noopener" : undefined}>
+            <strong>{entry.title}</strong>
+            <small>{entry.note}</small>
+          </a>
+        ))}
+      </div>
     </div>
-  </div>
+  </nav>
+
+  {p.shot && (
+    <section class="band tight" aria-label={`${p.name} interface`}>
+      <div class="inner">
+        <figure class="shot">
+          <a class="shot-link" href={p.demo?.href ?? p.shot.src}>
+            <img src={p.shot.src} alt={p.shot.alt} loading="lazy" decoding="async" width={p.shot.width} height={p.shot.height} />
+          </a>
+          <figcaption>{p.shot.caption} <a href={p.demo?.href ?? p.shot.src}>{p.demo ? "Open it" : "View full-size image"}</a></figcaption>
+        </figure>
+      </div>
+    </section>
+  )}
+
+  <section class="band" id="problem" aria-labelledby="problem-t">
+    <div class="split">
+      <div>
+        <h2 id="problem-t" class="display display-s">The problem</h2>
+        <p class="people">{p.people}</p>
+      </div>
+      <div><p>{p.problem}</p></div>
+    </div>
+  </section>
+
+  <section class="band" id="built" aria-labelledby="built-t">
+    <div class="split">
+      <div><h2 id="built-t" class="display display-s">What I built</h2></div>
+      <div><p>{p.built}</p></div>
+    </div>
+    {PIPELINES[p.slug] && (
+      <div class="inner pipe-wrap">
+        <Pipeline stages={PIPELINES[p.slug]} label={`${p.name}: the pipeline, stage by stage`} />
+      </div>
+    )}
+  </section>
+
+  <section class="band" id="decisions" aria-labelledby="decisions-t">
+    <div class="inner">
+      <h2 id="decisions-t" class="display display-s">Decisions worth defending</h2>
+      <ol class="decisions">
+        {p.decisions.map((d) => <li>{d}</li>)}
+      </ol>
+    </div>
+  </section>
+
+  <section class="band" id="results" aria-labelledby="results-t">
+    <div class="inner">
+      <h2 id="results-t" class="display display-m">Results</h2>
+      {fig && (
+        <div class="poster-frame">
+          <p class="cap">{fig.caption}</p>
+          {p.slug === "prior-auth" && <PaGates />}
+          {p.slug === "10k-risk" && <StabilityDots />}
+          {p.slug === "nda-triage" && <NdaSweep />}
+          {p.slug === "calibration" && <CoverageBand />}
+          {p.slug === "learning-harness" && <GraderPaths />}
+          <p class="cap">{fig.note}</p>
+        </div>
+      )}
+      {tables.map((table) => <ResultsTable table={table} />)}
+    </div>
+  </section>
+
+  <section class="band verdict" data-field={p.ink} id="finding" aria-labelledby="finding-t">
+    <div class="inner">
+      <h2 id="finding-t" class="display display-m">{p.launch.label}</h2>
+      <p class="verdict-gate num">{p.launch.gate}</p>
+      <p class="verdict-body measure">{p.finding}</p>
+      <a class="pill solid" href={`/projects/${p.slug}/launch-decision-memo/`}>Read the reasoning</a>
+    </div>
+  </section>
+
+
+  {FIXES[p.slug] && (
+    <section class="band fix" data-field={p.ink} id="fixes" aria-labelledby="fixes-t">
+      <div class="inner">
+        <h2 id="fixes-t" class="display display-m cut">What I would fix next</h2>
+        <p class="fix-lede cut" style="--d:80ms;margin:1rem 0 0">
+          The same field, one step later: the cheapest experiment that tells me
+          whether the mechanism is fixable, then a re-run against a gate written
+          before the numbers exist.
+        </p>
+        <ol class="fix-list cut" style="--d:140ms">
+          {FIXES[p.slug].map((fix, j) => (
+            <li>
+              <span class="num fix-n">{String(j + 1).padStart(2, "0")}</span>
+              <p>{fix}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+  )}
+
+  <section class="band" id="artifacts" aria-labelledby="artifacts-t">
+    <div class="inner">
+      <h2 id="artifacts-t" class="display display-m">The record</h2>
+      <p class="cap">
+        Strategy, metrics, tradeoffs, the safety review where one exists, and the
+        recommendation. Every document is published, in the order worth reading them.
+      </p>
+      <div class="catalog">
+        {artifacts.map((a, i) => (
+          <a class="cell" href={hrefFor(a)}>
+            <span class="code num">{String(i + 1).padStart(2, "0")}</span>
+            <strong>{a.data.title}</strong>
+            <small>{a.data.hook}</small>
+            <span class="mins num">{readMinutes(a.body)} min</span>
+          </a>
+        ))}
+        {p.hasReport !== false && (
+          <a class="cell wide" href={p.report}>
+            <span class="code num">{String(artifacts.length + 1).padStart(2, "0")}</span>
+            <strong>Eval report</strong>
+            <small>Every number, with its denominator and its confidence interval.</small>
+            <span class="mins num">full record</span>
+          </a>
+        )}
+      </div>
+    </div>
+  </section>
 </Base>
+
 <style>
-  .shot{margin:0 0 2.8rem;max-width:52rem}
-  .shot a{display:block}
-  .shot img{width:100%;display:block;border-radius:14px;border:1px solid var(--glass-brd);
-    box-shadow:0 16px 50px rgba(0,0,0,.4)}
-  .shot figcaption{margin-top:.65rem;color:var(--muted);font-size:.86rem;line-height:1.55;max-width:44rem}
-  .sec{font-size:1.3rem;letter-spacing:-.016em;margin:3rem 0 .8rem;padding-top:1.1rem;border-top:1px solid var(--hairline)}
-  .decision-banner{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:1.25rem;max-width:52rem;padding:1rem 1.2rem;margin:1.4rem 0 0;background:rgba(255,255,255,.035);border:1px solid var(--hairline);border-radius:14px}
-  .decision-banner .eyebrow{margin:0 0 .4rem}.decision-banner strong{display:block;font-family:var(--serif);color:var(--ink)}
-  .decision-banner p{margin:.15rem 0 0;color:var(--muted);font-size:.86rem;line-height:1.45}.decision-banner a{white-space:nowrap;font-size:.82rem}
-  .entry-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin:0 0 2rem}
-  .entry-card{display:flex;flex-direction:column;gap:.35rem;min-height:145px;padding:1rem;text-decoration:none;color:inherit;transition:transform var(--d1) var(--ease),border-color var(--d1) var(--ease)}
-  .entry-card:hover{transform:translateY(-3px);border-color:rgba(239,177,134,.45)}.entry-card.primary{background:rgba(239,177,134,.1);border-color:rgba(239,177,134,.32)}
-  .entry-card strong{font-family:var(--serif);color:var(--ink);line-height:1.25}.entry-card small{color:var(--muted);line-height:1.45;margin-top:auto}
-  .page-shell{display:grid;grid-template-columns:180px minmax(0,1fr);gap:2rem;align-items:start}
-  .reading-rail{position:sticky;top:126px;padding:1rem;max-height:calc(100vh - 146px);overflow:auto}
-  .progress{height:3px;background:var(--hairline);margin-bottom:.55rem}.progress span{display:block;width:0;height:100%;background:var(--accent)}
-  .toc-panel{padding:1.2rem 1.3rem}
-  .toc-list a{display:block;padding:.42rem 0;font-size:.8rem;text-decoration:none;color:var(--muted);
-    transition:color var(--d1) var(--ease),border-color var(--d1) var(--ease)}
-  .toc-list a + a{border-top:1px solid var(--hairline)}
-  .toc-list a:hover,.toc-list a.active{color:var(--accent)}
-  .rail-shortcuts{border-top:1px solid var(--hairline);margin-top:.65rem;padding-top:.65rem}.rail-shortcuts a{display:block;font-size:.76rem;margin:.35rem 0;text-decoration:none}
-  .tldr{margin:0 0 1.1rem;padding:1rem 1.3rem;border:1px solid var(--hairline);border-radius:12px;background:rgba(0,0,0,.2);max-width:44rem}
-  .tldr ul{margin:0;padding-left:1.1rem}
-  .tldr li{margin:.42rem 0;padding-left:.25rem;line-height:1.55}
-  .tldr li::marker{color:var(--accent)}
-  .decisions{padding-left:1.1rem}
-  .decisions li{margin:.7rem 0;padding-left:.3rem}
-  .decisions li::marker{font-family:var(--mono);font-size:.8rem;color:var(--accent)}
-  .finding{font-size:1.05rem;border-left:2px solid var(--accent);padding:.2rem 0 .2rem 1.1rem}
-  .rail{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:.8rem;margin-top:1.2rem}
-  .art{display:flex;flex-direction:column;gap:.35rem;padding:1.1rem 1.2rem;text-decoration:none;color:inherit;
-    transition:transform var(--d1) var(--ease),background var(--d1) var(--ease),border-color var(--d1) var(--ease)}
-  .art:hover{transform:translateY(-3px);background:var(--glass-hi);border-color:rgba(232,169,124,.30)}
-  .art-t{font-weight:600;font-size:.98rem}
-  .art-h{color:var(--muted);font-size:.85rem;line-height:1.5}
-  .art-meta{color:var(--dim);font-size:.66rem;text-transform:uppercase;letter-spacing:.08em}
-  @media(max-width:900px){.entry-grid{grid-template-columns:repeat(2,1fr)}.page-shell{display:block}.reading-rail{position:sticky;top:113px;z-index:10;display:flex;align-items:center;gap:.8rem;overflow-x:auto;margin-bottom:1.4rem;padding:.55rem .75rem}.reading-rail>.eyebrow,.reading-rail>.progress,.rail-shortcuts{display:none}.toc-list{display:flex;gap:.25rem}.toc-list a{white-space:nowrap;border:0!important;padding:.4rem .55rem}}
-  @media(max-width:560px){.decision-banner{grid-template-columns:1fr}.decision-banner a{white-space:normal}.entry-grid{grid-template-columns:1fr}.entry-card{min-height:110px}}
+  .head .inner{padding-block:clamp(2.75rem,7vw,4.75rem)}
+  .head .label{margin-bottom:.9rem}
+  .head-scale{display:flex;align-items:baseline;gap:.8rem;flex-wrap:wrap;margin:1.9rem 0 0;max-width:36rem}
+  .head-fig{font-size:clamp(2rem,5vw,3rem);font-variation-settings:"wght" 700;letter-spacing:-.04em;line-height:1}
+  .head-scale span:last-child{font-size:.95rem;line-height:1.4}
+
+  .brief{margin:0;padding:0;list-style:none;display:grid;gap:1px;background:var(--rule);border:1px solid var(--rule)}
+  .brief li{background:var(--paper);padding:1.1rem 1.25rem;line-height:1.55;font-size:.98rem}
+  .brief :global(strong){font-variation-settings:"wght" 750}
+
+  .entry-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule)}
+  .entry{
+    background:var(--paper);display:flex;flex-direction:column;gap:.4rem;
+    padding:1.15rem 1.2rem;text-decoration:none;min-height:8.5rem;
+    transition:background var(--t1) var(--cut),color var(--t1) var(--cut);
+  }
+  .entry strong{font-variation-settings:"wdth" 104,"wght" 760;font-size:1.02rem;line-height:1.2}
+  .entry small{color:var(--ink-soft);line-height:1.45;font-size:.85rem;margin-top:auto}
+  .entry:hover{background:var(--ink);color:var(--paper)}
+  .entry:hover small{color:inherit;opacity:.8}
+
+  .shot{margin:0;max-width:56rem}
+  .shot-link{display:block}
+  .shot img{display:block;width:100%;height:auto;border:1px solid var(--rule);background:var(--paper-sunk)}
+  .shot figcaption{margin-top:.7rem;color:var(--ink-soft);font-size:.88rem;line-height:1.5;max-width:44rem}
+
+  .pipe-wrap{padding-top:0;padding-bottom:clamp(2rem,4vw,3rem)}
+  .people{margin:1rem 0 0;font-size:1.06rem;line-height:1.5;color:var(--vermilion-deep);max-width:32ch}
+  .decisions{margin:1.4rem 0 0;padding-left:0;list-style:none;counter-reset:d;max-width:52rem}
+  .decisions li{
+    counter-increment:d;display:grid;grid-template-columns:2.6rem 1fr;gap:1rem;
+    padding:.95rem 0;border-top:1px solid var(--rule);line-height:1.55;
+  }
+  .decisions li::before{
+    content:counter(d,decimal-leading-zero);
+    font-family:var(--mono);font-size:.78rem;color:var(--ink-soft);padding-top:.2rem;
+  }
+  .decisions li:last-child{border-bottom:1px solid var(--rule)}
+
+  .verdict .inner{padding-block:clamp(3rem,7vw,5rem)}
+  .verdict-gate{
+    margin:1rem 0 .9rem;font-size:.78rem;letter-spacing:.13em;text-transform:uppercase;
+  }
+  .verdict-body{margin:0 0 1.8rem;font-size:1.1rem;line-height:1.55}
+  /* What I would fix next: the verdict's field, one step later. */
+  .fix .inner{padding-block:clamp(2.75rem,6vw,4.5rem)}
+  .fix-lede{margin:1rem 0 0;font-size:1.02rem;line-height:1.5;color:inherit;max-width:44rem}
+  .fix-list{
+    margin:1.8rem 0 0;padding:0;list-style:none;
+    display:grid;gap:1px;border:1px solid rgba(255,255,255,.28);
+  }
+  [data-field="chrome"] .fix-list{border-color:rgba(0,0,0,.22)}
+  .fix-list li{
+    display:grid;grid-template-columns:2.6rem 1fr;gap:1rem;
+    background:rgba(255,255,255,.14);
+    padding:1.05rem 1.25rem;font-size:.98rem;line-height:1.55;
+  }
+  [data-field="chrome"] .fix-list li{background:rgba(0,0,0,.05)}
+  .fix-list p{margin:0}
+  .fix-n{font-size:.74rem;letter-spacing:.06em;padding-top:.15rem}
+
+  /* The record, packed: every document visible at once, with its code. */
+  .catalog{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(15rem,1fr));
+    gap:1px;background:var(--rule);border:1px solid var(--rule);margin-top:1.5rem;
+  }
+  .cell{
+    background:var(--paper);display:flex;flex-direction:column;gap:.35rem;
+    padding:1rem 1.1rem 1.05rem;text-decoration:none;min-height:9.5rem;
+    transition:background var(--t1) var(--cut),color var(--t1) var(--cut);
+  }
+  .cell .code{font-size:.7rem;color:var(--vermilion-deep);letter-spacing:.08em}
+  .cell strong{font-variation-settings:"wdth" 104,"wght" 750;font-size:.98rem;line-height:1.2}
+  .cell small{color:var(--ink-soft);font-size:.83rem;line-height:1.45}
+  .cell .mins{margin-top:auto;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft)}
+  .cell:hover{background:var(--ink);color:var(--paper)}
+  .cell:hover small,.cell:hover .mins,.cell:hover .code{color:inherit;opacity:.82}
+  .cell.wide{grid-column:span 2}
+
+  @media (max-width:900px){
+    .entry-grid{grid-template-columns:repeat(2,1fr)}
+  }
+  @media (max-width:560px){
+    .entry-grid{grid-template-columns:1fr}
+    .entry{min-height:0}
+    .cell.wide{grid-column:span 1}
+    .decisions li{grid-template-columns:1.9rem 1fr;gap:.7rem}
+  }
 </style>
-<script>
-  const sections = [...document.querySelectorAll<HTMLElement>(".page-content [id]")];
-  const links = [...document.querySelectorAll<HTMLAnchorElement>(".reading-rail .toc-list a")];
-  const progress = document.querySelector<HTMLElement>(".reading-rail .progress span");
-  const updateReadingRail = () => {
-    const marker = window.scrollY + 190;
-    let current = sections[0]?.id;
-    sections.forEach((section) => { if (section.offsetTop <= marker) current = section.id; });
-    links.forEach((link) => link.classList.toggle("active", link.hash === `#${current}`));
-    if (progress) {
-      const max = document.documentElement.scrollHeight - innerHeight;
-      progress.style.width = `${max ? Math.min(100, (scrollY / max) * 100) : 0}%`;
-    }
-  };
-  addEventListener("scroll", updateReadingRail, { passive: true }); updateReadingRail();
-</script>

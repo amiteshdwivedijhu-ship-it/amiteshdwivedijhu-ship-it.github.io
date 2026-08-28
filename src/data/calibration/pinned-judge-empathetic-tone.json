@@ -1,0 +1,23 @@
+{
+  "criterion": {
+    "id": "empathetic-tone",
+    "name": "Empathetic tone",
+    "question": "Is the reply\u2019s tone empathetic and appropriate to the customer\u2019s situation?"
+  },
+  "renderings": [
+    "Is the reply\u2019s tone empathetic and appropriate to the customer\u2019s situation? (rendering A)",
+    "Is the reply\u2019s tone empathetic and appropriate to the customer\u2019s situation? (rendering B)"
+  ],
+  "model": "qwen/qwen3.8-flash",
+  "k": 3,
+  "temperature": 0.7,
+  "aggregation_rule": "strict majority, referee (different family) breaks splits",
+  "diagnostics": {
+    "base_rate": 0.9,
+    "self_consistency": 0.81,
+    "rendering_stability": 0.95,
+    "redaction_shift_pp": 1.0000000000000009,
+    "recall_ceiling": 0.9904,
+    "call": "Automatable"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "criterion": {
+    "id": "no-hallucinated-policy",
+    "name": "No hallucinated policy",
+    "question": "Does the reply avoid inventing or asserting any policy, benefit, or capability not supported by the retrieved documents?"
+  },
+  "renderings": [
+    "Does the reply avoid inventing or asserting any policy, benefit, or capability not supported by the retrieved documents? (rendering A)",
+    "Does the reply avoid inventing or asserting any policy, benefit, or capability not supported by the retrieved documents? (rendering B)"
+  ],
+  "model": "qwen/qwen3.8-flash",
+  "k": 3,
+  "temperature": 0.7,
+  "aggregation_rule": "strict majority, referee (different family) breaks splits",
+  "diagnostics": {
+    "base_rate": 0.0,
+    "self_consistency": 0.9967,
+    "rendering_stability": 1.0,
+    "redaction_shift_pp": 0.0,
+    "recall_ceiling": 0.0,
+    "call": "Too Rare"
+  }
+}

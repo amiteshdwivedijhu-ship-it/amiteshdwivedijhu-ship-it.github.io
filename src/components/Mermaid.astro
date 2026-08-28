@@ -1,6 +1,6 @@
 ---
 /* Renders any <pre class="mermaid"> blocks (lifted from ```mermaid fences at sync
-   time) into inline SVG, themed to the house palette. If a diagram fails to parse,
+   time) into inline SVG, themed to the house palette: ink on paper, square corners. If a diagram fails to parse,
    the source block stays visible as plain text. */
 ---
 <script>
@@ -8,26 +8,36 @@
 
   mermaid.initialize({
     startOnLoad: false,
-    securityLevel: "strict",
+    securityLevel: "antiscript",
     theme: "base",
+    /* Render at natural size and let the container scroll. Fitting a seven-node
+       flow into the text measure shrinks it below reading size and clips labels. */
+    flowchart: { useMaxWidth: false, htmlLabels: true, nodeSpacing: 34, rankSpacing: 44, padding: 10 },
+    sequence: { useMaxWidth: false },
+    gantt: { useMaxWidth: false },
     themeVariables: {
-      background: "#17161e",
-      primaryColor: "#211e2c",
-      primaryBorderColor: "#4a4458",
-      primaryTextColor: "#ece9f0",
-      secondaryColor: "#1a1822",
-      tertiaryColor: "#17161e",
-      lineColor: "#928d9e",
-      textColor: "#ece9f0",
-      mainBkg: "#211e2c",
-      nodeBorder: "#4a4458",
-      clusterBkg: "rgba(255,255,255,.03)",
-      clusterBorder: "rgba(255,255,255,.11)",
-      edgeLabelBackground: "#17161e",
-      fontFamily: "ui-serif, Georgia, serif",
-      fontSize: "15px",
+      background: "#f2efe3",
+      primaryColor: "#e8e4d4",
+      primaryBorderColor: "#171613",
+      primaryTextColor: "#171613",
+      secondaryColor: "#dbd6c3",
+      tertiaryColor: "#f2efe3",
+      lineColor: "#5a574c",
+      textColor: "#171613",
+      mainBkg: "#e8e4d4",
+      nodeBorder: "#171613",
+      clusterBkg: "#f2efe3",
+      clusterBorder: "#d5d0be",
+      edgeLabelBackground: "#f2efe3",
+      titleColor: "#171613",
+      fontFamily: '"Archivo Variable", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif',
+      fontSize: "16px",
     },
   });
+
+  /* Mermaid measures label widths itself. Render only once Archivo has actually
+     loaded, or it sizes every node against fallback metrics and clips the text. */
+  await document.fonts.ready;
 
   document.querySelectorAll("pre.mermaid").forEach(async (el, i) => {
     try {

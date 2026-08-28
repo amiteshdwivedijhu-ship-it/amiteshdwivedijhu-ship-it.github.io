@@ -1,43 +1,136 @@
 ---
-/* Run-to-run agreement (mean Jaccard) per issuer in the stability benchmark.
-   Read from the committed benchmark artifact at build time. */
-import stability from "../../data/10k-risk/stability.json";
+/* POSTER — "Three identical runs."
+   Each circle is one pass of the same pipeline over the same filing; only the
+   cache salt changes. Each square is a passage the run flagged as newly
+   disclosed risk. Where the three circles overlap is what survived all three.
+   On Boeing that overlap is empty, and the empty middle is the finding.
+   Consolidated Edison is the control, printed at the same size, so the method
+   can be seen not to be rigged.
+   Every membership is read from the committed benchmark at build time. */
+import instability from "../../data/10k-risk/instability-detail.json";
 
-const rows = (stability as any).issuers.map((i: any) => ({
-  ticker: i.ticker as string,
-  jaccard: i.mean_jaccard as number,
-  survives: Math.round(i.consensus_ratio * 100),
-}));
+const PANELS = ["BA", "ED"] as const;
 
-const X0 = 74, X1 = 470, W = 720;
-const x = (v: number) => X0 + v * (X1 - X0);
-const rh = 40, top = 16, axisH = 26;
-const H = top + rows.length * rh + axisH;
-const ticks = [0, 0.25, 0.5, 0.75, 1];
+/* Venn geometry: three circles on a triangle, and the seven regions between. */
+const R = 68, D = 36, CX = 140, CY = 142;
+const U = [
+  [0, -1],
+  [Math.cos(Math.PI / 6), Math.sin(Math.PI / 6)],
+  [-Math.cos(Math.PI / 6), Math.sin(Math.PI / 6)],
+];
+const centre = U.map((u) => [CX + u[0] * D, CY + u[1] * D]);
+
+/* Where each region's squares cluster. Order: A, B, C, AB, AC, BC, ABC. */
+const pair = (i: number, j: number): [number, number] => {
+  const vx = U[i][0] + U[j][0], vy = U[i][1] + U[j][1];
+  const m = Math.hypot(vx, vy) || 1;
+  return [CX + (vx / m) * D * 0.82, CY + (vy / m) * D * 0.82];
+};
+const SPOT: Record<string, [number, number]> = {
+  A: [CX + U[0][0] * D * 1.42, CY + U[0][1] * D * 1.42],
+  B: [CX + U[1][0] * D * 1.42, CY + U[1][1] * D * 1.42],
+  C: [CX + U[2][0] * D * 1.42, CY + U[2][1] * D * 1.42],
+  AB: pair(0, 1), AC: pair(0, 2), BC: pair(1, 2),
+  ABC: [CX, CY],
+};
+
+/* A deterministic tight cluster, so the same data always draws the same sheet. */
+const cluster = (n: number, [ox, oy]: [number, number]) =>
+  Array.from({ length: n }, (_, k) => {
+    const a = k * 2.39996323, r = 7.4 * Math.sqrt(k);
+    return [ox + Math.cos(a) * r, oy + Math.sin(a) * r];
+  });
+
+const panels = PANELS.map((ticker) => {
+  const issuer = (instability as any).issuers.find((i: any) => i.ticker === ticker);
+  const [p1, p2, p3] = issuer.passes.map((p: string[]) => new Set(p));
+  const ever: string[] = issuer.ever_flagged;
+  const key = (id: string) =>
+    `${p1.has(id) ? "A" : ""}${p2.has(id) ? "B" : ""}${p3.has(id) ? "C" : ""}`;
+  const regions: Record<string, string[]> = {};
+  ever.forEach((id) => { const k = key(id); (regions[k] ||= []).push(id); });
+  return {
+    ticker,
+    ever: ever.length,
+    always: issuer.always_flagged.length,
+    counts: issuer.passes.map((p: string[]) => p.length),
+    squares: Object.entries(regions).flatMap(([k, ids]) =>
+      cluster(ids.length, SPOT[k] ?? [CX, CY]).map(([x, y]) => ({ x, y }))
+    ),
+  };
+});
+
+const PASS_INK = ["var(--vermilion)", "var(--chrome)", "var(--cobalt)"];
+const VW = 280, VH = 268;
 ---
-<svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label="Mean Jaccard agreement across three identical runs, per issuer">
-  {ticks.map((tv) => (
-    <line x1={x(tv)} y1={top - 4} x2={x(tv)} y2={top + rows.length * rh} stroke="rgba(255,255,255,.07)" stroke-width="1" />
+<div class="venns">
+  {panels.map((panel, pi) => (
+    <figure class="venn-cell">
+      <svg class="poster venn" viewBox={`0 0 ${VW} ${VH}`} data-poster
+           role="img"
+           aria-label={`${panel.ticker}: three identical passes flagged ${panel.counts.join(", ")} passages. ${panel.ever} passages were flagged at least once and ${panel.always} survived all three passes.`}>
+        {centre.map(([cx, cy], i) => (
+          <circle class="lobe" cx={cx} cy={cy} r={R}
+                  fill={PASS_INK[i]} fill-opacity=".42"
+                  stroke={PASS_INK[i]} stroke-width="3"
+                  style={`--d:${pi * 220 + i * 130}ms`} />
+        ))}
+        {panel.squares.map((s, i) => (
+          <rect class="flag" x={s.x - 3.4} y={s.y - 3.4} width="6.8" height="6.8"
+                fill="var(--ink)" style={`--d:${pi * 220 + 460 + i * 42}ms`} />
+        ))}
+        <text class="survived" x={CX} y={VH - 16} text-anchor="middle">
+          {panel.always} of {panel.ever} survived all three
+        </text>
+      </svg>
+      <figcaption>
+        <strong>{panel.ticker}</strong>
+        <span class="num">{panel.counts.join(" / ")} flagged per pass</span>
+      </figcaption>
+    </figure>
   ))}
-  {rows.map((r: any, i: number) => {
-    const y = top + i * rh + rh / 2;
-    const unstable = r.survives === 0;
-    const col = unstable ? "var(--alarm)" : "var(--accent)";
-    return (
-      <g>
-        <text x={0} y={y + 4} class="flbl" fill="var(--muted)">{r.ticker}</text>
-        <line x1={x(0)} y1={y} x2={x(r.jaccard)} y2={y} stroke={col} stroke-width="2" opacity=".4" />
-        <circle cx={x(r.jaccard)} cy={y} r="5" fill={col} />
-        <text x={x(r.jaccard) + 11} y={y + 4} class="flbl" fill="var(--ink)">{r.jaccard.toFixed(3)}</text>
-        <text x={W - 8} y={y + 4} text-anchor="end" class="flbl" fill="var(--dim)">{r.survives}% of flags survive all 3 runs</text>
-      </g>
-    );
-  })}
-  {ticks.map((tv) => (
-    <text x={x(tv)} y={H - 6} text-anchor="middle" class="flbl" fill="var(--dim)">{tv.toFixed(2)}</text>
-  ))}
-</svg>
+  <p class="venn-key">
+    <span><i style="background:var(--vermilion)"></i>pass one</span>
+    <span><i style="background:var(--chrome)"></i>pass two</span>
+    <span><i style="background:var(--cobalt)"></i>pass three</span>
+    <span><i class="sq"></i>a passage flagged as newly disclosed risk</span>
+  </p>
+</div>
+
 <style>
-  svg{width:100%;height:auto;display:block}
-  .flbl{font-family:var(--mono);font-size:10.5px;letter-spacing:.02em}
+  .venns{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem 2rem;align-items:start}
+  .venn-cell{margin:0}
+  .venn{max-width:26rem;margin-inline:auto}
+  /* Overprint, the way three passes of ink meet on one sheet. */
+  .venn .lobe{mix-blend-mode:multiply}
+  .venn .survived{
+    font-family:var(--mono);font-size:12.5px;font-weight:600;
+    letter-spacing:.02em;fill:var(--ink);
+  }
+  .venn-cell figcaption{
+    display:flex;flex-wrap:wrap;gap:.2rem .7rem;align-items:baseline;
+    justify-content:center;text-align:center;margin-top:.5rem;
+  }
+  .venn-cell strong{font-variation-settings:"wdth" 108,"wght" 800;font-size:1.05rem}
+  .venn-cell .num{font-size:.78rem;color:var(--ink-soft)}
+  .venn-key{
+    grid-column:1/-1;display:flex;flex-wrap:wrap;gap:.45rem 1.4rem;
+    margin:.4rem 0 0;font-size:.78rem;color:var(--ink-soft);
+  }
+  .venn-key span{display:inline-flex;align-items:center;gap:.45rem}
+  .venn-key i{width:.85rem;height:.85rem;display:inline-block;opacity:.62}
+  .venn-key i.sq{width:.5rem;height:.5rem;background:var(--ink);opacity:1}
+
+  :global([data-motion="on"]) .venn .lobe{opacity:0;transform:scale(.86);transform-origin:center}
+  :global([data-motion="on"]) .venn .flag{opacity:0}
+  :global([data-motion="on"]) .venn.in .lobe{animation:lobe-lay var(--t3) var(--cut) both;animation-delay:var(--d)}
+  :global([data-motion="on"]) .venn.in .flag{animation:flag-drop 320ms var(--cut) both;animation-delay:var(--d)}
+  @keyframes lobe-lay{from{opacity:0;transform:scale(.86)}to{opacity:1;transform:scale(1)}}
+  @keyframes flag-drop{from{opacity:0;transform:translateY(-7px)}to{opacity:1;transform:none}}
+
+  @media (max-width:700px){ .venns{grid-template-columns:1fr} }
+  @media (prefers-reduced-motion:reduce){
+    :global([data-motion="on"]) .venn .lobe,
+    :global([data-motion="on"]) .venn .flag{opacity:1;transform:none}
+  }
 </style>

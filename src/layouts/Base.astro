@@ -1,11 +1,13 @@
 ---
 import "../styles/house.css";
 import { PROJECTS } from "../lib/site";
+import Icon from "../components/Icon.astro";
 interface Props { title: string; description?: string; }
-const { title, description = "Amitesh Dwivedi. AI product manager. Agentic AI in healthcare, and three prototypes with the evidence attached." } = Astro.props;
+const { title, description = "Amitesh Dwivedi. AI product manager. Agentic AI in healthcare, and working prototypes with the evidence attached." } = Astro.props;
 const path = Astro.url.pathname;
 const activeProject = PROJECTS.find((project) => path.includes(`/${project.slug}`));
 const socialImage = new URL("/og.png", Astro.site ?? Astro.url.origin).toString();
+const on = (test: boolean) => (test ? "page" : undefined);
 ---
 <!doctype html>
 <html lang="en">
@@ -23,39 +25,96 @@ const socialImage = new URL("/og.png", Astro.site ?? Astro.url.origin).toString(
   <meta name="twitter:title" content={title} />
   <meta name="twitter:description" content={description} />
   <meta name="twitter:image" content={socialImage} />
-  <meta name="theme-color" content="#100f15" />
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='26' font-size='26'%3E%E2%97%89%3C/text%3E%3C/svg%3E" />
+  <meta name="theme-color" content="#f2efe3" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23f2efe3'/%3E%3Crect x='7' y='7' width='18' height='18' fill='%23e2361a'/%3E%3C/svg%3E" />
+  <script is:inline>
+    /* Content is visible by default. The gesture is added only where it is welcome. */
+    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      document.documentElement.dataset.motion = "on";
+    }
+  </script>
 </head>
 <body>
-  <a class="skip-link" href="#main-content">Skip to content</a>
-  <nav class="nav" aria-label="Global navigation">
-    <div class="wrap">
-      <a class="home" href="/">Amitesh Dwivedi</a>
-      <a href="/#projects" aria-current={path === "/" ? "page" : undefined}>Work</a>
-      <a href="/resume/" aria-current={path.startsWith("/resume") ? "page" : undefined}>Resume</a>
-      <a class="linkedin" href="https://linkedin.com/in/amiteshdwivedi/" rel="me noopener" target="_blank">LinkedIn ↗</a>
+<!--
+  THESIS: Every colour on this site is a measurement. The finding of each project
+  is drawn as a poster whose shapes are its numbers, refusing the dark-glass
+  AI-portfolio hero and its cream-and-serif opposite.
+  OWN-WORLD: Cut paper on bone. Archivo run wide and heavy, Chivo Mono for
+  measured figures only, hairline-ruled full-bleed bands, drenched vermilion /
+  chrome / cobalt / viridian fields, no gradient, blur, or shadow anywhere.
+  STORY: A hiring manager sees three shipped AI products, reads one measured
+  figure each, and finds every number traced to a committed artifact.
+  FIRST VIEWPORT: Bone ground, the locked sentence set to the full width in
+  heavy Archivo with a vermilion cut for its full stop, the gate rule drawing
+  beneath it, two pills at the left, three colour fields breaking the fold.
+  FORM: Fletcher wit poster fused with the tolans panel grammar. Candidate 1 of
+  7, brief-pinned over assigned candidate 6; seed key e3b25340.
+  FINISH: unreviewed and undocumented is unfinished; this build ends with the
+  finish review, the verdict, DESIGN.md, and every shipping raster carrying its
+  provenance.
+-->
+  <a class="skip" href="#main">Skip to content</a>
+
+  <nav class="nav" aria-label="Global">
+    <div class="inner">
+            <a class="wordmark" href="/">Amitesh Dwivedi</a>
+      <a class="pill" href="/resume/" aria-current={on(path.startsWith("/resume"))}><Icon name="resume" size={16} />Resume</a>
+            <a class="pill" href="/resume/" aria-current={on(path.startsWith("/resume"))}><Icon name="resume" size={16} />Resume</a>
+      <a class="pill hide-s" href="https://linkedin.com/in/amiteshdwivedi/" rel="me noopener" target="_blank"><Icon name="linkedin" size={16} />LinkedIn</a>
+      <a class="pill hide-s" href="https://github.com/amiteshdwivedijhu-ship-it" rel="me noopener" target="_blank"><Icon name="github" size={16} />GitHub</a>
     </div>
   </nav>
+
   {activeProject && (
-    <nav class="project-nav" aria-label={`${activeProject.name} navigation`}>
-      <div class="wrap">
-        <a class="project-name" href={`/projects/${activeProject.slug}/`}>{activeProject.name}</a>
-        <a href={`/projects/${activeProject.slug}/`} aria-current={path === `/projects/${activeProject.slug}/` ? "page" : undefined}>Overview</a>
+    <nav class="rail-nav" aria-label={`${activeProject.name}`}>
+      <div class="inner">
+        <a class="here" href={`/projects/${activeProject.slug}/`}>{activeProject.name}</a>
+        <a href={`/projects/${activeProject.slug}/`} aria-current={on(path === `/projects/${activeProject.slug}/`)}>Overview</a>
         {activeProject.demo && <a href={activeProject.demo.href}>Demo</a>}
         <a href={`/projects/${activeProject.slug}/prd/`}>Product</a>
-        <a href={`/projects/${activeProject.slug}/report/`}>Evidence</a>
-        <a href={`/projects/${activeProject.slug}/launch-decision-memo/`}>Learnings</a>
+        {activeProject.hasReport !== false && <a href={`/projects/${activeProject.slug}/report/`}>Evidence</a>}
+        <a href={`/projects/${activeProject.slug}/launch-decision-memo/`}>Decision</a>
+        <a href={`/projects/${activeProject.slug}/#fixes`}>Fix plan</a>
         <a href={`/projects/${activeProject.slug}/#artifacts`}>Artifacts</a>
       </div>
     </nav>
   )}
-  <main id="main-content" class="wrap" style="padding-top:3rem" tabindex="-1">
+
+  <main id="main" tabindex="-1">
     <slot />
   </main>
-  <footer>
-    <div class="wrap">
-      <p style="margin:0">Built by Amitesh Dwivedi. Every number on this site is read at build time from a committed run artifact, never typed by hand.</p>
+
+  <footer class="site">
+    <div class="inner">
+      <p>Every number on this site is read at build time from a committed run artifact. None of them is typed by hand. If a figure cannot be sourced, it does not appear.</p>
+      <nav aria-label="Elsewhere">
+        <a class="pill" href="/resume/"><Icon name="resume" size={16} />Resume</a>
+        <a class="pill" href="https://linkedin.com/in/amiteshdwivedi/" rel="me noopener" target="_blank"><Icon name="linkedin" size={16} />LinkedIn</a>
+        <a class="pill" href="https://github.com/amiteshdwivedijhu-ship-it" rel="me noopener" target="_blank"><Icon name="github" size={16} />GitHub</a>
+      </nav>
     </div>
   </footer>
+
+  <script is:inline>
+    /* One observer for the whole site. Paper lands when it comes into view. */
+    (function () {
+      if (document.documentElement.dataset.motion !== "on") return;
+      var targets = document.querySelectorAll(".cut, .drawn-rule, [data-poster]");
+      if (!("IntersectionObserver" in window)) {
+        targets.forEach(function (el) { el.classList.add("in"); });
+        return;
+      }
+      /* Arm each element only now: before this line it is plain visible text. */
+      targets.forEach(function (el) { el.setAttribute("data-armed", ""); });
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("in");
+          io.unobserve(entry.target);
+        });
+      }, { rootMargin: "0px 0px -12% 0px", threshold: 0.15 });
+      targets.forEach(function (el) { io.observe(el); });
+    })();
+  </script>
 </body>
 </html>

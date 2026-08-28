@@ -45,3 +45,6 @@ pnpm-debug.log*
 # commit them on purpose so a reviewer can re-run the evals with no API key.
 *.sqlite
 *.npz
+
+# Impeccable session artifacts (comps, review screenshots, local config)
+.impeccable/

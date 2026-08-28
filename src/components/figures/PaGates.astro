@@ -1,49 +1,83 @@
 ---
-/* Met-precision by configuration, with Wilson 95% intervals. Every figure is read
-   from the committed scorecards at build time. */
+/* POSTER — "The bar was set before the run."
+   Met-precision and its 95% interval for every configuration, against the 0.95
+   release gate. The gate is drawn heavier than anything else on the sheet,
+   because it is the only thing here that did not move.
+   Read at build time from the committed scorecards. Nothing is typed by hand. */
 import summary from "../../data/prior-auth/_summary.json";
 import ood from "../../data/prior-auth/ood.json";
 
-const rows = Object.entries((summary as any).in_distribution).map(([cfg, m]: [string, any]) => ({
-  label: cfg,
-  value: m.met_precision.value as number,
-  ci: m.met_precision.wilson95 as number[],
-  n: m.met_precision.n as number,
-}));
-const g = (ood as any).slices.ood.gates.met_precision;
-rows.push({ label: "ood-fc-golden", value: g.value, ci: g.wilson95, n: g.n });
+type Row = { label: string; value: number; lo: number; hi: number; n: number };
 
-const LO = 0.8, HI = 1.0, BAR = 0.95;
-const X0 = 178, X1 = 596, W = 672;
+const rows: Row[] = Object.entries((summary as any).in_distribution).map(
+  ([cfg, m]: [string, any]) => ({
+    label: cfg,
+    value: m.met_precision.value,
+    lo: m.met_precision.wilson95[0],
+    hi: m.met_precision.wilson95[1],
+    n: m.met_precision.n,
+  })
+);
+const g = (ood as any).slices.ood.gates.met_precision;
+rows.push({ label: "ood-fc-golden", value: g.value, lo: g.wilson95[0], hi: g.wilson95[1], n: g.n });
+
+const GATE = 0.95;
+const LO = 0.7, HI = 1.0;
+const W = 760, PAD_L = 132, PAD_R = 74;
+const X0 = PAD_L, X1 = W - PAD_R;
 const x = (v: number) => X0 + ((Math.min(Math.max(v, LO), HI) - LO) / (HI - LO)) * (X1 - X0);
-const rh = 34, top = 22, axisH = 26;
-const H = top + rows.length * rh + axisH;
-const ticks = [0.8, 0.9, 1.0];
+const RH = 46, TOP = 52;
+const H = TOP + rows.length * RH + 40;
+const ticks = [0.7, 0.8, 0.9, 1.0];
+const gx = x(GATE);
 ---
-<svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label="Met-precision by configuration, with Wilson 95 percent confidence intervals, against the 0.95 bar">
-  {ticks.map((tv) => (
-    <line x1={x(tv)} y1={top - 6} x2={x(tv)} y2={top + rows.length * rh} stroke="rgba(255,255,255,.07)" stroke-width="1" />
+<svg class="poster gates" viewBox={`0 0 ${W} ${H}`} data-poster
+     role="img"
+     aria-label={`Met-precision with 95 percent confidence intervals for ${rows.length} configurations. Every interval falls short of the 0.95 release gate.`}>
+  <!-- the window this sheet shows -->
+  {ticks.map((t) => (
+    <g>
+      <line x1={x(t)} y1={TOP - 16} x2={x(t)} y2={TOP + rows.length * RH} stroke="var(--paper-edge)" stroke-width="1" />
+      <text x={x(t)} y={H - 14} text-anchor="middle" class="p-lbl" fill="var(--ink-soft)">{t.toFixed(2)}</text>
+    </g>
   ))}
-  <line x1={x(BAR)} y1={top - 10} x2={x(BAR)} y2={top + rows.length * rh} stroke="var(--accent)" stroke-width="1.4" stroke-dasharray="5 4" />
-  <text x={x(BAR)} y={top - 14} text-anchor="middle" class="flbl" fill="var(--accent)">bar 0.95</text>
+
   {rows.map((r, i) => {
-    const y = top + i * rh + rh / 2;
+    const y = TOP + i * RH + RH / 2;
     return (
-      <g>
-        <text x={0} y={y + 4} class="flbl" fill="var(--muted)">{r.label}</text>
-        <line x1={x(r.ci[0])} y1={y} x2={x(r.ci[1])} y2={y} stroke="var(--accent)" stroke-width="2" stroke-linecap="round" opacity=".65" />
-        <line x1={x(r.ci[0])} y1={y - 4} x2={x(r.ci[0])} y2={y + 4} stroke="var(--accent)" stroke-width="2" opacity=".65" />
-        <line x1={x(r.ci[1])} y1={y - 4} x2={x(r.ci[1])} y2={y + 4} stroke="var(--accent)" stroke-width="2" opacity=".65" />
-        <circle cx={x(r.value)} cy={y} r="4.5" fill="var(--ink)" />
-        <text x={X1 + 8} y={y + 4} class="flbl" fill="var(--dim)">{r.value.toFixed(3)}</text>
+      <g class="gate-row" style={`--d:${180 + i * 70}ms`}>
+        <text x={X0 - 14} y={y + 4} text-anchor="end" class="p-lbl" fill="var(--ink-soft)">{r.label}</text>
+        <line class="ci" x1={x(r.lo)} y1={y} x2={x(r.hi)} y2={y}
+              stroke="var(--vermilion)" stroke-width="14" stroke-linecap="butt" opacity=".55"
+              style={`--cx:${x(r.value)}px`} />
+        <rect class="pt" x={x(r.value) - 3} y={y - 13} width="6" height="26" fill="var(--ink)" />
+        <text x={X1 + 12} y={y + 4} class="p-fig" fill="var(--ink)">{r.value.toFixed(3)}</text>
       </g>
     );
   })}
-  {ticks.map((tv) => (
-    <text x={x(tv)} y={H - 6} text-anchor="middle" class="flbl" fill="var(--dim)">{tv.toFixed(2)}</text>
-  ))}
+
+  <!-- The gate. It is heavier than the data on purpose. -->
+  <line class="gate-rule" x1={gx} y1={TOP - 30} x2={gx} y2={TOP + rows.length * RH + 8}
+        stroke="var(--ink)" stroke-width="4" />
+  <text x={gx} y={TOP - 38} text-anchor="middle" class="p-fig" fill="var(--ink)">GATE 0.95</text>
 </svg>
+
 <style>
-  svg{width:100%;height:auto;display:block}
-  .flbl{font-family:var(--mono);font-size:10.5px;letter-spacing:.02em}
+  .gates{max-width:52rem}
+  .gates .p-fig{font-size:14px}
+  /* The intervals grow out from their point estimate; the gate never moves. */
+  :global([data-motion="on"]) .gates .ci{transform:scaleX(0);transform-origin:var(--cx) center}
+  :global([data-motion="on"]) .gates .pt{opacity:0}
+  :global([data-motion="on"]) .gates .gate-rule{transform:scaleY(0);transform-origin:center top}
+  :global([data-motion="on"]) .gates.in .gate-rule{animation:gate-drop var(--t3) var(--cut) both}
+  :global([data-motion="on"]) .gates.in .ci{animation:ci-open var(--t3) var(--cut) both;animation-delay:var(--d)}
+  :global([data-motion="on"]) .gates.in .pt{animation:pt-in var(--t2) var(--cut) both;animation-delay:var(--d)}
+  @keyframes gate-drop{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+  @keyframes ci-open{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+  @keyframes pt-in{from{opacity:0}to{opacity:1}}
+  @media (prefers-reduced-motion:reduce){
+    :global([data-motion="on"]) .gates .ci,
+    :global([data-motion="on"]) .gates .pt,
+    :global([data-motion="on"]) .gates .gate-rule{transform:none;opacity:1}
+  }
 </style>

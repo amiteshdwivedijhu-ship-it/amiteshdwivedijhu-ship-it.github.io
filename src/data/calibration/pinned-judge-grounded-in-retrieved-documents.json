@@ -1,0 +1,23 @@
+{
+  "criterion": {
+    "id": "grounded-in-retrieved-documents",
+    "name": "Grounded in retrieved documents",
+    "question": "Does the reply base substantive policy or product claims only on the retrieved documents provided in the trace?"
+  },
+  "renderings": [
+    "Does the reply base substantive policy or product claims only on the retrieved documents provided in the trace? (rendering A)",
+    "Does the reply base substantive policy or product claims only on the retrieved documents provided in the trace? (rendering B)"
+  ],
+  "model": "qwen/qwen3.8-flash",
+  "k": 3,
+  "temperature": 0.7,
+  "aggregation_rule": "strict majority, referee (different family) breaks splits",
+  "diagnostics": {
+    "base_rate": 0.0,
+    "self_consistency": 0.985,
+    "rendering_stability": 1.0,
+    "redaction_shift_pp": 0.0,
+    "recall_ceiling": 0.0,
+    "call": "Too Rare"
+  }
+}

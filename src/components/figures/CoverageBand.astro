@@ -1,0 +1,136 @@
+---
+/* POSTER — "Both ends are zero."
+   The curve is how much a yes-or-no check can tell you at a given firing rate.
+   It is binary entropy, so it is fixed by arithmetic rather than chosen: a check
+   that fires on nothing and a check that fires on everything both sit at zero.
+   Squares are the six checks as written. Arrows are what the tool's own rewrite
+   engine did to the five that failed, and three of them travel the whole width
+   of the sheet to land back at zero, stamped as a pass.
+   Every position is read from the committed run at build time. */
+import { CALIBRATION } from "../../lib/site";
+
+const checks = CALIBRATION.checks as any[];
+const rewrites = CALIBRATION.rewrites;
+
+/* Binary entropy: 1 bit at an even split, 0 bits at either extreme. */
+const H = (p: number) => (p <= 0 || p >= 1 ? 0 : -(p * Math.log2(p) + (1 - p) * Math.log2(1 - p)));
+
+const W = 780, H_PX = 356;
+const X0 = 56, X1 = W - 56, YB = 258, YT = 54;
+const x = (p: number) => X0 + p * (X1 - X0);
+const y = (h: number) => YB - h * (YB - YT);
+
+const curve = Array.from({ length: 201 }, (_, i) => {
+  const p = i / 200;
+  return `${i === 0 ? "M" : "L"}${x(p).toFixed(1)},${y(H(p)).toFixed(1)}`;
+}).join(" ");
+
+/* The lift of a rewrite's arc follows how far it actually travelled, so a check
+   that barely moved draws a short hop rather than a spike to the ceiling. */
+const arc = (p1: number, h1: number, p2: number, h2: number) => {
+  const [sx, sy] = [x(p1), y(h1) - 12];
+  const [ex, ey] = [x(p2), y(h2) - 12];
+  const lift = 26 + Math.abs(p2 - p1) * 150;
+  const cy = Math.max(YT - 18, Math.min(sy, ey) - lift);
+  return `M${sx.toFixed(1)},${sy.toFixed(1)} Q${((sx + ex) / 2).toFixed(1)},${cy.toFixed(1)} ${ex.toFixed(1)},${ey.toFixed(1)}`;
+};
+
+const byId = new Map(rewrites.map((r) => [r.of, r]));
+const points = checks.map((c) => {
+  const p = c.diagnostics.base_rate as number;
+  const rw = byId.get(c.criterion.id);
+  return {
+    id: c.criterion.id,
+    name: c.criterion.name,
+    p,
+    rewrite: rw ? { p: rw.base, stamped: rw.call === "automatable" } : null,
+  };
+});
+const leapt = points.filter((d) => d.rewrite?.stamped).length;
+const ticks = [0, 0.25, 0.5, 0.75, 1];
+---
+<figure class="band-fig">
+  <svg class="poster coverage" viewBox={`0 0 ${W} ${H_PX}`} data-poster
+       role="img"
+       aria-label={`How much a yes-or-no check can tell you, plotted against how often it fires. The curve peaks at an even split and falls to zero at both extremes. ${leapt} of the tool's rewrites moved a check from firing on almost nothing to firing on almost everything, which is the same zero.`}>
+    <!-- what a check at this firing rate can tell you -->
+    <path class="hill" d={`${curve} L${x(1)},${YB} L${x(0)},${YB} Z`} fill="var(--ink)" fill-opacity=".07" />
+    <path class="hill-line" d={curve} fill="none" stroke="var(--ink)" stroke-width="1.5" stroke-opacity=".45" />
+
+    {ticks.map((tv) => (
+      <g>
+        <line x1={x(tv)} y1={YB} x2={x(tv)} y2={YB + 6} stroke="var(--rule)" stroke-width="1" />
+        <text x={x(tv)} y={YB + 22}
+              text-anchor={tv === 0 ? "start" : tv === 1 ? "end" : "middle"}
+              class="p-lbl" fill="var(--ink-soft)">{Math.round(tv * 100)}%</text>
+      </g>
+    ))}
+    <line x1={X0} y1={YB} x2={X1} y2={YB} stroke="var(--ink)" stroke-width="1.5" />
+
+    <!-- the two ends are the same end, and the axis says so -->
+    <text x={x(0)} y={YB + 40} class="p-lbl end" fill="var(--ink-soft)">fires on nothing</text>
+    <text x={x(1)} y={YB + 40} text-anchor="end" class="p-lbl end" fill="var(--ink-soft)">fires on everything</text>
+    <text x={x(0.5)} y={y(1) - 12} text-anchor="middle" class="p-fig" fill="var(--ink)">most it can tell you</text>
+
+    {points.map((d, i) => (
+      <g class="mark" style={`--d:${240 + i * 90}ms`}>
+        {d.rewrite && (
+          <path class="leap" d={arc(d.p, H(d.p), d.rewrite.p, H(d.rewrite.p))}
+                fill="none"
+                stroke={d.rewrite.stamped ? "var(--vermilion)" : "var(--ink-soft)"}
+                stroke-width={d.rewrite.stamped ? 2.4 : 1.4}
+                stroke-dasharray={d.rewrite.stamped ? "none" : "4 4"} />
+        )}
+        <rect x={x(d.p) - 5} y={y(H(d.p)) - 5} width="10" height="10" fill="var(--ink)" />
+        {d.rewrite && (
+          <rect x={x(d.rewrite.p) - 5.5} y={y(H(d.rewrite.p)) - 5.5} width="11" height="11"
+                fill={d.rewrite.stamped ? "var(--vermilion)" : "none"}
+                stroke={d.rewrite.stamped ? "none" : "var(--ink-soft)"} stroke-width="1.5" />
+        )}
+        <title>{d.name}: fires on {(d.p * 100).toFixed(1)}%{d.rewrite ? `, rewritten to ${(d.rewrite.p * 100).toFixed(0)}%` : ""}</title>
+      </g>
+    ))}
+  </svg>
+
+  <figcaption>
+    <p class="band-key">
+      <span><i class="sq ink"></i>the check as she wrote it</span>
+      <span><i class="sq verm"></i>the tool's rewrite, stamped as a pass</span>
+      <span><i class="sq hollow"></i>the tool's rewrite, still failing</span>
+    </p>
+  </figcaption>
+</figure>
+
+<style>
+  .band-fig{margin:0}
+  .coverage{max-width:52rem}
+  .coverage .p-lbl{font-size:11px;letter-spacing:.04em}
+  .coverage .p-lbl.end{font-size:10.5px;letter-spacing:.09em;text-transform:uppercase}
+  .coverage .p-fig{font-size:11px;letter-spacing:.13em;text-transform:uppercase}
+  .band-key{display:flex;flex-wrap:wrap;gap:.5rem 1.5rem;margin:1rem 0 0;font-size:.8rem;color:var(--ink-soft)}
+  .band-key span{display:inline-flex;align-items:center;gap:.5rem}
+  .band-key i{width:.7rem;height:.7rem;display:inline-block;flex:0 0 auto}
+  .band-key i.ink{background:var(--ink)}
+  .band-key i.verm{background:var(--vermilion)}
+  .band-key i.hollow{border:1.5px solid var(--ink-soft)}
+
+  /* The hill is drawn first, then each check is laid on it, then the rewrites
+     travel. The three long arrows are the whole point, so they take their time. */
+  :global([data-motion="on"]) .coverage .hill-line{stroke-dasharray:1400;stroke-dashoffset:1400}
+  :global([data-motion="on"]) .coverage .hill{opacity:0}
+  :global([data-motion="on"]) .coverage .mark{opacity:0}
+  :global([data-motion="on"]) .coverage .leap{stroke-dasharray:900;stroke-dashoffset:900}
+  :global([data-motion="on"]) .coverage.in .hill-line{animation:draw-hill 1100ms var(--cut) both}
+  :global([data-motion="on"]) .coverage.in .hill{animation:fade-hill 700ms var(--cut) both 400ms}
+  :global([data-motion="on"]) .coverage.in .mark{animation:mark-in 420ms var(--cut) both;animation-delay:var(--d)}
+  :global([data-motion="on"]) .coverage.in .leap{animation:draw-leap 900ms var(--cut) both;animation-delay:calc(var(--d) + 220ms)}
+  @keyframes draw-hill{to{stroke-dashoffset:0}}
+  @keyframes fade-hill{from{opacity:0}to{opacity:1}}
+  @keyframes mark-in{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+  @keyframes draw-leap{from{stroke-dashoffset:900}to{stroke-dashoffset:0}}
+  @media (prefers-reduced-motion:reduce){
+    :global([data-motion="on"]) .coverage :is(.hill,.hill-line,.mark,.leap){
+      opacity:1;transform:none;stroke-dashoffset:0;
+    }
+  }
+</style>

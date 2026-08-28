@@ -1,0 +1,28 @@
+{
+  "run": "2026-08-28-budget",
+  "date": "2026-08-28",
+  "transport": "openai",
+  "model": "z-ai/glm-5.3-flash",
+  "grader": "grader-v4+z-ai-glm-5-3-flash",
+  "effort": "xhigh",
+  "cases": 15,
+  "accuracy": "11/15",
+  "recallRightAnswerWrongReason": "0.20",
+  "results": [
+    { "fixture": "binding-machine-execution-slip", "expected": "execution_slip", "actual": "execution_slip", "pass": true },
+    { "fixture": "biotech-rnd-wrong-rule", "expected": "wrong_rule", "actual": "wrong_rule", "pass": true },
+    { "fixture": "cnc-router-foundation-missing", "expected": "foundation_missing", "actual": "foundation_missing", "pass": true },
+    { "fixture": "deposit-interest-right-answer-wrong-reason", "expected": "right_answer_wrong_reason", "actual": "wrong_rule", "pass": false },
+    { "fixture": "depreciation-right-answer-wrong-reason", "expected": "right_answer_wrong_reason", "actual": "sound", "pass": false, "note": "grader failed validation twice (wrong_rule named a neighbour outside confused_with); runner records the error as sound" },
+    { "fixture": "ebike-consignment-key-disputed", "expected": "key_disputed", "actual": "key_disputed", "pass": true },
+    { "fixture": "gear-shop-cogs-foundation-missing", "expected": "foundation_missing", "actual": "foundation_missing", "pass": true },
+    { "fixture": "hotel-windows-key-disputed", "expected": "key_disputed", "actual": "key_disputed", "pass": true },
+    { "fixture": "plumbing-receivables-sound", "expected": "sound", "actual": "sound", "pass": true },
+    { "fixture": "prepaid-rent-right-answer-wrong-reason", "expected": "right_answer_wrong_reason", "actual": "execution_slip", "pass": false },
+    { "fixture": "restaurant-furniture-missed-boundary", "expected": "missed_boundary", "actual": "missed_boundary", "pass": true },
+    { "fixture": "revenue-consultancy-foundation-missing", "expected": "foundation_missing", "actual": "foundation_missing", "pass": true },
+    { "fixture": "revenue-right-answer-wrong-reason", "expected": "right_answer_wrong_reason", "actual": "foundation_missing", "pass": false },
+    { "fixture": "subscription-deferred-right-answer-wrong-reason", "expected": "right_answer_wrong_reason", "actual": "right_answer_wrong_reason", "pass": true },
+    { "fixture": "swiss-balances-fx-sound", "expected": "sound", "actual": "sound", "pass": true }
+  ]
+}

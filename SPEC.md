@@ -292,6 +292,15 @@ Still correct: every project has a `.venv` and all three already ignore it.
 
 ### 8.1 Visual system
 
+> **Superseded 2026-08-27.** The visual world was replaced in a full redesign:
+> Alan Fletcher wit-poster graphic language on the tolans.com panel grammar, four
+> meaning-bearing inks rather than one alarm colour, Archivo and Chivo Mono.
+> `portfolio/DESIGN.md` is now the visual authority, and `src/styles/house.css` is
+> ground truth. The palette recorded below is the pre-redesign seed, kept for
+> history. Decisions 1 to 7 in §1 all still stand, including the affirmative
+> homepage.
+
+
 Seeded from `10K Risk Extractor/docs/site/index.html`, which already ships the house style:
 
 ```

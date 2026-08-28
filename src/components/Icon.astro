@@ -1,0 +1,64 @@
+---
+/* The house icon set. Authored, not borrowed: one 24-unit grid, one 1.6 stroke,
+   butt caps and mitre joins, no rounded corners and no fills, so an icon reads as
+   the same cut-paper world as everything else on the page. Every glyph here
+   stands for a real stage in a real pipeline; there are no ornaments. */
+interface Props { name: string; size?: number; class?: string }
+const { name, size = 26, class: cls = "" } = Astro.props;
+
+const P: Record<string, string> = {
+  /* a patient chart: a record with a reading on it */
+  chart: "M5 3h14v18H5zM8 8h8M8 12h5M8 16h8",
+  /* a published policy: a document with a seal */
+  policy: "M5 3h11l3 3v15H5zM16 3v3h3M8 11h8M8 15h5",
+  /* pull the criteria out */
+  funnel: "M3 4h18l-7 8v8l-4-2v-6z",
+  /* weigh the case against the criteria */
+  scale: "M12 4v16M6 8h12M6 8l-3 6h6zM18 8l-3 6h6zM8 20h8",
+  /* the bar the work is held to, and the mark landing under it */
+  gate: "M3 9h18M7 14h10M12 14v5M9 19h6",
+  /* what leaves the building */
+  letter: "M3 6h18v12H3zM3 6l9 7 9-7",
+  /* prose split into identified sentences */
+  lines: "M4 5h16M4 9h16M4 13h11M4 17h16M4 21h7",
+  /* tagged against a taxonomy */
+  tag: "M3 3h9l9 9-9 9-9-9zM7.5 7.5h.01",
+  /* this year against last year */
+  diff: "M4 4h7v16H4zM13 4h7v16h-7M15.5 9h3M15.5 12h3M6 9h3M6 12h3M6 15h3",
+  /* the clause that is not there */
+  absence: "M4 3h16v18H4zM8.5 9.5h7v6h-7z",
+  /* who, if anyone, needs to read it */
+  route: "M3 12h6l4-6h8M13 18h8M9 12l4 6M17 3l4 3-4 3M17 15l4 3-4 3",
+  /* the rubric, in prose */
+  rubric: "M5 3h14v18H5zM8 8h.01M11 8h5M8 12h.01M11 12h5M8 16h.01M11 16h5",
+  /* one question written two honest ways */
+  fork: "M3 12h6l5-6h6M9 12l5 6h6M17 3l4 3-4 3M17 15l4 3-4 3",
+  /* asked three times at the same settings */
+  repeat: "M6 4h12v4H6zM6 10h12v4H6zM6 16h12v4H6z",
+  /* the coverage table */
+  table: "M3 4h18v16H3zM3 9h18M9 9v11M15 9v11",
+  /* corpus of documents */
+  stack: "M4 7l8-4 8 4-8 4zM4 12l8 4 8-4M4 17l8 4 8-4",
+  /* a human decides between two rationales */
+  arbitrate: "M4 4h7v9H4zM13 4h7v9h-7M7.5 20v-3M16.5 20v-3M4 20h7M13 20h7",
+  /* a resume: one page, folded once, with its evidence ruled in */
+  resume: "M5 3h10l4 4v14H5zM15 3v4h4M8 11h8M8 15h8M8 19h5",
+  /* LinkedIn, redrawn on the house grid */
+  linkedin: "M3 3h18v18H3zM7 10v7M7 7v.01M11 17v-7M11 13c1-4 6-4 6 0v4M17 17v-4",
+  /* GitHub's branching silhouette, kept in the house outline weight */
+  github: "M15 22v-4a4.8 4.8 0 0 0-1-3.5c3.28-.36 6.72-1.61 6.72-7a5.44 5.44 0 0 0-1.5-3.73A5.07 5.07 0 0 0 19.13.69S17.95.32 15 2.26a13.38 13.38 0 0 0-6 0C6.05.32 4.87.69 4.87.69a5.07 5.07 0 0 0-.09 3.08A5.44 5.44 0 0 0 3.28 7.5c0 5.42 3.44 6.61 6.72 7A4.8 4.8 0 0 0 9 18v4M9 18c-4.51 2-5-2-7-2",
+};
+const d = P[name] ?? P.chart;
+---
+<svg class={`ico ${cls}`} width={size} height={size} viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+  <path d={d} />
+</svg>
+
+<style>
+  .ico{
+    display:block;flex:0 0 auto;
+    fill:none;stroke:currentColor;stroke-width:1.6;
+    stroke-linecap:butt;stroke-linejoin:miter;
+    vector-effect:non-scaling-stroke;
+  }
+</style>

@@ -14,7 +14,8 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const p = bySlug(entry.data.project);
 const { Content } = await render(entry);
-const artifacts = (await getCollection("artifacts", (a) => a.data.project === p.slug)).sort((a, b) => a.data.order - b.data.order);
+const artifacts = (await getCollection("artifacts", (a) => a.data.project === p.slug))
+  .sort((a, b) => a.data.order - b.data.order);
 const index = artifacts.findIndex((a) => a.id === entry.id);
 const previous = index > 0 ? artifacts[index - 1] : undefined;
 const next = index < artifacts.length - 1 ? artifacts[index + 1] : undefined;
@@ -23,50 +24,119 @@ const updated = entry.body.match(/Last updated:\*\*\s*([^\n]+)/i)?.[1]?.trim() ?
 const hrefFor = (a: typeof entry) => `/projects/${p.slug}/${a.id.split("/").pop()}/`;
 ---
 <Base title={`${entry.data.title} – ${p.name}`} description={entry.data.hook}>
-  <header class="document-header" id="document-top">
-    <p class="eyebrow"><a href={`/projects/${p.slug}/#artifacts`}>&larr; All {p.name} artifacts</a></p>
-    <div class="document-meta num">{entry.data.title} · {minutes} min · Updated {updated}</div>
-    <div class="takeaway"><span class="eyebrow">Executive takeaway</span><p>{entry.data.hook}</p></div>
+  <div class="progress" aria-hidden="true"><span></span></div>
+
+  <header class="band head" data-field={p.ink}>
+    <div class="inner">
+      <p class="label">
+        {p.name} · document {String(index + 1).padStart(2, "0")} of {String(artifacts.length).padStart(2, "0")} · {minutes} min · updated {updated}
+      </p>
+      <h1 class="display display-l cut">{entry.data.title}</h1>
+      <p class="takeaway cut measure" style="--d:100ms">{entry.data.hook}</p>
+    </div>
   </header>
-  <div class="document-shell">
-    <aside class="document-rail glass">
-      <span class="eyebrow">Project record</span>
-      <p>{p.name}</p>
-      <div class="doc-progress" aria-hidden="true"><span></span></div>
-      <a href={`/projects/${p.slug}/`}>Back to project</a>
-      {p.demo && <a href={p.demo.href}>Open demo</a>}
-      <a href={`/projects/${p.slug}/report/`}>Evaluation report</a>
-    </aside>
-    <div>
+
+  <div class="band">
+    <div class="inner reading">
       <article class="prose"><Content /></article>
-      <p class="num source">Source: {entry.data.source}</p>
+      <p class="source num">Source: {entry.data.source}</p>
       <Mermaid />
-      <nav class="document-nav" aria-label="Artifact sequence">
-        {previous ? <a href={hrefFor(previous)}><span>Previous</span><strong>← {previous.data.title}</strong></a> : <span></span>}
-        {next ? <a class="next" href={hrefFor(next)}><span>Next</span><strong>{next.data.title} →</strong></a> : <a class="next" href={p.report}><span>Next</span><strong>Eval report →</strong></a>}
-      </nav>
-      <details class="all-artifacts glass">
-        <summary>All artifacts in recommended order</summary>
-        <ol>{artifacts.map((artifact) => <li><a href={hrefFor(artifact)} aria-current={artifact.id === entry.id ? "page" : undefined}>{artifact.data.title}</a><small>{artifact.data.hook}</small></li>)}</ol>
-      </details>
     </div>
   </div>
+
+  <nav class="band tight steps" aria-label="Document sequence">
+    <div class="inner">
+      <div class="step-grid">
+        {previous ? (
+          <a class="step" href={hrefFor(previous)}>
+            <span class="num">Previous</span>
+            <strong>{previous.data.title}</strong>
+          </a>
+        ) : <span class="step empty" aria-hidden="true"></span>}
+        {next ? (
+          <a class="step next" href={hrefFor(next)}>
+            <span class="num">Next</span>
+            <strong>{next.data.title}</strong>
+          </a>
+        ) : p.hasReport !== false ? (
+          <a class="step next" href={`/projects/${p.slug}/report/`}>
+            <span class="num">Next</span>
+            <strong>Eval report</strong>
+          </a>
+        ) : (
+          <a class="step next" href={`/projects/${p.slug}/`}>
+            <span class="num">Return</span>
+            <strong>Case study</strong>
+          </a>
+        )}
+      </div>
+      <details class="all">
+        <summary>All {artifacts.length} documents, in the order worth reading them</summary>
+        <ol>
+          {artifacts.map((a) => (
+            <li>
+              <a href={hrefFor(a)} aria-current={a.id === entry.id ? "page" : undefined}>{a.data.title}</a>
+              <small>{a.data.hook}</small>
+            </li>
+          ))}
+        </ol>
+      </details>
+    </div>
+  </nav>
 </Base>
+
 <style>
-  .document-header{max-width:48rem;margin-bottom:1.5rem}.document-header>.eyebrow a{text-decoration:none;color:var(--muted)}
-  .document-meta{margin:.8rem 0;color:var(--dim);font-size:.7rem;text-transform:uppercase;letter-spacing:.08em}
-  .takeaway{border-left:3px solid var(--accent);padding:.9rem 1.15rem;background:rgba(239,177,134,.07);border-radius:0 10px 10px 0}
-  .takeaway span{display:block;margin-bottom:.3rem}.takeaway p{font-family:var(--serif);font-size:1.05rem;color:var(--ink);margin:0;line-height:1.5}
-  .document-shell{display:grid;grid-template-columns:160px minmax(0,1fr);gap:2rem;align-items:start}
-  .document-rail{position:sticky;top:126px;padding:1rem}.document-rail p{font-size:.75rem;color:var(--muted);line-height:1.4}.document-rail a{display:block;padding:.4rem 0;font-size:.76rem;text-decoration:none;border-top:1px solid var(--hairline)}
-  .doc-progress{height:3px;background:var(--hairline);margin:.75rem 0}.doc-progress span{display:block;width:0;height:100%;background:var(--accent)}
-  .source{color:var(--dim);font-size:.7rem;margin-top:3rem}
-  .document-nav{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:3rem 0}.document-nav a{display:flex;flex-direction:column;gap:.25rem;padding:1rem;border:1px solid var(--hairline);border-radius:12px;text-decoration:none}.document-nav span{font-family:var(--mono);font-size:.65rem;text-transform:uppercase;color:var(--dim)}.document-nav strong{font-family:var(--serif);color:var(--ink)}.document-nav .next{text-align:right}
-  .all-artifacts{padding:1rem 1.2rem}.all-artifacts summary{cursor:pointer;min-height:44px;display:flex;align-items:center;font-weight:700;color:var(--ink)}.all-artifacts ol{padding-left:1.4rem}.all-artifacts li{padding:.45rem 0}.all-artifacts a{display:block}.all-artifacts a[aria-current="page"]{color:var(--ink);font-weight:700}.all-artifacts small{display:block;color:var(--muted);line-height:1.4}
-  @media(max-width:760px){.document-shell{display:block}.document-rail{position:sticky;top:113px;z-index:9;display:flex;align-items:center;gap:.75rem;overflow:auto;margin-bottom:1.4rem;padding:.5rem .7rem}.document-rail p,.doc-progress{display:none}.document-rail a{white-space:nowrap;border:0}.document-nav{grid-template-columns:1fr}}
+  .progress{position:fixed;left:0;right:0;top:0;height:3px;z-index:40;background:transparent}
+  .progress span{display:block;height:100%;width:0;background:var(--vermilion)}
+  .head .label{margin-bottom:.9rem}
+  .takeaway{
+    margin:1.4rem 0 0;font-size:clamp(1.1rem,2vw,1.32rem);line-height:1.45;
+    padding-left:1.1rem;border-left:1px solid currentColor;
+  }
+  .reading{max-width:var(--wrap)}
+  .source{color:var(--ink-soft);font-size:.74rem;margin-top:3.5rem;letter-spacing:.06em}
+
+  .step-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);border:1px solid var(--rule)}
+  .step{
+    background:var(--paper);display:flex;flex-direction:column;gap:.3rem;
+    padding:1.1rem 1.2rem;text-decoration:none;min-height:5.5rem;
+    transition:background var(--t1) var(--cut),color var(--t1) var(--cut);
+  }
+  .step .num{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft)}
+  .step strong{font-variation-settings:"wdth" 104,"wght" 750;font-size:1rem;line-height:1.25}
+  .step.next{text-align:right;align-items:flex-end}
+  .step:hover{background:var(--ink);color:var(--paper)}
+  .step:hover .num{color:inherit;opacity:.8}
+  .step.empty{background:var(--paper)}
+
+  .all{margin-top:1.5rem;border:1px solid var(--rule);background:var(--paper-sunk)}
+  .all summary{
+    cursor:pointer;min-height:44px;display:flex;align-items:center;padding:.6rem 1.1rem;
+    font-family:var(--mono);font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;
+  }
+  .all ol{margin:0;padding:0 1.1rem 1.1rem 2.4rem}
+  .all li{padding:.4rem 0}
+  .all li a{font-variation-settings:"wght" 600}
+  .all li a[aria-current="page"]{text-decoration-color:var(--vermilion);text-decoration-thickness:3px}
+  .all small{display:block;color:var(--ink-soft);line-height:1.45;font-size:.85rem}
+
+  @media (max-width:640px){
+    .step-grid{grid-template-columns:1fr}
+    .step.next{text-align:left;align-items:flex-start}
+    .step.empty{display:none}
+  }
 </style>
-<script>
-  const bar = document.querySelector<HTMLElement>(".doc-progress span");
-  const update = () => { const max = document.documentElement.scrollHeight - innerHeight; if (bar) bar.style.width = `${max ? Math.min(100, scrollY / max * 100) : 0}%`; };
-  addEventListener("scroll", update, { passive: true }); update();
+
+<script is:inline>
+  (function () {
+    var bar = document.querySelector(".progress span");
+    if (!bar) return;
+    var tick = function () {
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      bar.style.width = (max > 0 ? Math.min(100, (window.scrollY / max) * 100) : 0) + "%";
+    };
+    addEventListener("scroll", tick, { passive: true });
+    addEventListener("resize", tick);
+    tick();
+  })();
 </script>
