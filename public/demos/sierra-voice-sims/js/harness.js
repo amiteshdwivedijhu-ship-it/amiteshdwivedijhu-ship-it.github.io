@@ -183,7 +183,7 @@ function runSuite(suite, GATES) {
 
   const markers = [];
   for (const m of mishandled) {
-    markers.push({ kind: "interruption", time: m.turn.tStart, turnId: m.turn.id, label: "spoke over caller " + m.continuedMs + " ms" });
+    markers.push({ kind: "interruption", time: m.turn.tStart, turnId: m.turn.id, label: "spoke over caller" });
   }
   for (const m of misses) {
     markers.push({ kind: "asr", time: m.time, turnId: m.turnId, label: m.field + " misheard" });

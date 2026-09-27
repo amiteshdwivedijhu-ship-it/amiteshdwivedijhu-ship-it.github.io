@@ -170,21 +170,39 @@
     }
 
     for (const turn of suite.turns) {
-      const w = Math.max(6, x(turn.tEnd) - x(turn.tStart));
+      const tx0 = x(turn.tStart);
+      const tx1 = Math.min(x(turn.tEnd), W);
+      const w = Math.max(6, tx1 - tx0);
       const h = hash(turn.id) % 15 + 7;
       const fill = turn.speaker === "agent" ? "rgba(47,79,58,0.5)" : "rgba(23,24,26,0.42)";
-      out += '<rect class="w-turn" data-turn="' + turn.id + '" x="' + x(turn.tStart) + '" y="' + (baseY - h) + '" width="' + w + '" height="' + h + '" rx="1.5" fill="' + fill + '">' +
+      out += '<rect class="w-turn" data-turn="' + turn.id + '" x="' + tx0 + '" y="' + (baseY - h) + '" width="' + w + '" height="' + h + '" rx="1.5" fill="' + fill + '">' +
         '<title>' + turn.id + " " + turn.speaker + " " + fmtT(turn.tStart) + "</title></rect>";
     }
 
+    // Marker labels: place right of the pin, flip left at the right edge,
+    // and stack onto separate bands when two labels would collide.
+    const labelW = (s) => s.length * 5.5;
+    const bands = [14, 26, 38];
+    const placed = [];
     for (const m of run.markers) {
       const xp = x(m.time);
       const c = MARKER_COLOR[m.kind] || "#b3261e";
       const dash = m.kind === "recovery-miss" ? ' stroke-dasharray="4 3"' : "";
+      const ltext = m.label + " · " + fmtT(m.time);
+      const lw = labelW(ltext);
+      let lx = xp + 6;
+      if (lx + lw > W - 4) lx = xp - 6 - lw;
+      lx = Math.max(2, lx);
+      let ly = bands[1];
+      for (const b of bands) {
+        const clash = placed.some((p) => Math.abs(p.y - b) < 9 && lx < p.x1 + 8 && lx + lw > p.x0 - 8);
+        if (!clash) { ly = b; break; }
+      }
+      placed.push({ x0: lx, x1: lx + lw, y: ly });
       out += '<g class="w-marker" data-turn="' + m.turnId + '" style="cursor:pointer">';
       out += '<line x1="' + xp + '" y1="30" x2="' + xp + '" y2="' + baseY + '" stroke="' + c + '" stroke-width="2"' + dash + "/>";
       out += '<polygon points="' + (xp - 4) + ',44 ' + (xp + 4) + ',44 ' + xp + ",50" + '" fill="' + c + '"/>';
-      out += '<text x="' + (xp + 5) + '" y="26" font-size="9.5" fill="' + c + '">' + m.label + " &middot; " + fmtT(m.time) + "</text>";
+      out += '<text x="' + lx + '" y="' + ly + '" font-size="9.5" fill="' + c + '">' + ltext + "</text>";
       out += "</g>";
     }
 
