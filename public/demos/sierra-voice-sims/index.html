@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1200">
+<meta name="robots" content="noindex">
+<title>Sierra · Agent Studio · Voice Sims</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="topbar">
+  <div class="brand">SIERRA</div>
+  <div class="crumbs">
+    <span class="crumb">Agent Studio</span>
+    <span class="crumb-sep">/</span>
+    <span class="crumb active">Voice Sims</span>
+  </div>
+  <div class="build-chip">build VOICE-201 &middot; candidate</div>
+  <div class="top-actions">
+    <span class="user-chip">Ami&nbsp;&middot;&nbsp;Voice&nbsp;PM</span>
+  </div>
+</div>
+
+<aside class="rail">
+  <div class="rail-group">BUILD</div>
+  <a class="rail-item">Journeys</a>
+  <a class="rail-item">Knowledge</a>
+  <a class="rail-item">Integrations</a>
+  <div class="rail-group">TEST</div>
+  <a class="rail-item" id="rail-sims">Simulations</a>
+  <a class="rail-item">Chat Sims</a>
+  <a class="rail-item active" id="rail-voice">Voice Sims</a>
+  <div class="rail-group">OBSERVE</div>
+  <a class="rail-item">Traces</a>
+  <a class="rail-item">Monitor</a>
+</aside>
+
+<main>
+  <section class="page-head">
+    <h1>Voice Sims</h1>
+    <p class="lede">Quality gates over synthetic calls before any release. Every verdict on this panel is a count, a duration, or a string comparison computed from the annotated transcript. The rubric is written in code before the run and cannot move. No LLM judge, so a bad day cannot move the bar.</p>
+  </section>
+
+  <section class="suites" id="suite-cards"></section>
+
+  <section class="result" id="result-panel" hidden>
+    <div class="result-head" id="result-head"></div>
+    <div class="release-banner" id="release-banner"></div>
+    <div class="gate-grid" id="gate-grid"></div>
+    <div class="wave-wrap">
+      <div class="wave-title">Call waveform <span class="wave-sub">synthetic audio from turn annotations &middot; click a marker to jump into the transcript</span></div>
+      <svg id="waveform" viewBox="0 0 1000 72" preserveAspectRatio="none"></svg>
+      <div class="wave-legend">
+        <span class="lg lg-red">&#9654; spoke over caller</span>
+        <span class="lg lg-amber">&#9654; entity misheard</span>
+        <span class="lg lg-green">&#9654; readback prompt</span>
+        <span class="lg lg-red-dash">&#9654; readback missing</span>
+      </div>
+    </div>
+    <div class="transcript" id="transcript"></div>
+  </section>
+
+  <footer class="honesty">
+    Prototype data: synthetic calls with timing annotations and ASR hypothesis pairs. No live telephony, no accounts. Rubric Lens reuse: a check is only a gate if it is measurable before any labels exist (counts, durations, normalized string match), so the bar is decided before the run, not after. Switch the same noisy call to recovery behavior and watch two gates flip while the ASR miss stays red, on purpose.
+  </footer>
+</main>
+
+<div class="toast" id="toast" hidden></div>
+
+<script src="js/gates.js"></script>
+<script src="js/data.js"></script>
+<script src="js/harness.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
