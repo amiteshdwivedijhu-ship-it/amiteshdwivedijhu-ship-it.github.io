@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pace · Exception and QA review</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <span class="logo">P</span>
+    <span class="wordmark">Pace</span>
+    <span class="crumb">/ Agent QA</span>
+  </div>
+  <div class="topright">
+    <span class="pill muted">Prototype · synthetic runs</span>
+    <span class="user">Ami · Agent PM</span>
+  </div>
+</header>
+
+<main>
+  <section class="runs">
+    <h1>Exception and QA review</h1>
+    <p class="sub">Pick a synthetic agent run. The engine re-runs extraction, QA checks and escalation on load. No live carriers, no real data.</p>
+    <div class="runbar" id="runbar">
+      <button type="button" data-run="A" class="runbtn">A · Happy path</button>
+      <button type="button" data-run="B" class="runbtn">B · Missing doc · NIGO</button>
+      <button type="button" data-run="C" class="runbtn">C · Channel conflict</button>
+      <label class="toggle"><input type="checkbox" id="checklistToggle" checked> Servicing checklist input</label>
+    </div>
+    <p class="confnote" id="confNote"></p>
+  </section>
+
+  <section class="grid">
+    <article class="card tcard" id="transcript"></article>
+    <article class="card pcard" id="packet"></article>
+  </section>
+
+  <section class="card evalcard">
+    <h2>Rubric eval · 3 runs</h2>
+    <p class="sub">A run fails the rubric if any field lacks a citation, any failed QA check lacks a rule id, or the escalate flag does not match the outcome.</p>
+    <div id="eval"></div>
+  </section>
+
+  <footer>
+    Prototype only. Synthetic transcripts. Card-first QA review matching public Pace product imagery (withpace.com). Vocabulary: Agent Operating Procedure, QA check, exception, next action, audit lineage.
+  </footer>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>
