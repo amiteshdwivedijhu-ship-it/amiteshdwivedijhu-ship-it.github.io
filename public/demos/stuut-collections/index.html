@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stuut · Collections exception packet prototype</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="logo-mark">S</span>
+    <span class="brand-name">Stuut</span>
+    <span class="brand-divider"></span>
+    <span class="brand-module">Collections · Exception packets</span>
+  </div>
+  <div class="topbar-right">
+    <span class="synth-badge" title="All inputs are synthetic: no live ERP, no real customer PII, no real dialing">Synthetic data</span>
+    <span class="top-date" id="top-date"></span>
+    <div class="avatar">AC</div>
+    <span class="avatar-name">Alex Chen · AR Lead</span>
+  </div>
+</header>
+
+<div class="app-shell">
+
+  <aside class="worklist">
+    <div class="panel-head">
+      <h2>Morning worklist</h2>
+      <span class="muted">ranked by exception</span>
+    </div>
+    <p class="worklist-note" id="worklist-note"></p>
+    <div class="wl-rows" id="wl-rows"></div>
+    <div class="panel-foot">
+      <span class="ask-chip" id="ask-chip"><span class="bounce-dot"></span>Ask Stuut</span>
+      <span class="muted" id="eval-count"></span>
+    </div>
+  </aside>
+
+  <main class="detail" id="detail">
+    <div class="placeholder">Select a case from the worklist.</div>
+  </main>
+
+</div>
+
+<section class="rubric-band" id="rubric-band">
+  <div class="rubric-head">
+    <h2>Rubric lens · 3-row eval table</h2>
+    <p class="muted">Pass/fail computed by code. The lens re-locates every cited span in the source corpus; a claim with no locatable span fails the row. Nothing is hand-marked.</p>
+    <button class="btn-secondary" id="rerun-btn">↻ Re-run packet + checks</button>
+  </div>
+  <table class="eval-table" id="eval-table">
+    <thead><tr><th>Case</th><th>Status</th><th>Checks</th><th>Reason</th></tr></thead>
+    <tbody id="eval-body"></tbody>
+  </table>
+</section>
+
+<!-- Ask Stuut: chat affordance, top-left per Stuut's dashboard -->
+<div class="ask-panel hidden" id="ask-panel">
+  <div class="ask-head">
+    <span class="bounce-dot"></span>
+    <span>Ask Stuut</span>
+    <button class="ask-close" id="ask-close" aria-label="Close">×</button>
+  </div>
+  <div class="ask-body">
+    <div class="ask-q">Why is this case on my worklist?</div>
+    <div class="ask-a" id="ask-answer"></div>
+    <div class="ask-feedback">
+      <button class="thumb" id="thumb-up" title="Helpful">👍</button>
+      <button class="thumb" id="thumb-down" title="Not helpful">👎</button>
+      <span class="muted" id="ask-note">Feedback is saved to the eval set with a request_id.</span>
+    </div>
+  </div>
+</div>
+
+<script src="cases.js"></script>
+<script src="engine.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
