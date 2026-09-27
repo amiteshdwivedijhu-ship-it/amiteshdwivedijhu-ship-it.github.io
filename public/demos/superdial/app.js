@@ -234,7 +234,7 @@ function renderReport(packet) {
       `</div>` +
       `<div class="k">What was captured</div><div class="v"><div class="chips">` +
       cap
-        .map((c) => `<span class="chip" style="cursor:default">${esc(c.label)}: <b>${esc(c.value)}</b>${c.conf < 0.7 ? " · low" : ""}</span>`)
+        .map((c) => `<span class="chip static">${esc(c.label)}: <b>${esc(c.value)}</b>${c.conf < 0.7 ? " · low" : ""}</span>`)
         .join("") +
       `</div></div>` +
       `<div class="k">What is missing</div><div class="v">${esc(packet.packet.missing)}</div>` +
