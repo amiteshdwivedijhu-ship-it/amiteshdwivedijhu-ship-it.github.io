@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Odyssey · Agora-2 Trajectory Review — eval packet prototype</title>
+<link rel="stylesheet" href="../house-demo.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">ODYSSEY</div>
+  <nav class="crumbs" aria-label="Breadcrumb">
+    <span class="crumb">Research</span><span class="sep">/</span>
+    <span class="crumb">Agora-2 · Shared simulation</span><span class="sep">/</span>
+    <span class="crumb active">Trajectory Review</span>
+  </nav>
+  <span class="chip">developer eval · prototype</span>
+  <span class="chip ghost right">noindex · unlisted</span>
+</header>
+
+<main>
+  <section class="head">
+    <p class="eyebrow">Multi-agent world simulation · eval packet</p>
+    <h1>Trajectory Review</h1>
+    <p class="lede">Given a recorded multi-agent trajectory from a shared simulation, the harness returns an eval packet: trajectory score, pass/fail, cited failure modes, and a next training priority. Every failure tag cites a frame range from the run. The rubric is written before the run and cannot move; packets are computed from raw frames, never hand-labeled.</p>
+  </section>
+
+  <section class="cases" id="cases" aria-label="Trajectory packs"></section>
+
+  <section class="card eval-table-card">
+    <div class="card-head">
+      <h2>Session eval table</h2>
+      <span class="sub">Rule: a row fails if a claimed failure lacks a citation span.</span>
+    </div>
+    <table class="eval-table" id="eval-table">
+      <thead>
+        <tr><th>case</th><th>run</th><th>pass / fail</th><th>reason (cited)</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <p class="integrity" id="integrity"></p>
+  </section>
+
+  <section class="card packet" id="packet">
+    <div class="packet-head">
+      <div>
+        <p class="eyebrow" id="pk-case">—</p>
+        <h2><span class="runid" id="pk-run"></span></h2>
+        <p class="sub" id="pk-meta"></p>
+      </div>
+      <div class="packet-verdict">
+        <div class="score" id="pk-score">—</div>
+        <div class="vchip" id="pk-verdict">—</div>
+      </div>
+    </div>
+
+    <div class="priority" id="pk-priority"></div>
+
+    <div class="chips" id="pk-chips" aria-label="Failure modes with cited spans"></div>
+
+    <h3>Rubric</h3>
+    <table class="rubric" id="pk-rubric">
+      <thead>
+        <tr><th>check</th><th>measurable?</th><th>pass / fail</th><th>cited span</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <p class="scenario-note" id="pk-note"></p>
+  </section>
+
+  <section class="card timeline">
+    <div class="card-head">
+      <h2>Trajectory playback</h2>
+      <span class="sub" id="tl-sub">click a failure chip or span to jump to its citation</span>
+    </div>
+    <div class="room" id="room"></div>
+    <div class="transport">
+      <button id="play" class="play" type="button">&#9654;</button>
+      <input id="scrub" type="range" min="0" max="259" value="0" step="1" aria-label="Frame">
+      <span class="timecode" id="timecode">00:00.00</span>
+      <span class="frame" id="framedisp">f0</span>
+    </div>
+    <div class="spans" id="spans" aria-label="Cited spans"></div>
+    <div class="framebox" id="framebox"></div>
+  </section>
+
+  <section class="card jsoncard">
+    <div class="card-head">
+      <h2>Eval packet JSON</h2>
+      <span class="sub" id="json-sub">computed by the harness, not authored</span>
+    </div>
+    <button id="json-toggle" class="jsontoggle" type="button">show packet JSON</button>
+    <pre id="json" hidden></pre>
+  </section>
+
+  <footer class="honesty">
+    Prototype only. Synthetic trajectories generated offline from scenario directives: no live Agora account, no robot or AV data, no partner credentials.
+    Rubric Lens reuse: each failure mode is a check that can pass or fail with a cited frame span before any label set exists, so the bar is decided before the run, not after.
+    A failing claim without a citation fails the eval row by rule, and the next training priority must match the top failed critical or the packet itself fails integrity.
+  </footer>
+</main>
+
+<script src="js/trajectories.js"></script>
+<script src="js/eval.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
