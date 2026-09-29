@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Liquid · LEAP · Customize → Deploy on-device</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="../house-demo.css">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="wordmark">Liquid AI</span>
+    <span class="crumb">LEAP / Workbench</span>
+  </div>
+  <div class="topright">
+    <span class="pill pill-muted">Prototype · synthetic runs</span>
+    <span class="pill pill-purple">Edge SDK · on-device</span>
+    <span class="user">Ami · Agent PM</span>
+  </div>
+</header>
+
+<nav class="funnel" aria-label="LEAP workflow steps">
+  <span class="step">Find your model</span><span class="steparrow"></span>
+  <span class="step">Customize</span><span class="steparrow"></span>
+  <span class="step">Deploy on-device</span>
+</nav>
+
+<main>
+  <section class="hero">
+    <h1>From edge use case to on-device agent handoff.</h1>
+    <p class="sub">
+      Specify the job in plain English. LEAP finds the smallest LFM that fits,
+      shapes a tiny agent harness (tools, memory, router), and prints the Edge SDK
+      handoff for what ships on device.
+    </p>
+  </section>
+
+  <div class="builder">
+    <section class="panel" aria-labelledby="p1">
+      <h2 id="p1"><span class="stepnum">1</span> Specify use case</h2>
+      <label class="field-label" for="use-case">Describe the edge job</label>
+      <textarea id="use-case" rows="3"
+        placeholder="Example: an offline phone agent that can call tools"></textarea>
+      <div class="presets" role="group" aria-label="Example use cases">
+        <button type="button" class="chip" data-case="phone">Offline phone agent that can call tools</button>
+        <button type="button" class="chip" data-case="vehicle">In-vehicle function orchestration</button>
+        <button type="button" class="chip" data-case="voice">Offline voice assistant</button>
+      </div>
+      <button type="button" id="find" class="btn-primary">Find your model</button>
+      <p class="hint">Best Model Search · catalog is synthetic, model facts are public</p>
+    </section>
+
+    <section class="panel" aria-labelledby="p2">
+      <h2 id="p2"><span class="stepnum">2</span> Customize</h2>
+
+      <article class="card model-card">
+        <div class="model-head">
+          <div>
+            <div class="model-name" id="model-name">—</div>
+            <div class="model-meta" id="model-meta"></div>
+          </div>
+          <span class="pill pill-purple" id="model-tag">text</span>
+        </div>
+        <p class="model-why" id="model-why"></p>
+        <div class="model-alts" id="model-alts"></div>
+        <div class="format-row">
+          <label for="format">Format</label>
+          <select id="format" class="select"></select>
+        </div>
+      </article>
+
+      <article class="card harness-card">
+        <div class="harness-head">
+          <h3>Harness config</h3>
+          <span class="pill pill-muted">tiny · editable</span>
+        </div>
+        <div class="hrow">
+          <div class="hlabel" id="tools-label">Tools</div>
+          <div class="tools" id="tools" role="group" aria-labelledby="tools-label"></div>
+        </div>
+        <div class="hrow">
+          <label class="hlabel" for="memory">Memory</label>
+          <input type="text" id="memory" class="text-input" spellcheck="false">
+        </div>
+        <div class="hrow">
+          <label class="hlabel" for="router">Router</label>
+          <select id="router" class="select"></select>
+        </div>
+      </article>
+    </section>
+
+    <section class="panel" aria-labelledby="p3">
+      <h2 id="p3"><span class="stepnum">3</span> Deploy on-device</h2>
+
+      <article class="card snippet-card">
+        <div class="snippet-head">
+          <span>Edge SDK · deploy handoff</span>
+          <button type="button" id="copy" class="btn-ghost">Copy</button>
+        </div>
+        <pre class="snippet"><code id="snippet"></code></pre>
+      </article>
+
+      <article class="card preview-card">
+        <div class="preview-head">What ships on device</div>
+        <div class="phone" aria-hidden="true">
+          <div class="phone-notch"></div>
+          <div class="phone-chat" id="phone-chat"></div>
+          <div class="phone-chips" id="phone-chips"></div>
+        </div>
+        <ul class="ship-list" id="ship-list"></ul>
+      </article>
+    </section>
+  </div>
+
+  <footer class="foot">
+    <p>
+      Working prototype · synthetic runs only. Model facts from public docs
+      (docs.liquid.ai · LFM2.5 family · GGUF Q4_K_M · Edge SDK). Harness shapes,
+      routers, and latency chips are prototype estimates, not shipped configs.
+    </p>
+  </footer>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>
