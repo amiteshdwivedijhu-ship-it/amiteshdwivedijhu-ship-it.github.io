@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Liquid · LEAP Workbench · Ship-ready eval packet</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="wordmark">Liquid AI</span>
+    <span class="crumb">LEAP / Workbench</span>
+  </div>
+  <div class="topright">
+    <span class="pill muted">Prototype · synthetic runs</span>
+    <span class="pill purple">Edge SDK · on-device</span>
+    <span class="user">Ami · Agent PM</span>
+  </div>
+</header>
+
+<div class="funnel" aria-label="LEAP workflow steps">
+  <span class="step">Find your model</span>
+  <span class="steparrow"></span>
+  <span class="step on">Test and compare</span>
+  <span class="steparrow"></span>
+  <span class="step">Customize</span>
+  <span class="steparrow"></span>
+  <span class="step">Deploy on-device</span>
+  <span class="funnelnote">The eval packet sits between a scored agent run and Deploy.</span>
+</div>
+
+<main>
+  <section class="head">
+    <h1>Ship-ready eval packet</h1>
+    <p class="sub">
+      Given a synthetic on-device agent run, the harness returns a scored packet: latency vs budget,
+      tool success, groundedness with citation spans, and a kill-or-ship gate. Every scored field cites
+      a span from the run log. Low-confidence checks go to human review. Evidence over intuition.
+    </p>
+    <div class="runbar" id="runbar">
+      <button type="button" data-run="A" class="runbtn">A · Happy path</button>
+      <button type="button" data-run="B" class="runbtn">B · Latency over budget</button>
+      <button type="button" data-run="C" class="runbtn">C · Tool error + uncited claim</button>
+    </div>
+  </section>
+
+  <section class="card rubric">
+    <h2>Rubric Lens · measurable before the run</h2>
+    <div class="rubricrow" id="rubric"></div>
+  </section>
+
+  <section class="grid">
+    <article class="card logcard" id="log"></article>
+    <article class="card pcard" id="packet"></article>
+  </section>
+
+  <section class="card evalcard">
+    <h2>Eval table · 3 runs</h2>
+    <p class="sub" id="evalrule"></p>
+    <div id="eval"></div>
+  </section>
+
+  <footer class="notes">
+    <p><strong>Honesty note:</strong> marketing UI only. Public Liquid pages show homepage, LEAP library and Workbench
+    marketing, and docs; the signed-in Workbench / Playground surfaces are behind sign-up and were not used. The
+    product chrome here is inferred from public marketing and docs (leap.liquid.ai, workbench.liquid.ai, liquid.ai/blog/lfm2-5-2-6b).
+    All runs are synthetic: no live device APIs, no signed-in LEAP, no customer data.</p>
+    <p class="dim">Prototype vocabulary follows LEAP Workbench: Test and compare, AI judges, synthetic data, Deploy on-device,
+    function calling, latency, groundedness, citation, harness, ship / kill. Not affiliated with Liquid AI.</p>
+  </footer>
+</main>
+
+<script src="runs.js"></script>
+<script src="engine.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
