@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Roger · Clinician Documentation Console (Synthetic)</title>
+<meta name="description" content="Synthetic demo: AI-drafted OASIS and routine note fields with source citations, clinician checkpoint, Ready for EMR sync.">
+<style>
+  :root {
+    --ink: #1a1b1f;
+    --ink-soft: #5d6c7b;
+    --muted: #8a93a0;
+    --paper: #faf8f6;
+    --surface: #ffffff;
+    --cream: #f9f2ee;
+    --line: #e3e3e3;
+    --purple: #7E64ED;
+    --purple-soft: #f3effe;
+    --lavender: #E1ACF0;
+    --green-ink: #1d7a4c;
+    --green-bg: #e9f5ee;
+    --amber-ink: #9a5b00;
+    --amber-bg: #fff4e5;
+    --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; overflow-x: hidden; max-width: 100%; }
+  body { background: var(--paper); color: var(--ink); font: 15px/1.5 var(--font); -webkit-font-smoothing: antialiased; -webkit-text-size-adjust: 100%; touch-action: manipulation; }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+  .topbar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; background: var(--surface); border-bottom: 1px solid var(--line); padding: 12px 16px; padding-left: max(16px, env(safe-area-inset-left)); padding-right: max(16px, env(safe-area-inset-right)); }
+  .brand-mark { width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg, var(--purple), var(--lavender)); }
+  .brand-name { font-weight: 700; font-size: 16px; }
+  .brand-sub { color: var(--ink-soft); font-size: 13px; }
+  .badge { margin-left: auto; flex: 0 0 auto; font: 600 11px/1 var(--font); color: var(--purple); background: var(--purple-soft); border: 1px solid #d9d0fb; padding: 5px 10px; border-radius: 999px; }
+  .shell { max-width: 920px; margin: 0 auto; padding: 20px 16px 56px; padding-left: max(16px, env(safe-area-inset-left)); padding-right: max(16px, env(safe-area-inset-right)); }
+  .hero h1 { margin: 0 0 8px; font-size: clamp(1.35rem, 5vw, 1.6rem); letter-spacing: -0.02em; }
+  .eyebrow { margin: 0 0 6px; color: var(--purple); font: 600 12px/1.2 var(--font); text-transform: uppercase; letter-spacing: .04em; }
+  .tagline { margin: 0 0 20px; color: var(--ink-soft); max-width: 62ch; }
+  .steps { list-style: none; display: flex; flex-wrap: wrap; gap: 4px 0; margin: 0 0 20px; padding: 0; }
+  .steps li { flex: 1 1 0; min-width: 0; display: flex; align-items: center; gap: 6px; font: 600 11px/1.3 var(--font); color: var(--muted); }
+  .steps li:not(:last-child)::after { content: ""; flex: 1 1 0; height: 2px; background: var(--line); margin: 0 6px; }
+  .steps .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--line); flex: 0 0 auto; }
+  .steps li.done { color: var(--green-ink); }
+  .steps li.done .dot { background: var(--green-ink); }
+  .steps li.done:not(:last-child)::after { background: var(--green-ink); }
+  .steps li.active { color: var(--purple); }
+  .steps li.active .dot { background: var(--purple); box-shadow: 0 0 0 3px rgba(126,100,237,.18); }
+  .steps li.active:not(:last-child)::after { background: var(--purple); }
+  .card { overflow-wrap: anywhere; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; box-shadow: 0 1px 2px rgba(26,27,31,.04); }
+  .picker { margin-bottom: 18px; }
+  .picker h2, .block h2 { margin: 0 0 12px; font-size: 15px; }
+  .case-grid { display: grid; gap: 10px; grid-template-columns: 1fr; }
+  @media (min-width: 700px) { .case-grid { grid-template-columns: 1fr 1fr; } }
+  .case-btn { text-align: left; background: var(--cream); border: 1px solid var(--line); border-radius: 12px; padding: 16px; min-height: 56px; width: 100%; cursor: pointer; font: inherit; color: inherit; -webkit-tap-highlight-color: transparent; }
+  .case-btn:hover, .case-btn[aria-pressed="true"] { border-color: var(--purple); box-shadow: 0 0 0 3px rgba(126,100,237,.15); background: #fff; }
+  .case-btn strong { display: block; margin-bottom: 4px; }
+  .case-btn span { color: var(--ink-soft); font-size: 12px; }
+  .hidden { display: none !important; }
+  .visit-head { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: flex-start; margin-bottom: 16px; }
+  .visit-head h2 { margin: 0; font-size: 18px; flex: 1 1 220px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip { font: 600 11px/1 var(--font); padding: 5px 9px; border-radius: 999px; border: 1px solid var(--line); background: #f4f4f6; color: var(--ink-soft); }
+  .chip.amber { background: var(--amber-bg); color: var(--amber-ink); border-color: #f0d4a8; }
+  .chip.green { background: var(--green-bg); color: var(--green-ink); border-color: #b9dfc8; }
+  .chip.purple { background: var(--purple-soft); color: var(--purple); border-color: #d9d0fb; }
+  .meta { color: var(--ink-soft); font-size: 13px; width: 100%; }
+  .fields { display: grid; gap: 12px; margin-bottom: 16px; }
+  .field { border: 1px solid var(--line); border-radius: 12px; padding: 14px; background: var(--surface); }
+  .field-top { display: flex; flex-wrap: wrap; gap: 8px; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+  .field-label { font-weight: 700; font-size: 13px; }
+  .field-side { display: flex; gap: 8px; align-items: center; margin-left: auto; }
+  .edit-btn { font: 600 12px/1 var(--font); color: var(--purple); background: transparent; border: 1px solid #d9d0fb; border-radius: 999px; padding: 6px 10px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+  .edit-btn:hover { background: var(--purple-soft); }
+  .edit-btn:disabled { opacity: .4; cursor: not-allowed; }
+  .field-value { margin: 0 0 8px; }
+  .cites { display: flex; flex-wrap: wrap; gap: 6px; }
+  .cite { font: 500 12px/1.35 var(--font); word-break: break-word; color: var(--purple); background: var(--purple-soft); border-radius: 8px; padding: 5px 8px; }
+  .field-edit { width: 100%; border: 1px solid var(--line); border-radius: 10px; padding: 12px; font: inherit; font-size: 16px; margin: 0 0 8px; resize: vertical; }
+  .field-actions { display: flex; gap: 8px; margin-bottom: 8px; }
+  .btn-sm { font: 600 13px/1 var(--font); border-radius: 10px; padding: 10px 14px; min-height: 40px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+  .btn-sm.save { background: var(--purple); color: #fff; border: 0; }
+  .btn-sm.cancel { background: transparent; color: var(--ink-soft); border: 1px solid var(--line); }
+  .checkpoint { background: linear-gradient(180deg, #fff, var(--cream)); }
+  .checkpoint p { margin: 0 0 12px; color: var(--ink-soft); }
+  .actions { display: flex; flex-direction: column; gap: 10px; margin-bottom: 10px; }
+  @media (min-width: 560px) { .actions { flex-direction: row; flex-wrap: wrap; } }
+  button.primary, button.secondary, button.quiet { font: 600 15px/1.2 var(--font); border-radius: 12px; padding: 14px 16px; min-height: 48px; width: 100%; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+  @media (min-width: 560px) { button.primary, button.secondary { width: auto; min-width: 180px; } button.quiet { width: auto; } }
+  button.primary { background: var(--purple); color: #fff; border: 0; }
+  button.primary:disabled { opacity: .45; cursor: not-allowed; }
+  button.secondary { background: #fff; color: var(--ink); border: 1px solid var(--line); }
+  button.quiet { background: transparent; color: var(--ink-soft); border: 1px solid transparent; }
+  .note-input { width: 100%; max-width: 100%; border: 1px solid var(--line); border-radius: 10px; padding: 14px 12px; font: inherit; font-size: 16px; margin-bottom: 10px; }
+  .resolution { border-left: 4px solid var(--purple); }
+  .resolution.ok { border-left-color: var(--green-ink); }
+  .resolution.warn { border-left-color: var(--amber-ink); }
+  .finalized { margin: 12px 0; border: 1px solid var(--line); border-radius: 10px; background: #fff; overflow: hidden; }
+  .frow { display: flex; flex-wrap: wrap; gap: 4px 12px; justify-content: space-between; padding: 9px 12px; border-bottom: 1px solid var(--line); font-size: 13px; }
+  .frow:last-child { border-bottom: 0; }
+  .frow .k { font-weight: 600; }
+  .corr { font-style: normal; font: 600 11px/1 var(--font); color: var(--green-ink); background: var(--green-bg); border-radius: 999px; padding: 3px 7px; white-space: nowrap; }
+  footer { margin-top: 28px; color: var(--muted); font-size: 12px; }
+  .toast { position: fixed; bottom: max(18px, env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); max-width: calc(100vw - 32px); background: var(--ink); color: #fff; padding: 10px 14px; border-radius: 999px; font-size: 13px; opacity: 0; pointer-events: none; transition: opacity .2s; z-index: 10; }
+  .toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <span class="brand-mark" aria-hidden="true"></span>
+  <span class="brand-name">Roger</span>
+  <span class="brand-sub">Clinician documentation</span>
+  <span class="badge">Synthetic demo</span>
+</header>
+<main class="shell">
+  <header class="hero">
+    <p class="eyebrow">AI-Platform · post-visit review</p>
+    <h1>Clinician documentation console</h1>
+    <p class="tagline">AI drafts OASIS and routine note fields from visit context, shows source citations, and waits for an explicit clinician checkpoint before Ready for EMR sync. No model runs here; visits are synthetic.</p>
+  </header>
+
+  <ol class="steps" id="steps" aria-label="Documentation flow">
+    <li data-step="0"><span class="dot" aria-hidden="true"></span>Visit</li>
+    <li data-step="1"><span class="dot" aria-hidden="true"></span>AI drafts</li>
+    <li data-step="2"><span class="dot" aria-hidden="true"></span>Checkpoint</li>
+    <li data-step="3"><span class="dot" aria-hidden="true"></span>EMR sync</li>
+  </ol>
+
+  <section class="picker card" aria-labelledby="picker-title">
+    <h2 id="picker-title">1. Load a synthetic visit</h2>
+    <div class="case-grid" id="case-grid"></div>
+  </section>
+
+  <section id="console" class="hidden" aria-live="polite">
+    <div id="visit-header" class="card visit-head"></div>
+    <section class="block" aria-labelledby="fields-title">
+      <h2 id="fields-title">2. AI-drafted fields with sources</h2>
+      <div class="fields" id="fields"></div>
+    </section>
+    <section class="block" aria-labelledby="checkpoint-title">
+      <h2 id="checkpoint-title">3. Clinician checkpoint</h2>
+      <div id="checkpoint" class="card checkpoint"></div>
+    </section>
+    <section id="resolution-block" class="block hidden" aria-labelledby="resolution-title">
+      <h2 id="resolution-title">4. Chart status</h2>
+      <div id="resolution" class="card resolution"></div>
+    </section>
+  </section>
+</main>
+<footer class="shell">
+  <p>Synthetic prototype. No real patient PHI, no EMR logins, no Roger account. Built to show citation-gated documentation with a clinician gate before EMR sync.</p>
+  <button class="quiet" type="button" id="reset">Reset demo</button>
+</footer>
+<div class="toast" id="toast" role="status"></div>
+<script>
+const visits = [
+  {
+    id: "soc",
+    title: "Start of Care · OASIS",
+    blurb: "RN visit · referral packet + recording",
+    patient: "Patient A (synthetic)",
+    agency: "Palmeira Home Health (demo)",
+    type: "OASIS Start of Care",
+    draftTime: "Drafted in 1m 48s",
+    feedback: "2 real-time feedback prompts during recording",
+    status: "Needs clinician review",
+    syncTarget: "EMR: WellSky (demo)",
+    sendBackHint: "Review the drafted medications and wound note before resync.",
+    fields: [
+      { label: "M1800 · ability to dress upper body",
+        value: "1 · Able with use of assistive device or assistance",
+        cites: ["Source · Visit transcript 14:22", "Source · Referral summary · PT eval"] },
+      { label: "Medications · reconciled list",
+        value: "Metformin 500mg BID · Lisinopril 10mg daily · Acetaminophen 500mg PRN added",
+        cites: ["Source · Referral packet med list", "Source · Post-visit dictation"] },
+      { label: "Wound care note",
+        value: "Left heel Stage 2 pressure injury, 1.2cm x 0.8cm, scant serous drainage, clean edges",
+        cites: ["Source · Visit recording · wound description", "Source · Photo capture on chart"] }
+    ],
+    preview: "OASIS SOC chart packet · fields finalized · queued for near real-time EMR sync"
+  },
+  {
+    id: "routine",
+    title: "Routine skilled nursing visit",
+    blurb: "Ambiguous wound severity · may send back",
+    patient: "Patient B (synthetic)",
+    agency: "Capitol Home Health (demo)",
+    type: "Routine visit note",
+    draftTime: "Drafted in 42s",
+    feedback: "1 real-time feedback prompt during recording",
+    status: "Needs clinician review",
+    syncTarget: "EMR: WellSky (demo)",
+    sendBackHint: "Wound severity was unclear on audio-only capture; re-check with a clear photo before sync.",
+    fields: [
+      { label: "Vital signs",
+        value: "BP 138/84 · HR 78 · SpO2 97% on room air · Temp 98.4F",
+        cites: ["Source · Visit transcript · vitals segment"] },
+      { label: "Wound severity",
+        value: "Possible Stage 2 vs deep tissue injury · edges unclear on audio-only capture",
+        cites: ["Source · Visit recording audio", "Source · Photo capture · unclear"] },
+      { label: "Plan",
+        value: "Continue wound care protocol; escalate if drainage increases",
+        cites: ["Source · Post-visit dictation"] }
+    ],
+    preview: "Routine note held · edit note attached · stays Needs review until re-draft"
+  }
+];
+
+let active = null;
+let decided = false;
+
+const grid = document.getElementById("case-grid");
+const stepsEl = document.getElementById("steps");
+const consoleEl = document.getElementById("console");
+const visitHeader = document.getElementById("visit-header");
+const fieldsEl = document.getElementById("fields");
+const checkpoint = document.getElementById("checkpoint");
+const resolutionBlock = document.getElementById("resolution-block");
+const resolution = document.getElementById("resolution");
+const toast = document.getElementById("toast");
+
+function showToast(msg) {
+  toast.textContent = msg;
+  toast.classList.add("show");
+  setTimeout(() => toast.classList.remove("show"), 1800);
+}
+
+function setStep(n) {
+  stepsEl.querySelectorAll("li").forEach(li => {
+    li.classList.toggle("done", Number(li.dataset.step) < n);
+    li.classList.toggle("active", Number(li.dataset.step) === n);
+  });
+}
+
+function renderPicker() {
+  grid.innerHTML = visits.map(v => `
+    <button type="button" class="case-btn" data-id="${v.id}" aria-pressed="false">
+      <strong>${v.title}</strong>
+      <span>${v.blurb}</span>
+    </button>`).join("");
+  grid.querySelectorAll(".case-btn").forEach(btn => {
+    btn.addEventListener("click", () => loadVisit(btn.dataset.id));
+  });
+}
+
+function fieldCard(f, i) {
+  return `
+    <article class="field" id="field-${i}">
+      <div class="field-top">
+        <span class="field-label">${f.label}</span>
+        <span class="field-side">
+          <span class="chip" data-chip="draft">AI draft</span>
+          <button type="button" class="edit-btn" id="edit-${i}" aria-label="Edit ${f.label}">Edit</button>
+        </span>
+      </div>
+      <p class="field-value" id="val-${i}">${f.value}</p>
+      <textarea class="field-edit hidden" id="editval-${i}" rows="2" aria-label="Edit ${f.label}"></textarea>
+      <div class="field-actions hidden" id="factions-${i}">
+        <button type="button" class="btn-sm save" id="save-${i}">Save correction</button>
+        <button type="button" class="btn-sm cancel" id="cancel-${i}">Cancel</button>
+      </div>
+      <div class="cites">${f.cites.map(c => `<span class="cite">${c}</span>`).join("")}</div>
+    </article>`;
+}
+
+function renderFields() {
+  fieldsEl.innerHTML = active.fields.map((f, i) => fieldCard(f, i)).join("");
+  active.fields.forEach((f, i) => wireField(f, i));
+}
+
+function wireField(f, i) {
+  const editBtn = document.getElementById(`edit-${i}`);
+  const valP = document.getElementById(`val-${i}`);
+  const area = document.getElementById(`editval-${i}`);
+  const actions = document.getElementById(`factions-${i}`);
+  const draftChip = fieldsEl.querySelector(`#field-${i} [data-chip="draft"]`);
+  editBtn.addEventListener("click", () => {
+    if (decided) return;
+    area.value = f.value;
+    valP.classList.add("hidden");
+    actions.classList.remove("hidden");
+    area.classList.remove("hidden");
+    editBtn.classList.add("hidden");
+    area.focus();
+  });
+  document.getElementById(`cancel-${i}`).addEventListener("click", () => {
+    valP.classList.remove("hidden");
+    actions.classList.add("hidden");
+    area.classList.add("hidden");
+    editBtn.classList.remove("hidden");
+  });
+  document.getElementById(`save-${i}`).addEventListener("click", () => {
+    const next = area.value.trim();
+    if (!next) { showToast("Field cannot be empty"); return; }
+    const changed = next !== f.value;
+    f.value = next;
+    if (changed) {
+      f.edited = true;
+      draftChip.textContent = "AI draft · clinician corrected";
+      draftChip.classList.add("green");
+      showToast("Correction applied to draft");
+    } else {
+      showToast("No change");
+    }
+    valP.textContent = f.value;
+    valP.classList.remove("hidden");
+    actions.classList.add("hidden");
+    area.classList.add("hidden");
+    editBtn.classList.remove("hidden");
+  });
+}
+
+function lockEditing() {
+  active.fields.forEach((f, i) => {
+    const btn = document.getElementById(`edit-${i}`);
+    if (btn) btn.disabled = true;
+  });
+}
+
+function loadVisit(id) {
+  active = visits.find(v => v.id === id);
+  decided = false;
+  grid.querySelectorAll(".case-btn").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.id === id)));
+  consoleEl.classList.remove("hidden");
+  resolutionBlock.classList.add("hidden");
+  visitHeader.innerHTML = `
+    <h2>${active.type}</h2>
+    <div class="chips">
+      <span class="chip purple">${active.agency}</span>
+      <span class="chip" id="draft-chip">${active.draftTime}</span>
+      <span class="chip amber" id="status-chip">${active.status}</span>
+    </div>
+    <p class="meta">${active.patient} · synthetic visit context only · ${active.feedback}</p>`;
+  renderFields();
+  checkpoint.innerHTML = `
+    <p>Roger drafted these fields from referral summary + visit recording + post-visit dictation. Nothing syncs to the EMR until you act. Correct any field inline, then finalize.</p>
+    <label class="sr-only" for="edit-note">Optional one-line edit or handoff note</label>
+    <input class="note-input" id="edit-note" type="text" placeholder="Optional one-line edit / handoff note" autocomplete="off" enterkeyhint="done">
+    <div class="actions">
+      <button type="button" class="primary" id="approve">Approve finalize · Ready for EMR sync</button>
+      <button type="button" class="secondary" id="sendback">Send back to edit</button>
+    </div>`;
+  document.getElementById("approve").onclick = () => decide("approve");
+  document.getElementById("sendback").onclick = () => decide("sendback");
+  setStep(2);
+  showToast("Visit loaded · drafts ready for review");
+  consoleEl.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function decide(kind) {
+  if (!active || decided) return;
+  const note = (document.getElementById("edit-note").value || "").trim();
+  decided = true;
+  document.getElementById("approve").disabled = true;
+  document.getElementById("sendback").disabled = true;
+  lockEditing();
+  const chip = document.getElementById("status-chip");
+  resolutionBlock.classList.remove("hidden");
+  const corrected = active.fields.filter(f => f.edited).length;
+  const rows = active.fields.map(f => `
+    <div class="frow"><span class="k">${f.label}</span><span>${f.value}${f.edited ? ' <span class="corr">clinician corrected</span>' : ""}</span></div>`).join("");
+  if (kind === "approve") {
+    chip.textContent = "Ready for EMR sync";
+    chip.className = "chip green";
+    resolution.className = "card resolution ok";
+    resolution.innerHTML = `
+      <p><strong>Chart finalized by clinician.</strong> ${active.preview}</p>
+      <div class="finalized">${rows}</div>
+      <p class="meta">Next: near real-time EMR sync · human checkpoint completed · ${active.syncTarget}${corrected ? ` · ${corrected} field${corrected > 1 ? "s" : ""} corrected by clinician` : ""}</p>
+      ${note ? `<p class="meta">Clinician note: ${note}</p>` : ""}`;
+    setStep(3);
+    showToast("Ready for EMR sync");
+  } else {
+    chip.textContent = "Needs clinician review";
+    chip.className = "chip amber";
+    resolution.className = "card resolution warn";
+    resolution.innerHTML = `
+      <p><strong>Sent back to edit.</strong> The AI draft did not finish alone.</p>
+      <p>${active.preview}</p>
+      <div class="finalized">${rows}</div>
+      <p class="meta">Handoff note: ${note || active.sendBackHint}</p>`;
+    setStep(2);
+    showToast("Sent back · chart stays Needs review");
+  }
+  resolutionBlock.scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+
+document.getElementById("reset").onclick = () => {
+  active = null; decided = false;
+  consoleEl.classList.add("hidden");
+  resolutionBlock.classList.add("hidden");
+  setStep(0);
+  renderPicker();
+  showToast("Demo reset");
+};
+
+renderPicker();
+</script>
+</body>
+</html>
