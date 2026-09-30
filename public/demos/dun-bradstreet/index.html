@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>D&B · ChatD&B Agent Console (Synthetic)</title>
+<meta name="description" content="Synthetic demo: ChatD&B-style agent workflow with RAG citations and human-in-the-loop approval before account action.">
+<style>
+  :root {
+    --ink: #0f1c24;
+    --ink-soft: #4a5d6a;
+    --muted: #7a8b96;
+    --paper: #f3f6f8;
+    --surface: #ffffff;
+    --navy: #005172;
+    --teal: #3095B4;
+    --teal-soft: #e6f4f8;
+    --line: #d5dee4;
+    --green-ink: #1d7a4c;
+    --green-bg: #e9f5ee;
+    --amber-ink: #9a5b00;
+    --amber-bg: #fff4e5;
+    --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; overflow-x: hidden; max-width: 100%; }
+  body { background: var(--paper); color: var(--ink); font: 15px/1.5 var(--font); -webkit-font-smoothing: antialiased; -webkit-text-size-adjust: 100%; touch-action: manipulation; }
+  .topbar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; background: var(--navy); color: #fff; padding: 12px 16px; padding-left: max(16px, env(safe-area-inset-left)); padding-right: max(16px, env(safe-area-inset-right)); }
+  .brand-mark { width: 28px; height: 28px; border-radius: 6px; background: linear-gradient(135deg, var(--teal), #7ec8db); }
+  .brand-name { font-weight: 700; font-size: 15px; letter-spacing: .01em; }
+  .brand-sub { opacity: .8; font-size: 13px; }
+  .badge { margin-left: auto; flex: 0 0 auto; font: 600 11px/1 var(--font); color: #fff; background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.25); padding: 5px 10px; border-radius: 999px; }
+  .shell { max-width: 960px; margin: 0 auto; padding: 20px 16px 56px; padding-left: max(16px, env(safe-area-inset-left)); padding-right: max(16px, env(safe-area-inset-right)); }
+  .eyebrow { margin: 0 0 6px; color: var(--teal); font: 600 12px/1.2 var(--font); text-transform: uppercase; letter-spacing: .04em; }
+  .hero h1 { margin: 0 0 8px; font-size: clamp(1.35rem, 5vw, 1.6rem); color: var(--navy); letter-spacing: -0.02em; }
+  .tagline { margin: 0 0 20px; color: var(--ink-soft); max-width: 68ch; }
+  .card { overflow-wrap: anywhere; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; box-shadow: 0 1px 2px rgba(0,81,114,.05); }
+  .picker { margin-bottom: 18px; }
+  .picker h2, .block h2 { margin: 0 0 12px; font-size: 15px; color: var(--navy); }
+  .case-grid { display: grid; gap: 10px; grid-template-columns: 1fr; }
+  @media (min-width: 700px) { .case-grid { grid-template-columns: 1fr 1fr; } }
+  .case-btn { text-align: left; background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 16px; min-height: 56px; width: 100%; cursor: pointer; font: inherit; color: inherit; -webkit-tap-highlight-color: transparent; }
+  .case-btn:hover, .case-btn[aria-pressed="true"] { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(48,149,180,.18); }
+  .case-btn strong { display: block; margin-bottom: 4px; color: var(--navy); }
+  .case-btn span { color: var(--ink-soft); font-size: 12px; }
+  .hidden { display: none !important; }
+  .acct-head { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: flex-start; margin-bottom: 16px; }
+  .acct-head h2 { margin: 0; font-size: 18px; color: var(--navy); flex: 1 1 240px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip { font: 600 11px/1 var(--font); padding: 5px 9px; border-radius: 999px; border: 1px solid var(--line); background: #eef2f5; color: var(--ink-soft); }
+  .chip.teal { background: var(--teal-soft); color: var(--navy); border-color: #b7dce8; }
+  .chip.amber { background: var(--amber-bg); color: var(--amber-ink); border-color: #f0d4a8; }
+  .chip.green { background: var(--green-bg); color: var(--green-ink); border-color: #b9dfc8; }
+  .meta { color: var(--ink-soft); font-size: 13px; width: 100%; }
+  .steps { list-style: none; margin: 0 0 16px; padding: 0; display: grid; gap: 10px; }
+  .step { border: 1px solid var(--line); border-radius: 12px; padding: 14px; background: #fff; }
+  .step-top { display: flex; justify-content: space-between; gap: 8px; align-items: center; margin-bottom: 6px; }
+  .step-title { font-weight: 700; color: var(--navy); }
+  .step p { margin: 0 0 8px; }
+  .cites { display: flex; flex-wrap: wrap; gap: 6px; }
+  .cite { font: 500 12px/1.35 var(--font); word-break: break-word; color: var(--navy); background: var(--teal-soft); border-radius: 8px; padding: 5px 8px; }
+  .checkpoint { background: linear-gradient(180deg, #fff, #eef7fa); }
+  .checkpoint p { margin: 0 0 12px; color: var(--ink-soft); }
+  .actions { display: flex; flex-direction: column; gap: 10px; margin-bottom: 10px; }
+  @media (min-width: 560px) { .actions { flex-direction: row; flex-wrap: wrap; } }
+  button.primary, button.secondary, button.quiet { font: 600 15px/1.2 var(--font); border-radius: 10px; padding: 14px 16px; min-height: 48px; width: 100%; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+  @media (min-width: 560px) { button.primary, button.secondary { width: auto; min-width: 180px; } button.quiet { width: auto; } }
+  button.primary { background: var(--teal); color: #fff; border: 0; }
+  button.primary:disabled { opacity: .45; cursor: not-allowed; }
+  button.secondary { background: #fff; color: var(--navy); border: 1px solid var(--line); }
+  button.quiet { background: transparent; color: var(--ink-soft); border: 1px solid transparent; }
+  .note-input { width: 100%; max-width: 100%; border: 1px solid var(--line); border-radius: 8px; padding: 14px 12px; font: inherit; font-size: 16px; margin-bottom: 10px; }
+  .resolution { border-left: 4px solid var(--teal); }
+  .resolution.ok { border-left-color: var(--green-ink); }
+  .resolution.warn { border-left-color: var(--amber-ink); }
+  footer { margin-top: 28px; color: var(--muted); font-size: 12px; }
+  .toast { position: fixed; bottom: max(18px, env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); max-width: calc(100vw - 32px); background: var(--navy); color: #fff; padding: 10px 14px; border-radius: 999px; font-size: 13px; opacity: 0; pointer-events: none; transition: opacity .2s; }
+  .toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <span class="brand-mark" aria-hidden="true"></span>
+  <span class="brand-name">Dun &amp; Bradstreet</span>
+  <span class="brand-sub">ChatD&amp;B · Agent console</span>
+  <span class="badge">Synthetic demo</span>
+</header>
+<main class="shell">
+  <header class="hero">
+    <p class="eyebrow">D&amp;B.AI · human-in-the-loop</p>
+    <h1>Enterprise agent console</h1>
+    <p class="tagline">A ChatD&amp;B-style agent retrieves D-U-N-S anchored Commercial Graph facts with RAG citations, then pauses for human approval before any action writes to a customer account. No live APIs; workflows are synthetic.</p>
+  </header>
+
+  <section class="picker card" aria-labelledby="picker-title">
+    <h2 id="picker-title">1. Load a synthetic account workflow</h2>
+    <div class="case-grid" id="case-grid"></div>
+  </section>
+
+  <section id="console" class="hidden" aria-live="polite">
+    <div id="acct-header" class="card acct-head"></div>
+    <section class="block" aria-labelledby="steps-title">
+      <h2 id="steps-title">2. Agent steps with RAG citations</h2>
+      <ol class="steps" id="steps"></ol>
+    </section>
+    <section class="block" aria-labelledby="checkpoint-title">
+      <h2 id="checkpoint-title">3. Human-in-the-loop approval</h2>
+      <div id="checkpoint" class="card checkpoint"></div>
+    </section>
+    <section id="resolution-block" class="block hidden" aria-labelledby="resolution-title">
+      <h2 id="resolution-title">4. Account action</h2>
+      <div id="resolution" class="card resolution"></div>
+    </section>
+  </section>
+</main>
+<footer class="shell">
+  <p>Synthetic prototype. No real D&amp;B login, no live Commercial Graph calls, no customer account writes. Built to show agentic product execution with HITL before apply.</p>
+  <button class="quiet" type="button" id="reset">Reset demo</button>
+</footer>
+<div class="toast" id="toast" role="status"></div>
+<script>
+const workflows = [
+  {
+    id: "supplier",
+    title: "Supplier risk · KYB onboarding",
+    blurb: "Match D-U-N-S → risk signals → recommend approve",
+    company: "Northwind Components LLC (synthetic)",
+    duns: "12-345-6789",
+    workflow: "Supplier Risk Insights agent",
+    status: "Needs human approval",
+    steps: [
+      { title: "1. Match D-U-N-S Number", body: "Matched legal entity Northwind Components LLC to persistent D-U-N-S 12-345-6789 with high confidence.", cite: "D&B Match Agent · Agent Ready Data" },
+      { title: "2. Retrieve Commercial Graph facts", body: "Firmographics OK · Active status · Primary SIC wholesale industrial · No open bankruptcy signals in synthetic set.", cite: "RAG · Commercial Graph firmographics + legal events" },
+      { title: "3. Draft recommended account action", body: "Recommend Approve onboarding with standard monitoring. Supplier risk score Low (synthetic).", cite: "Supplier Risk Insights agent · MCP tool expand" }
+    ],
+    action: "Apply Approve onboarding to customer account · start continuous monitoring",
+    preview: "Action applied to account NW-SUP-1042 · Monitoring started · audit log retained"
+  },
+  {
+    id: "credit",
+    title: "Credit research · elevated risk",
+    blurb: "Conflicting ownership · likely escalate",
+    company: "Atlas Trade Holdings (synthetic)",
+    duns: "98-765-4321",
+    workflow: "Credit decisioning assistant",
+    status: "Needs human approval",
+    steps: [
+      { title: "1. Match D-U-N-S Number", body: "Matched Atlas Trade Holdings; related entities detected under alternate trade styles.", cite: "D&B Match Agent · family tree stub" },
+      { title: "2. Retrieve risk and ownership", body: "Payment performance mixed · Beneficial ownership graph incomplete for one related entity (synthetic conflict).", cite: "RAG · ownership + Paydex-style signal stubs" },
+      { title: "3. Draft recommended account action", body: "Recommend Escalation: do not auto-extend credit limit until ownership conflict cleared.", cite: "Credit agent · explainable tool path" }
+    ],
+    action: "Hold credit change · escalate to risk analyst",
+    preview: "No account write · escalated to risk analyst queue · conflict note attached"
+  }
+];
+
+let active = null;
+let decided = false;
+
+const grid = document.getElementById("case-grid");
+const consoleEl = document.getElementById("console");
+const acctHeader = document.getElementById("acct-header");
+const stepsEl = document.getElementById("steps");
+const checkpoint = document.getElementById("checkpoint");
+const resolutionBlock = document.getElementById("resolution-block");
+const resolution = document.getElementById("resolution");
+const toast = document.getElementById("toast");
+
+function showToast(msg) {
+  toast.textContent = msg;
+  toast.classList.add("show");
+  setTimeout(() => toast.classList.remove("show"), 1800);
+}
+
+function renderPicker() {
+  grid.innerHTML = workflows.map(w => `
+    <button type="button" class="case-btn" data-id="${w.id}" aria-pressed="false">
+      <strong>${w.title}</strong>
+      <span>${w.blurb}</span>
+    </button>`).join("");
+  grid.querySelectorAll(".case-btn").forEach(btn => {
+    btn.addEventListener("click", () => loadWorkflow(btn.dataset.id));
+  });
+}
+
+function loadWorkflow(id) {
+  active = workflows.find(w => w.id === id);
+  decided = false;
+  grid.querySelectorAll(".case-btn").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.id === id)));
+  consoleEl.classList.remove("hidden");
+  resolutionBlock.classList.add("hidden");
+  acctHeader.innerHTML = `
+    <h2>${active.company}</h2>
+    <div class="chips">
+      <span class="chip teal">D-U-N-S ${active.duns}</span>
+      <span class="chip teal">${active.workflow}</span>
+      <span class="chip amber" id="status-chip">${active.status}</span>
+    </div>
+    <p class="meta">Synthetic ChatD&B-style workflow · verified-data language only</p>`;
+  stepsEl.innerHTML = active.steps.map(s => `
+    <li class="step">
+      <div class="step-top"><span class="step-title">${s.title}</span><span class="chip">Agent step</span></div>
+      <p>${s.body}</p>
+      <div class="cites"><span class="cite">Citation: ${s.cite}</span></div>
+    </li>`).join("");
+  checkpoint.innerHTML = `
+    <p>Recommended next action: <strong>${active.action}</strong>. Nothing writes to the customer account until you approve or escalate.</p>
+    <label for="edit-note" style="position:absolute;left:-9999px">Optional handoff note</label>
+    <input class="note-input" id="edit-note" type="text" placeholder="Optional one-line handoff / edit note">
+    <div class="actions">
+      <button type="button" class="primary" id="approve">Approve apply to account</button>
+      <button type="button" class="secondary" id="escalate">Escalate to analyst</button>
+    </div>`;
+  document.getElementById("approve").onclick = () => decide("approve");
+  document.getElementById("escalate").onclick = () => decide("escalate");
+  showToast("Workflow loaded");
+  consoleEl.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function decide(kind) {
+  if (!active || decided) return;
+  const note = (document.getElementById("edit-note").value || "").trim();
+  decided = true;
+  document.getElementById("approve").disabled = true;
+  document.getElementById("escalate").disabled = true;
+  const chip = document.getElementById("status-chip");
+  resolutionBlock.classList.remove("hidden");
+  if (kind === "approve") {
+    chip.textContent = "Applied · Monitoring started";
+    chip.className = "chip green";
+    resolution.className = "card resolution ok";
+    resolution.innerHTML = `
+      <p><strong>Human approved. Action applied to customer account.</strong></p>
+      <p>${active.preview}</p>
+      <p class="meta">HITL gate completed · provenance retained with D-U-N-S ${active.duns}.</p>
+      ${note ? `<p class="meta">Approver note: ${note}</p>` : ""}`;
+    showToast("Action applied");
+  } else {
+    chip.textContent = "Escalated to analyst";
+    chip.className = "chip amber";
+    resolution.className = "card resolution warn";
+    resolution.innerHTML = `
+      <p><strong>Escalated.</strong> Agent did not write to the account alone.</p>
+      <p>${active.preview}</p>
+      <p class="meta">Handoff note: ${note || "Please clear ownership / risk conflict before any account write."}</p>`;
+    showToast("Escalated to analyst");
+  }
+  resolutionBlock.scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+
+document.getElementById("reset").onclick = () => {
+  active = null; decided = false;
+  consoleEl.classList.add("hidden");
+  resolutionBlock.classList.add("hidden");
+  renderPicker();
+  showToast("Demo reset");
+};
+
+renderPicker();
+</script>
+</body>
+</html>
