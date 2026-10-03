@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Resolve Desk · Voice agent operator console (Synthetic)</title>
+<meta name="description" content="Synthetic prototype: an operator console to design, test, and watch a voice agent that finishes scheduling and status calls — with a human takeover at the exact moment the agent is about to transfer.">
+<meta name="theme-color" content="#0E0E13">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="#/" data-nav="home" aria-label="Resolve Desk home">
+    <span class="brand-mark" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10v4M8 7v10M12 4v16M16 7v10M20 10v4"/></svg>
+    </span>
+    <span class="brand-name">Resolve Desk</span>
+    <span class="brand-sub">Brightline Dental · operator console</span>
+  </a>
+  <nav class="topnav" aria-label="Primary">
+    <a href="#/" class="tn-link" data-nav="home">Agents</a>
+    <a href="#/builder/riley" class="tn-link" data-nav="builder">Builder</a>
+    <a href="#/tools" class="tn-link" data-nav="tools">Tools</a>
+    <a href="#/monitor" class="tn-link" data-nav="monitor">Live monitor</a>
+  </nav>
+  <span class="badge">Synthetic demo</span>
+  <button type="button" class="btn-quiet reset-btn" data-action="reset">Reset demo</button>
+</header>
+
+<main id="view" class="shell"></main>
+
+<footer class="foot">
+  <p>Prototype inspired by public Vapi marketing pages. Not affiliated with Vapi. Synthetic data.</p>
+  <p class="foot-sub">All calls, patients, transcripts, and numbers are simulated. No real phone calls, no real APIs, no real audio.</p>
+</footer>
+
+<div id="overlay-root"></div>
+<div id="toast-root" aria-live="polite"></div>
+
+<script src="app.js"></script>
+<script src="views.js"></script>
+</body>
+</html>
