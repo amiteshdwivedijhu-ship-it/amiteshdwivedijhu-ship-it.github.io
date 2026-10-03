@@ -2,6 +2,33 @@
    Phone-first: everything stacks at 375px; the journey rail becomes a
    vertical step list (never sideways). */
 
+:root {
+  /* House paper world. Source of truth: portfolio/src/styles/house.css. */
+  --paper:#f2efe3; --paper-sunk:#e8e4d4; --paper-edge:#dbd6c3;
+  --bg:#f2efe3; --bg-raised:#e8e4d4;
+  --ink:#171613; --muted:#4e4b42; --dim:#57544a;
+  --line:#d5d0be; --line-strong:#bdb7a2;
+  --card:#f2efe3; --card-strong:#e8e4d4; --panel:#f2efe3; --panel-solid:#e8e4d4;
+
+  /* The four inks, and what each one means. */
+  --vermilion:#e2361a; --vermilion-deep:#b32809;   /* a gate that was missed */
+  --chrome:#f2b200;    --chrome-deep:#6b5000;      /* will not hold still     */
+  --cobalt:#1b3fd8;    --cobalt-deep:#1834b4;      /* a decision taken        */
+  --viridian:#0f8a5f;  --viridian-deep:#0b6a49;    /* held, by construction   */
+
+  --accent:#b32809; --accent-bright:#b32809; --accent-bg:rgba(226,54,26,.09);
+  --ok:#0b6a49;    --ok-bg:rgba(15,138,95,.1);
+  --warn:#6b5000;  --warn-bg:rgba(242,178,0,.16);
+  --bad:#b32809;   --bad-bg:rgba(226,54,26,.09);
+  --green:#0b6a49; --amber:#6b5000; --red:#b32809; --blue:#1834b4; --violet:#1834b4;
+
+  --sans:"Archivo Variable",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+  --serif:"Archivo Variable",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+  --mono:"Chivo Mono Variable",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --radius:0px;
+  --shadow:none;
+}
+
 * { box-sizing: border-box; }
 
 html { scroll-behavior: smooth; }
