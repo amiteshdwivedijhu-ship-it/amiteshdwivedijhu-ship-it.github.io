@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Trace to Gate: a LangSmith-style console prototype where a failed agent trace becomes a regression eval that guards the next deploy. Synthetic data only.">
+<title>Trace to Gate — prototype console</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="topbar">
+  <div class="brand">
+    <button class="icon-btn hamburger" data-action="toggle-nav" aria-label="Open navigation" aria-expanded="false" aria-controls="sidebar"><span class="hamburger-bars"></span></button>
+    <div class="brand-mark" aria-hidden="true"></div>
+    <div class="brand-text">
+      <div class="brand-name">Trace to Gate</div>
+      <div class="brand-sub">Northwind Goods · Refund Helper · LangSmith-style console</div>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <span class="gate-pill" id="top-gate-pill" aria-hidden="true"></span>
+    <button class="btn btn-ghost" data-action="reset-demo">Reset demo</button>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Primary">
+    <div class="side-section">
+      <div class="side-label">Workspace</div>
+      <div class="side-meta">Northwind Goods<br>agent: <span class="mono">refund-helper</span></div>
+    </div>
+    <ul class="side-nav">
+      <li><a href="#/traces" data-nav="traces"><span class="nav-dot"></span>Traces <span class="nav-count" id="nav-traces"></span></a></li>
+      <li><a href="#/evals" data-nav="evals"><span class="nav-dot"></span>Eval set <span class="nav-count" id="nav-evals"></span></a></li>
+      <li><a href="#/gate" data-nav="gate"><span class="nav-dot"></span>Deploy gate <span class="nav-count" id="nav-gate"></span></a></li>
+      <li><a href="#/annotations" data-nav="annotations"><span class="nav-dot"></span>Annotations <span class="nav-count" id="nav-annotations"></span></a></li>
+      <li><a href="#/activity" data-nav="activity"><span class="nav-dot"></span>Activity log <span class="nav-count" id="nav-activity"></span></a></li>
+    </ul>
+    <div class="side-foot">
+      <div class="side-foot-note">Prototype. Synthetic data only.<br>No real customers, people, or keys.</div>
+      <button class="btn btn-ghost btn-block" data-action="reset-demo">Reset demo</button>
+    </div>
+  </nav>
+
+  <main id="main" class="content" aria-live="polite"></main>
+</div>
+
+<footer class="page-footer">
+  Prototype inspired by public LangSmith marketing pages. Not affiliated with LangChain. Synthetic data.
+</footer>
+
+<div id="toast-root" class="toast-root" aria-live="assertive"></div>
+<div id="modal-root" class="modal-root" hidden></div>
+
+<script src="app.js"></script>
+</body>
+</html>
