@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Care Team Admin Desk — synthetic prototype of a shared admin console for prior authorization and referral processing. All data is synthetic and labeled.">
+<title>Care Team Admin Desk · Ascertain prototype</title>
+<link rel="stylesheet" href="../house-demo.css">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to demo</a>
+
+<header class="site-header">
+  <nav class="global-nav shell" aria-label="Primary navigation">
+    <a class="brand" href="#/home">
+      <span class="brand-mark" aria-hidden="true">◆</span>
+      <span class="brand-name">Care Team Admin Desk</span>
+      <span class="brand-tag">prototype</span>
+    </a>
+    <div class="nav-links" id="nav-links">
+      <a href="#/home" data-nav="home">Workflows</a>
+      <a href="#/pa" data-nav="pa">Prior auth</a>
+      <a href="#/review" data-nav="review">Review queue <span class="nav-badge" id="review-badge" hidden>0</span></a>
+      <a href="#/referral" data-nav="referral">Referrals</a>
+      <a href="#/rollout" data-nav="rollout">Rollout</a>
+    </div>
+    <div class="practice-chip" title="Synthetic demo practice — not a real clinic">
+      <span class="practice-name">Clinic North</span>
+      <span class="practice-tag">demo</span>
+    </div>
+  </nav>
+  <div class="synthetic-ribbon" role="note">
+    <span class="ribbon-dot" aria-hidden="true"></span>
+    Synthetic demo — no real patients, providers, payers, or outcomes. Every number is labeled.
+  </div>
+</header>
+
+<main id="main-content" class="shell">
+  <div id="view-home" class="view" hidden></div>
+  <div id="view-pa" class="view" hidden></div>
+  <div id="view-case" class="view" hidden></div>
+  <div id="view-review" class="view" hidden></div>
+  <div id="view-referral" class="view" hidden></div>
+  <div id="view-rollout" class="view" hidden></div>
+  <div id="view-spec" class="view" hidden></div>
+</main>
+
+<footer class="site-footer shell">
+  <p><strong>All data on this desk is synthetic.</strong> Patients are labeled (Patient A, Patient B…), providers and clinics are numbered or obvious placeholders (Provider 07, Clinic North), and payers are generic labels (Payer North, Payer Blue). No real PHI, member IDs, or NPIs appear anywhere. Metrics inside the prototype are simulated for demonstration.</p>
+  <p>Routine work flows. Non-routine work stops for a human. Every action is logged, explainable, and auditable. Coverage decisions belong to the payer — this desk never claims an outcome.</p>
+  <button id="footer-reset" class="button button-quiet" type="button">Reset demo to seed data</button>
+</footer>
+
+<div id="demo-bar" class="demo-bar" role="region" aria-label="Demo controls">
+  <div class="demo-bar-head">
+    <span class="demo-label">Demo controls — simulated outside world</span>
+    <button id="demo-toggle" class="demo-toggle" type="button" aria-expanded="false">Demo controls</button>
+  </div>
+  <div class="demo-bar-body demo-bar-closed" id="demo-bar-body">
+    <div class="demo-row">
+      <button id="demo-portal" class="demo-btn" type="button" data-portal="down">Payer portal: simulate outage</button>
+      <button id="demo-approve" class="demo-btn" type="button">Payer: approve</button>
+      <button id="demo-deny" class="demo-btn" type="button">Payer: deny</button>
+      <button id="demo-reset" class="demo-btn" type="button">Reset session</button>
+    </div>
+    <p class="demo-hint" id="demo-hint">These buttons simulate the payer side so a walkthrough never waits on the outside world.</p>
+  </div>
+</div>
+
+<div id="modal-root"></div>
+<div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
