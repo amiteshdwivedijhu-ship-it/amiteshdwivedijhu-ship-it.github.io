@@ -1,0 +1,135 @@
+{
+  "meta": {
+    "product": "Enrollment Runway",
+    "subtitle": "Provider operations console — agent-drafted payer enrollments with a human gate",
+    "syntheticNotice": "Prototype with synthetic data only: no real PHI, NPIs, provider names, member IDs, or payer connections. Every number is simulated.",
+    "conceptNotice": "Concept prototype built for a PM role application. Not affiliated with Assured Health, Inc. Mirrors public marketing language only."
+  },
+  "states": ["NY", "NJ", "CT", "PA"],
+  "tins": [
+    { "id": "TIN-A", "label": "TIN 700-0001-A (synthetic)" },
+    { "id": "TIN-B", "label": "TIN 700-0002-B (synthetic)" },
+    { "id": "TIN-C", "label": "TIN 700-0003-C (synthetic)" },
+    { "id": "TIN-D", "label": "TIN 700-0004-D (synthetic)" }
+  ],
+  "payers": [
+    { "id": "PN", "name": "Payer North", "lob": "Commercial", "baseDays": 28, "portal": "portal.withpayer-north.example (simulated)" },
+    { "id": "PE", "name": "Payer East", "lob": "Commercial + Medicaid", "baseDays": 31, "portal": "Payer East Provider Portal (simulated)" },
+    { "id": "PS", "name": "Payer South", "lob": "Commercial", "baseDays": 28, "portal": "Payer South Gateway (simulated)" },
+    { "id": "PW", "name": "Payer West", "lob": "Medicare Advantage", "baseDays": 24, "portal": "Payer West Connect (simulated)" },
+    { "id": "PM", "name": "Payer Mid", "lob": "Commercial", "baseDays": 30, "portal": "Payer Mid Portal (simulated)" }
+  ],
+  "providers": [
+    { "id": "P01", "name": "Provider 01", "role": "LPN — Licensed Practical Nurse", "states": ["NJ"], "tins": ["TIN-B"], "npi": "NPI-1188-2201", "dob": "May 3, 1984", "taxonomy": "164X00000X — Licensed Practical Nurse", "caqh": "CAQH-1188", "credentialing": "not_started", "intake": "pending" },
+    { "id": "P02", "name": "Provider 02", "role": "MD — Primary Care", "states": ["NY", "NJ"], "tins": ["TIN-A"], "npi": "NPI-1188-2202", "dob": "Jan 17, 1979", "taxonomy": "207Q00000X — Family Medicine", "caqh": "CAQH-1189", "credentialing": "not_started", "intake": "pending" },
+    { "id": "P03", "name": "Provider 03", "role": "PT — Physical Therapist", "states": ["CT"], "tins": ["TIN-C"], "npi": "NPI-1188-2203", "dob": "Nov 30, 1991", "taxonomy": "225100000X — Physical Therapist", "caqh": "CAQH-1190", "credentialing": "not_started", "intake": "pending" },
+    { "id": "P04", "name": "Provider 04", "role": "DDS — Dentistry", "states": ["PA"], "tins": ["TIN-D"], "npi": "NPI-1188-2204", "dob": "Aug 12, 1987", "taxonomy": "122300000X — Dentist", "caqh": "CAQH-1191", "credentialing": "not_started", "intake": "missing" },
+    { "id": "P05", "name": "Provider 05", "role": "MD — Cardiology", "states": ["NY"], "tins": ["TIN-A"], "npi": "NPI-1188-2205", "dob": "Mar 22, 1975", "taxonomy": "207RC0000X — Cardiovascular Disease", "caqh": "CAQH-1192", "credentialing": "in_progress", "intake": "complete" },
+    { "id": "P06", "name": "Provider 06", "role": "NP — Family Medicine", "states": ["CT"], "tins": ["TIN-C"], "npi": "NPI-1188-2206", "dob": "Jul 9, 1990", "taxonomy": "363LF0000X — Nurse Practitioner, Family", "caqh": "CAQH-1193", "credentialing": "in_progress", "intake": "complete" },
+    { "id": "P07", "name": "Provider 07", "role": "LCSW — Behavioral Health", "states": ["NY"], "tins": ["TIN-A"], "npi": "NPI-8821-3347", "dob": "Apr 19, 1988", "taxonomy": "1041C0700X — Clinical Social Worker", "caqh": "CAQH-8821", "credentialing": "done", "intake": "complete" },
+    { "id": "P08", "name": "Provider 08", "role": "MD — Dermatology", "states": ["NY"], "tins": ["TIN-B"], "npi": "NPI-1188-2208", "dob": "Dec 5, 1982", "taxonomy": "207N00000X — Dermatology", "caqh": "CAQH-1194", "credentialing": "done", "intake": "complete" },
+    { "id": "P09", "name": "Provider 09", "role": "MD — Pediatrics", "states": ["NY", "CT"], "tins": ["TIN-A"], "npi": "NPI-1188-2209", "dob": "Sep 2, 1978", "taxonomy": "208000000X — Pediatrics", "caqh": "CAQH-1195", "credentialing": "done", "intake": "complete" },
+    { "id": "P10", "name": "Provider 10", "role": "LCSW — Behavioral Health", "states": ["NJ"], "tins": ["TIN-B"], "npi": "NPI-1188-2210", "dob": "Jun 14, 1986", "taxonomy": "1041C0700X — Clinical Social Worker", "caqh": "CAQH-1196", "credentialing": "done", "intake": "complete" },
+    { "id": "P11", "name": "Provider 11", "role": "PsyD — Clinical Psychology", "states": ["NY"], "tins": ["TIN-A"], "npi": "NPI-1188-2211", "dob": "Feb 27, 1981", "taxonomy": "103TC0700X — Clinical Psychologist", "caqh": "CAQH-1197", "credentialing": "in_progress", "intake": "complete" },
+    { "id": "P12", "name": "Provider 12", "role": "MD — Psychiatry", "states": ["NY", "CT"], "tins": ["TIN-C"], "npi": "NPI-1188-2212", "dob": "Oct 8, 1977", "taxonomy": "2084P0800X — Psychiatry", "caqh": "CAQH-1198", "credentialing": "done", "intake": "complete" },
+    { "id": "P13", "name": "Provider 13", "role": "MD — Oncology", "states": ["NY", "PA"], "tins": ["TIN-A"], "npi": "NPI-1188-2213", "dob": "Jan 29, 1970", "taxonomy": "207RX0202X — Medical Oncology", "caqh": "CAQH-1199", "credentialing": "done", "intake": "complete" },
+    { "id": "P14", "name": "Provider 14", "role": "PT — Physical Therapy", "states": ["CT"], "tins": ["TIN-C"], "npi": "NPI-1188-2214", "dob": "May 18, 1994", "taxonomy": "225100000X — Physical Therapist", "caqh": "CAQH-1200", "credentialing": "done", "intake": "complete" },
+    { "id": "P15", "name": "Provider 15", "role": "SLP — Speech Therapy", "states": ["PA"], "tins": ["TIN-D"], "npi": "NPI-1188-2215", "dob": "Aug 25, 1989", "taxonomy": "235Z00000X — Speech-Language Pathologist", "caqh": "CAQH-1201", "credentialing": "done", "intake": "complete" },
+    { "id": "P16", "name": "Provider 16", "role": "DO — Internal Medicine", "states": ["NJ"], "tins": ["TIN-B"], "npi": "NPI-1188-2216", "dob": "Mar 6, 1983", "taxonomy": "207R00000X — Internal Medicine", "caqh": "CAQH-1202", "credentialing": "done", "intake": "complete" },
+    { "id": "P17", "name": "Provider 17", "role": "DC — Chiropractor", "states": ["CT"], "tins": ["TIN-C"], "npi": "NPI-1188-2217", "dob": "Jul 31, 1992", "taxonomy": "111N00000X — Chiropractor", "caqh": "CAQH-1203", "credentialing": "done", "intake": "complete" },
+    { "id": "P18", "name": "Provider 18", "role": "PA — Physician Assistant", "states": ["PA"], "tins": ["TIN-D"], "npi": "NPI-1188-2218", "dob": "Feb 11, 1995", "taxonomy": "363A00000X — Physician Assistant", "caqh": "CAQH-1204", "credentialing": "done", "intake": "complete" },
+    { "id": "P19", "name": "Provider 19", "role": "OT — Occupational Therapy", "states": ["NJ"], "tins": ["TIN-B"], "npi": "NPI-1188-2219", "dob": "Sep 20, 1985", "taxonomy": "225X00000X — Occupational Therapist", "caqh": "CAQH-1205", "credentialing": "in_progress", "intake": "complete" },
+    { "id": "P20", "name": "Provider 20", "role": "MD — Neurology", "states": ["NJ", "NY"], "tins": ["TIN-B"], "npi": "NPI-1188-2220", "dob": "Nov 8, 1972", "taxonomy": "2084N0400X — Neurology", "caqh": "CAQH-1206", "credentialing": "done", "intake": "complete" },
+    { "id": "P21", "name": "Provider 21", "role": "RD — Registered Dietitian", "states": ["NY"], "tins": ["TIN-A"], "npi": "NPI-1188-2221", "dob": "Jan 4, 1993", "taxonomy": "133V00000X — Dietitian", "caqh": "CAQH-1207", "credentialing": "done", "intake": "complete" },
+    { "id": "P22", "name": "Provider 22", "role": "DO — Orthopedics", "states": ["NJ"], "tins": ["TIN-B"], "npi": "NPI-1188-2222", "dob": "Apr 16, 1980", "taxonomy": "207XX0000X — Orthopedic Surgery", "caqh": "CAQH-1208", "credentialing": "done", "intake": "complete" },
+    { "id": "P23", "name": "Provider 23", "role": "MD — OB/GYN", "states": ["NJ"], "tins": ["TIN-B"], "npi": "NPI-1188-2223", "dob": "Jun 23, 1976", "taxonomy": "207V00000X — Obstetrics & Gynecology", "caqh": "CAQH-1209", "credentialing": "done", "intake": "complete" },
+    { "id": "P24", "name": "Provider 24", "role": "NP — Psychiatry", "states": ["CT"], "tins": ["TIN-C"], "npi": "NPI-1188-2224", "dob": "Oct 30, 1988", "taxonomy": "363LP0808X — Nurse Practitioner, Psychiatry", "caqh": "CAQH-1210", "credentialing": "done", "intake": "complete" }
+  ],
+  "licenses": {
+    "P07": [{ "state": "NY", "number": "L-88214 (synthetic)", "status": "active", "issued": "Jun 2024", "expires": "Jun 2027", "board": "NY State Education Dept (simulated)", "verified": "Aug 2026 (simulated)" }],
+    "P12": [
+      { "state": "CT", "number": "L-71105 (synthetic)", "status": "active", "issued": "Sep 2023", "expires": "Sep 2027", "board": "CT Dept of Public Health (simulated)", "verified": "Jul 2026 (simulated)" },
+      { "state": "NY", "number": null, "status": "missing", "issued": null, "expires": null, "board": "NY State Education Dept (simulated)", "verified": "Application incomplete — tracked in Licensing (simulated)" }
+    ],
+    "P16": [{ "state": "NJ", "number": "L-22096 (synthetic)", "status": "active", "issued": "Mar 2024", "expires": "Mar 2028", "board": "NJ State Board of Medical Examiners (simulated)", "verified": "Sep 2026 (simulated)" }],
+    "P17": [{ "state": "CT", "number": "L-33108 (synthetic)", "status": "active", "issued": "Jan 2025", "expires": "Jan 2029", "board": "CT Dept of Public Health (simulated)", "verified": "Sep 2026 (simulated)" }],
+    "P18": [{ "state": "PA", "number": "L-44912 (synthetic)", "status": "active", "issued": "May 2024", "expires": "May 2028", "board": "PA State Board of Medicine (simulated)", "verified": "Aug 2026 (simulated)" }],
+    "P21": [{ "state": "NY", "number": "L-55271 (synthetic)", "status": "active", "issued": "Feb 2025", "expires": "Feb 2029", "board": "NY State Education Dept (simulated)", "verified": "Sep 2026 (simulated)" }],
+    "P23": [{ "state": "NJ", "number": "L-66123 (synthetic)", "status": "active", "issued": "Nov 2023", "expires": "Nov 2027", "board": "NJ State Board of Medical Examiners (simulated)", "verified": "Jul 2026 (simulated)" }],
+    "P24": [{ "state": "CT", "number": "L-77204 (synthetic)", "status": "active", "issued": "Aug 2024", "expires": "Aug 2028", "board": "CT Dept of Public Health (simulated)", "verified": "Sep 2026 (simulated)" }],
+    "P08": [{ "state": "NY", "number": "L-88309 (synthetic)", "status": "active", "issued": "Apr 2023", "expires": "Apr 2027", "board": "NY State Education Dept (simulated)", "verified": "Aug 2026 (simulated)" }],
+    "P15": [{ "state": "PA", "number": "L-55411 (synthetic)", "status": "active", "issued": "Oct 2022", "expires": "Oct 2026", "board": "PA State Board of Medicine (simulated)", "verified": "Jul 2026 (simulated)" }],
+    "P22": [{ "state": "NJ", "number": "L-66217 (synthetic)", "status": "active", "issued": "Jun 2023", "expires": "Jun 2027", "board": "NJ State Board of Medical Examiners (simulated)", "verified": "Aug 2026 (simulated)" }],
+    "P05": [{ "state": "NY", "number": "L-55102 (synthetic)", "status": "active", "issued": "Dec 2023", "expires": "Dec 2027", "board": "NY State Education Dept (simulated)", "verified": "Jun 2026 (simulated)" }],
+    "P06": [{ "state": "CT", "number": "L-66203 (synthetic)", "status": "active", "issued": "Feb 2024", "expires": "Feb 2028", "board": "CT Dept of Public Health (simulated)", "verified": "Aug 2026 (simulated)" }],
+    "P11": [{ "state": "NY", "number": "L-77304 (synthetic)", "status": "active", "issued": "Jul 2024", "expires": "Jul 2028", "board": "NY State Education Dept (simulated)", "verified": "Sep 2026 (simulated)" }],
+    "P19": [{ "state": "NJ", "number": "L-88405 (synthetic)", "status": "active", "issued": "May 2025", "expires": "May 2029", "board": "NJ State Board of Medical Examiners (simulated)", "verified": "Sep 2026 (simulated)" }]
+  },
+  "malpractice": {
+    "P07": { "carrier": "Carrier North (synthetic)", "policy": "P-8821 (synthetic)", "period": "Oct 1, 2025 – Sep 30, 2026", "type": "Claims-made", "perClaim": "$1M / occurrence (synthetic)", "aggregate": "$3M annual (synthetic)", "expires": "Sep 30, 2026", "status": "expired", "doc": "MAL-P-8821.pdf (synthetic)" },
+    "P12": { "carrier": "Coverage East (synthetic)", "policy": "P-7712 (synthetic)", "period": "Jul 1, 2026 – Jun 30, 2027", "type": "Occurrence", "perClaim": "$2M / occurrence (synthetic)", "aggregate": "$4M annual (synthetic)", "expires": "Jun 30, 2027", "status": "active", "doc": "MAL-P-7712.pdf (synthetic)" }
+  },
+  "locations": {
+    "P07": [
+      { "id": "L1", "name": "Clinic North", "address": "120 Example Ave, Albany, NY 12201 (synthetic)", "phone": "(518) 555-0107 (synthetic)", "tin": "TIN 700-0001-A (synthetic)", "primary": true, "updated": "Sep 2, 2026" },
+      { "id": "L2", "name": "Clinic North — Branch", "address": "5 Sample St, Troy, NY 12180 (synthetic)", "phone": "(518) 555-0187 (synthetic)", "tin": "TIN 800-0021-B (synthetic)", "primary": false, "updated": "Aug 19, 2026" }
+    ],
+    "P12": [
+      { "id": "L1", "name": "CarePoint Group — NY", "address": "77 Demo Blvd, Buffalo, NY 14201 (synthetic)", "phone": "(716) 555-0112 (synthetic)", "tin": "TIN 700-0003-C (synthetic)", "primary": true, "updated": "Aug 30, 2026" }
+    ]
+  },
+  "enrollments": [
+    { "id": "P07-PN", "providerId": "P07", "payerId": "PN", "state": "NY", "status": "draft", "start": "-15d", "baseDays": 28, "delays": [{ "label": "Malpractice certificate expired", "days": 8, "gateId": "cert" }, { "label": "Practice location / TIN mismatch", "days": 9, "gateId": "location" }], "returnDelay": 0, "packet": "drafted", "draftedLocId": "L2", "gate": ["cert", "location", "w9"], "returnReason": null, "submittedAt": null, "payerAccount": null, "effective": null, "actualDays": null },
+    { "id": "P12-PE", "providerId": "P12", "payerId": "PE", "state": "NY", "status": "draft", "start": "-12d", "baseDays": 31, "delays": [{ "label": "Blocked — license not active in target state", "days": 2, "gateId": "license" }], "returnDelay": 0, "packet": "drafted", "hardStop": { "active": true, "reason": "No active New York license on record. Enrollment resumes after the license is active. Licensing task created automatically (simulated)." }, "gate": ["license"], "returnReason": null, "submittedAt": null, "payerAccount": null, "effective": null, "actualDays": null },
+    { "id": "P16-PM", "providerId": "P16", "payerId": "PM", "state": "NJ", "status": "ready", "start": "-9d", "baseDays": 30, "delays": [], "returnDelay": 0, "packet": "drafted", "gate": [], "returnReason": null, "submittedAt": null, "payerAccount": null, "effective": null, "actualDays": null },
+    { "id": "P17-PS", "providerId": "P17", "payerId": "PS", "state": "CT", "status": "draft", "start": "-18d", "baseDays": 24, "delays": [{ "label": "Primary location updated Sep 2 — confirm before submitting", "days": 7, "gateId": "address" }], "returnDelay": 0, "packet": "drafted", "gate": ["address"], "returnReason": null, "submittedAt": null, "payerAccount": null, "effective": null, "actualDays": null },
+    { "id": "P18-PW", "providerId": "P18", "payerId": "PW", "state": "PA", "status": "ready", "start": "-7d", "baseDays": 24, "delays": [], "returnDelay": 0, "packet": "drafted", "gate": [], "returnReason": null, "submittedAt": null, "payerAccount": null, "effective": null, "actualDays": null },
+    { "id": "P21-PN", "providerId": "P21", "payerId": "PN", "state": "NY", "status": "draft", "start": "-21d", "baseDays": 27, "delays": [{ "label": "Awaiting agent queue — packet not drafted yet", "days": 12 }], "returnDelay": 0, "packet": null, "gate": [], "returnReason": null, "submittedAt": null, "payerAccount": null, "effective": null, "actualDays": null },
+    { "id": "P23-PE", "providerId": "P23", "payerId": "PE", "state": "NJ", "status": "submitted", "start": "-19d", "baseDays": 34, "delays": [], "returnDelay": 0, "packet": null, "gate": [], "returnReason": null, "submittedAt": "-6d", "payerAccount": null, "effective": null, "actualDays": null },
+    { "id": "P24-PN", "providerId": "P24", "payerId": "PN", "state": "CT", "status": "in_progress", "start": "-14d", "baseDays": 27, "delays": [], "returnDelay": 0, "packet": null, "gate": [], "returnReason": null, "submittedAt": "-8d", "payerAccount": null, "effective": null, "actualDays": null },
+    { "id": "P08-PN", "providerId": "P08", "payerId": "PN", "state": "NY", "status": "needs_action", "start": "-33d", "baseDays": 29, "delays": [], "returnDelay": 12, "packet": null, "gate": [], "returnReason": "Missing signature on form page 3 (synthetic)", "submittedAt": "-20d", "payerAccount": null, "effective": null, "actualDays": null },
+    { "id": "P15-PS", "providerId": "P15", "payerId": "PS", "state": "PA", "status": "needs_action", "start": "-36d", "baseDays": 32, "delays": [], "returnDelay": 12, "packet": null, "gate": [], "returnReason": "Application page 2 unreadable after fax (simulated fax issue)", "submittedAt": "-22d", "payerAccount": null, "effective": null, "actualDays": null },
+    { "id": "P22-PM", "providerId": "P22", "payerId": "PM", "state": "NJ", "status": "needs_action", "start": "-28d", "baseDays": 27, "delays": [], "returnDelay": 11, "packet": null, "gate": [], "returnReason": "Address on application does not match tax entity on file", "submittedAt": "-16d", "payerAccount": null, "effective": null, "actualDays": null },
+    { "id": "P09-PN", "providerId": "P09", "payerId": "PN", "state": "NY", "status": "approved", "start": "-53d", "baseDays": 28, "delays": [], "returnDelay": 0, "packet": null, "gate": [], "returnReason": null, "submittedAt": "-47d", "payerAccount": "PN-88341 (synthetic)", "effective": "-12d", "actualDays": 41 },
+    { "id": "P10-PM", "providerId": "P10", "payerId": "PM", "state": "NJ", "status": "approved", "start": "-45d", "baseDays": 30, "delays": [], "returnDelay": 0, "packet": null, "gate": [], "returnReason": null, "submittedAt": "-39d", "payerAccount": "PM-55208 (synthetic)", "effective": "-12d", "actualDays": 33 },
+    { "id": "P13-PE", "providerId": "P13", "payerId": "PE", "state": "NY", "status": "approved", "start": "-61d", "baseDays": 31, "delays": [], "returnDelay": 0, "packet": null, "gate": [], "returnReason": null, "submittedAt": "-55d", "payerAccount": "PE-11023 (synthetic)", "effective": "-14d", "actualDays": 47 },
+    { "id": "P14-PS", "providerId": "P14", "payerId": "PS", "state": "CT", "status": "approved", "start": "-48d", "baseDays": 28, "delays": [], "returnDelay": 0, "packet": null, "gate": [], "returnReason": null, "submittedAt": "-42d", "payerAccount": "PS-77199 (synthetic)", "effective": "-12d", "actualDays": 36 },
+    { "id": "P20-PW", "providerId": "P20", "payerId": "PW", "state": "NY", "status": "approved", "start": "-66d", "baseDays": 24, "delays": [], "returnDelay": 0, "packet": null, "gate": [], "returnReason": null, "submittedAt": "-60d", "payerAccount": "PW-3021 (synthetic)", "effective": "-14d", "actualDays": 52 },
+    { "id": "P20-PS", "providerId": "P20", "payerId": "PS", "state": "NY", "status": "in_progress", "start": "-10d", "baseDays": 30, "delays": [], "returnDelay": 0, "packet": null, "gate": [], "returnReason": null, "submittedAt": "-5d", "payerAccount": null, "effective": null, "actualDays": null }
+  ],
+  "followups": {
+    "P23-PE": [{ "date": "-6d", "outcome": "Application received; assigned to analyst (simulated)", "next": "Payer decision expected by Oct 09 (simulated)", "owner": "payer" }],
+    "P20-PS": [{ "date": "-2d", "outcome": "Application received; credentialing verification requested (simulated)", "next": "Respond to payer by Oct 06 (simulated)", "owner": "payer" }],
+    "P24-PN": [{ "date": "-2d", "outcome": "Credentialing verification requested by payer (simulated)", "next": "Respond to payer by Oct 05 (simulated)", "owner": "team" }],
+    "P08-PN": [{ "date": "-14d", "outcome": "Application received (simulated)", "next": "Under review", "owner": "payer" }, { "date": "-2d", "outcome": "Returned — missing signature on form page 3 (simulated)", "next": "Team to re-sign and resubmit", "owner": "payer" }],
+    "P15-PS": [{ "date": "-16d", "outcome": "Application received (simulated)", "next": "Under review", "owner": "payer" }, { "date": "-2d", "outcome": "Returned — page 2 unreadable after fax (simulated)", "next": "Team to refax page 2", "owner": "payer" }],
+    "P22-PM": [{ "date": "-10d", "outcome": "Application received (simulated)", "next": "Under review", "owner": "payer" }, { "date": "-4d", "outcome": "Returned — address mismatch on file (simulated)", "next": "Team to correct address", "owner": "payer" }],
+    "P09-PN": [{ "date": "-50d", "outcome": "Application received (simulated)", "next": "Under review", "owner": "payer" }, { "date": "-12d", "outcome": "Approved — payer ID PN-88341 captured (simulated)", "next": "None — enrollment complete", "owner": "payer" }],
+    "P10-PM": [{ "date": "-42d", "outcome": "Application received (simulated)", "next": "Under review", "owner": "payer" }, { "date": "-12d", "outcome": "Approved — payer ID PM-55208 captured (simulated)", "next": "None — enrollment complete", "owner": "payer" }],
+    "P13-PE": [{ "date": "-58d", "outcome": "Application received (simulated)", "next": "Under review", "owner": "payer" }, { "date": "-14d", "outcome": "Approved — payer ID PE-11023 captured (simulated)", "next": "None — enrollment complete", "owner": "payer" }],
+    "P14-PS": [{ "date": "-45d", "outcome": "Application received (simulated)", "next": "Under review", "owner": "payer" }, { "date": "-12d", "outcome": "Approved — payer ID PS-77199 captured (simulated)", "next": "None — enrollment complete", "owner": "payer" }],
+    "P20-PW": [{ "date": "-63d", "outcome": "Application received (simulated)", "next": "Under review", "owner": "payer" }, { "date": "-14d", "outcome": "Approved — payer ID PW-3021 captured (simulated)", "next": "None — enrollment complete", "owner": "payer" }]
+  },
+  "activity": [
+    { "time": "-6d", "actor": "agent", "name": "Agent — Enrollment", "provider": "P07", "payer": "PN", "text": "Drafted Payer North packet: 41 of 44 fields populated from record (simulated)", "kind": "packet" },
+    { "time": "-6d", "actor": "agent", "name": "Agent — Enrollment", "provider": "P07", "payer": "PN", "text": "Pre-flight checks: 2 failed, 1 not verifiable (portal down) (simulated)", "kind": "check" },
+    { "time": "-5d", "actor": "human", "name": "Reviewer — Intake", "provider": "P07", "payer": null, "text": "Updated profile: added taxonomy code 1041C0700X (simulated)", "kind": "profile" },
+    { "time": "-4d", "actor": "system", "name": "System", "provider": null, "payer": null, "text": "Payer North portal reported unavailable (simulated outage)", "kind": "system" },
+    { "time": "-4d", "actor": "human", "name": "Reviewer — Credentialing", "provider": "P05", "payer": null, "text": "Primary source verification for NY license completed (simulated)", "kind": "credentialing" },
+    { "time": "-3d", "actor": "agent", "name": "Agent — Enrollment", "provider": "P23", "payer": "PE", "text": "Follow-up sent to Payer East: application status (simulated)", "kind": "followup" },
+    { "time": "-2d", "actor": "payer", "name": "Payer North (simulated)", "provider": "P08", "payer": "PN", "text": "Returned application: missing signature on form page 3", "kind": "return" },
+    { "time": "-1d", "actor": "agent", "name": "Agent — Enrollment", "provider": "P12", "payer": "PE", "text": "Drafted Payer East packet; pre-flight stopped: no active NY license (hard stop)", "kind": "check" },
+    { "time": "-1d", "actor": "agent", "name": "Agent — Enrollment", "provider": "P12", "payer": "PE", "text": "Created Licensing task for NY license (simulated)", "kind": "license" },
+    { "time": "-1d", "actor": "human", "name": "Reviewer — Submission", "provider": "P15", "payer": "PS", "text": "Reviewed payer return; refax scheduled for page 2 (simulated)", "kind": "return" },
+    { "time": "-10h", "actor": "system", "name": "System", "provider": null, "payer": null, "text": "Nightly verification sweep: 3 records need action (simulated)", "kind": "system" },
+    { "time": "-2d", "actor": "human", "name": "Reviewer — Submission", "provider": "P09", "payer": "PN", "text": "Captured payer ID PN-88341 and effective date (simulated)", "kind": "approval" }
+  ],
+  "sources": {
+    "profile": { "title": "CAQH-style profile import (simulated)", "note": "Imported record with source \"Imported\" — the same pattern Assured's marketing shows on its Provider intake card. This prototype simulates the import; no real CAQH connection." },
+    "license": { "title": "State license record (simulated)", "note": "License records are synthetic. Status verified at last check; primary-source verification is a separate workflow." },
+    "location": { "title": "Practice location record (simulated)", "note": "Location and tax entity records come from the group's roster (simulated). The TIN on each location must match the tax entity on file." },
+    "malpractice": { "title": "Malpractice record + policy document (simulated)", "note": "Carrier statement is synthetic. Expiration is checked before every submission." },
+    "payerForm": { "title": "Payer application form template (simulated)", "note": "Field-level requirements from the payer's application packet. Form version v2026.3 (synthetic)." },
+    "document": { "title": "Uploaded document (simulated)", "note": "Documents in this prototype are simulated placeholders, not real files." }
+  }
+}
