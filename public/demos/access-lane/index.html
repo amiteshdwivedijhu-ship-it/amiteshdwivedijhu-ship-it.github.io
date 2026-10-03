@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Access Lane — a specialty medication access console prototype for Squad Health. All data is synthetic.">
+<title>Access Lane · Squad Health · specialty medication access console (prototype)</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="../house-demo.css">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to console</a>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="wordmark">Squad Health</span>
+    <span class="crumb">Access Lane <span class="crumb-sub">· specialty medication access · prototype</span></span>
+  </div>
+  <div class="topright">
+    <span class="pill pill-warn">Prototype — all data synthetic</span>
+    <span class="user">Staff 02 · Care Coordinator</span>
+  </div>
+</header>
+
+<div id="app" class="app">
+  <section id="dashboard-view" class="view" aria-label="Practice dashboard">
+    <header class="view-head">
+      <div>
+        <p class="eyebrow">Practice console · synthetic working day</p>
+        <h1>What needs you today</h1>
+        <p class="view-sub">One prescription is one case. Access Lane follows the order through benefits, prior auth, appeals, assistance, and pharmacy — so no step drops between "PA approved" and "the patient has the drug."</p>
+      </div>
+      <div class="head-actions">
+        <button id="walkthrough-cta" class="button button-primary" type="button" data-action="walkthrough">Run the 90-second walkthrough</button>
+      </div>
+    </header>
+
+    <div id="stat-strip" class="stat-strip" aria-label="This week, synthetic numbers"></div>
+
+    <div class="filter-panel panel" aria-label="Case filters">
+      <div class="filter-group">
+        <label for="filter-clinic">Location</label>
+        <select id="filter-clinic"></select>
+      </div>
+      <div class="filter-group">
+        <label for="filter-prescriber">Prescriber</label>
+        <select id="filter-prescriber"></select>
+      </div>
+      <div class="filter-group filter-group-stage">
+        <label for="filter-stage">Stage</label>
+        <select id="filter-stage"></select>
+      </div>
+      <p id="result-count" class="result-count" role="status" aria-live="polite"></p>
+    </div>
+
+    <div id="case-list" class="case-list"></div>
+    <div id="case-empty" class="empty-state panel hidden">
+      <h2>No cases need you right now</h2>
+      <p>Nothing is stuck in this view. New orders land here as they arrive from the EMR, and follow-ups are tracked automatically — escalate something from the list if a payer has gone quiet.</p>
+      <button id="empty-reset" class="button button-quiet" type="button" data-action="empty-reset">Show all cases again</button>
+    </div>
+  </section>
+
+  <section id="case-view" class="view hidden" aria-label="Case workspace">
+    <header class="case-head">
+      <button id="back-to-dashboard" class="back-link" type="button" data-action="back-dashboard">← All cases</button>
+      <div class="case-title-row">
+        <h1 id="case-title"></h1>
+        <span id="case-pill" class="pill"></span>
+        <span class="pill pill-quiet">synthetic</span>
+      </div>
+      <p id="case-sub" class="view-sub"></p>
+    </header>
+
+    <div id="walkthrough-guide" class="walkthrough-guide hidden" aria-live="polite"></div>
+
+    <nav id="journey-rail" class="journey-rail" aria-label="Journey steps for this case"></nav>
+
+    <div class="workspace">
+      <main id="step-panels" class="step-panels"></main>
+      <aside class="side-col">
+        <section id="activity-panel" class="panel" aria-labelledby="activity-title">
+          <h2 id="activity-title" class="panel-title">Activity log</h2>
+          <div id="activity-list" class="activity-list"></div>
+        </section>
+        <section class="panel demo-panel" aria-labelledby="demo-title">
+          <h2 id="demo-title" class="panel-title">Demo controls</h2>
+          <p class="demo-note">Simulated outside world: payer replies and portal availability. Nothing here sends anything anywhere.</p>
+          <div id="demo-controls"></div>
+        </section>
+      </aside>
+    </div>
+  </section>
+</div>
+
+<div id="modal-root"></div>
+<div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+
+<footer class="shell-wide foot">
+  <p><strong>Synthetic prototype.</strong> Every patient (Patient A…), provider (Provider 01…), clinic, payer (Payer North…), drug (Biologic B, BIO-####), program, pharmacy, number, and chart passage on this screen is fabricated for a job-application prototype. No real PHI, member IDs, or NPIs appear anywhere. The console never claims an outcome — it only says what the record supports.</p>
+  <p class="foot-actions">
+    <button id="reset-demo" class="button button-quiet" type="button" data-action="reset-demo">Reset demo to seed data</button>
+  </p>
+</footer>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
