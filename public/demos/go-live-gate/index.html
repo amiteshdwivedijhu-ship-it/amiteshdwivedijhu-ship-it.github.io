@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Go-Live Gate · Ridgeback Freight (synthetic)</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="banner" role="status">
+    All loads, carriers, and shippers on this page are synthetic. Fake data only.
+  </div>
+
+  <div class="wrap">
+    <header class="topbar">
+      <div>
+        <h1>Go-Live Gate</h1>
+        <p class="sub">Forward-deployed PM console · Rate Confirmation to TMS Load Entry</p>
+      </div>
+      <button type="button" id="btn-reset" class="ghost" title="Restore seed state">Reset demo</button>
+    </header>
+
+    <aside class="hard-rule" aria-label="Hard product rule">
+      <strong>Hard product rule</strong>
+      The agent may go live only when all are true: (1) UAT accuracy on money and reference fields (rate, linehaul plus accessorials total, customer reference / PO, pickup and delivery appointment) is 100% on the UAT set, (2) all other fields are at least 98%, (3) zero open exceptions in the queue, (4) a second run on the same UAT set gives identical output, and (5) customer UAT signoff is recorded with a name and date. If any check fails, Go Live stays locked and the reason is visible.
+    </aside>
+
+    <nav class="nav-steps" aria-label="Go-Live path">
+      <button type="button" data-panel="deployment">1 Deployment</button>
+      <button type="button" data-panel="spec">2 Spec</button>
+      <button type="button" data-panel="uat">3 UAT</button>
+      <button type="button" data-panel="exceptions">4 Exceptions</button>
+      <button type="button" data-panel="determinism">5 Determinism</button>
+      <button type="button" data-panel="gate">6 Gate</button>
+      <button type="button" data-panel="handoff">7 Handoff</button>
+    </nav>
+
+    <main>
+      <section id="panel-deployment" class="panel" aria-label="Deployment card"></section>
+      <section id="panel-spec" class="panel" aria-label="Spec"></section>
+      <section id="panel-uat" class="panel" aria-label="UAT run"></section>
+      <section id="panel-exceptions" class="panel" aria-label="Exception queue"></section>
+      <section id="panel-determinism" class="panel" aria-label="Determinism check"></section>
+      <section id="panel-gate" class="panel" aria-label="Go-Live Gate"></section>
+      <section id="panel-handoff" class="panel" aria-label="CSM handoff packet"></section>
+    </main>
+
+    <footer class="footer">
+      Prototype for interview practice. Not affiliated with Euclid. Not a Euclid product. Synthetic freight data only. No real shipper, carrier, or driver data.
+    </footer>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

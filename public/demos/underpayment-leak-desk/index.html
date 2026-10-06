@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Underpayment Leak Desk (prototype, synthetic data)</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="banner" role="note">
+  Synthetic data only. Harbor Valley Health and all payers are made up. This is an interview prototype, not a Translucent product.
+</div>
+
+<header class="top">
+  <div class="wrap">
+    <p class="eyebrow">Revenue Intelligence</p>
+    <h1>Underpayment Leak Desk</h1>
+    <p class="sub">Harbor Valley Health, <span id="month"></span>. The agent finds gaps between contract and paid. A human decides if the dollar is real.</p>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="control" aria-label="Agent control surface">
+    <p class="control-label">Agent control surface</p>
+    <div class="agents">
+      <article class="agent live">
+        <div class="agent-head"><span class="dot"></span><strong>Revenue Cycle agent</strong></div>
+        <p>Compared <span id="agentCount"></span> remit lines to contract rates. Grouped gaps by root cause.</p>
+        <p class="agent-meta">Status: waiting on human review for <strong id="agentWaiting"></strong> cases</p>
+      </article>
+      <article class="agent soon" aria-disabled="true">
+        <div class="agent-head"><span class="dot off"></span><strong>Labor Expense agent</strong></div>
+        <p>Coming soon. Shown to hint at the platform. No logic behind it.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="card summary" aria-labelledby="sumH">
+    <h2 id="sumH">Leak summary</h2>
+    <div class="stats">
+      <div class="stat"><span class="stat-label">Total gap found</span><span class="stat-num" id="totalGap"></span></div>
+      <div class="stat"><span class="stat-label">Open gap (not yet decided)</span><span class="stat-num" id="openGap"></span></div>
+      <div class="stat confirmed"><span class="stat-label">CFO-confirmed dollars</span><span class="stat-num" id="cfoDollars"></span><span class="stat-help">Only human-approved cases count here.</span></div>
+    </div>
+    <h3>Gap by root cause</h3>
+    <ul class="causes" id="causes"></ul>
+    <p class="hitrate" id="hitRate"></p>
+  </section>
+
+  <div class="grid">
+    <section class="card list" aria-labelledby="listH">
+      <div class="list-head">
+        <h2 id="listH">Cases</h2>
+        <label class="filter">Payer
+          <select id="payerFilter"></select>
+        </label>
+      </div>
+      <p class="muted-strong">Sorted by dollars. Tap a case to open it.</p>
+      <div class="table-box" tabindex="0" aria-label="Case table, scrolls sideways">
+        <table>
+          <thead><tr><th>Case</th><th>Payer</th><th class="num">Gap</th><th>Root cause</th><th>Status</th></tr></thead>
+          <tbody id="caseRows"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card detail" id="detail" aria-labelledby="detH" tabindex="-1">
+      <h2 id="detH">Case detail</h2>
+      <div id="detailBody"><p class="muted-strong">Open a case from the list to see expected vs paid, the contract clause, and the actions.</p></div>
+    </section>
+  </div>
+
+  <section class="card rule" aria-labelledby="ruleH">
+    <h2 id="ruleH">Autonomy rule</h2>
+    <div class="rule-cols">
+      <div>
+        <h3>The agent may do alone</h3>
+        <ul>
+          <li>Flag a gap between expected and paid.</li>
+          <li>Group gaps by root cause.</li>
+          <li>Mark "Not a leak" when the gap fully matches a patient responsibility line on the remit.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>A human must approve</h3>
+        <ul>
+          <li>Any gap of <strong id="thrText">$500</strong> or more.</li>
+          <li>Any case with agent confidence under 85%.</li>
+          <li>Any case where the contract clause is missing. Approve stays locked until a clause is linked.</li>
+          <li>Only approved cases add to CFO-confirmed dollars.</li>
+          <li>Send back to agent needs a short note. The case returns as Needs review with the note shown.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="thr">
+      <label for="thrSel">Human review threshold</label>
+      <select id="thrSel">
+        <option value="250">$250</option>
+        <option value="500">$500</option>
+        <option value="1000">$1,000</option>
+        <option value="3000">$3,000</option>
+      </select>
+      <p id="thrImpact"></p>
+    </div>
+  </section>
+
+  <section class="card digest" aria-labelledby="digH">
+    <h2 id="digH">Weekly CFO digest preview</h2>
+    <p class="muted-strong">Preview only. Nothing is sent.</p>
+    <div id="digest"></div>
+  </section>
+
+  <div class="reset-row"><button class="btn ghost" id="resetBtn" type="button">Reset demo</button></div>
+</main>
+
+<footer class="foot">
+  <div class="wrap">Prototype for interview practice. Not affiliated with Translucent. Not a Translucent product. Synthetic data only. No real patients, claims, or payer contracts.</div>
+</footer>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

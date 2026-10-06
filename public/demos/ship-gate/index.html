@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ship Gate | Northline Eng (synthetic prototype)</title>
+  <meta name="description" content="Ship Gate: an approval desk for production-touching Droid asks. Synthetic prototype for interview practice.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="demo-banner" role="note">Synthetic demo data. Fake repos and spend.</div>
+
+  <header class="topbar">
+    <a class="brand" href="#/queue" aria-label="Ship Gate queue">
+      <span class="brand-mark" aria-hidden="true">SG</span>
+      <span class="brand-text">
+        <strong>Ship Gate</strong>
+        <span class="brand-sub">Northline Eng · Platform lead desk</span>
+      </span>
+    </a>
+    <div class="topbar-actions">
+      <span class="who" title="Signed in as a synthetic demo reviewer">Reviewer R</span>
+      <button type="button" class="btn btn-ghost" id="resetBtn">Reset</button>
+    </div>
+  </header>
+
+  <main id="app" class="app" tabindex="-1"></main>
+
+  <footer class="site-footer">
+    <p>Prototype for interview practice. Not affiliated with Factory or The San Francisco AI Factory, Inc. Not a Factory product. Synthetic org and sessions only.</p>
+  </footer>
+
+  <div id="actionbar" class="actionbar" hidden></div>
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+  <div id="modalRoot"></div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
