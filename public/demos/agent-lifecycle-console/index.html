@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Agent Lifecycle Console · Northbridge Mutual (synthetic)</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="banner" role="status">All banks, agents, and people on this page are synthetic. Fake data only.</div>
+  <div class="wrap">
+    <header class="topbar">
+      <div>
+        <h1>Agent Lifecycle Console</h1>
+        <p class="sub">Go-live to monitor to retire · Wire Exception Triage Agent</p>
+      </div>
+      <button type="button" id="btn-reset" class="ghost">Reset demo</button>
+    </header>
+    <aside class="hard-rule" aria-label="Hard product rule">
+      <strong>Hard product rule</strong>
+      Go live only when owner + backup, pinned prod env/model, scoped tools (no wildcard), policy pack attached, and dry-run has zero open policy blocks. Retire only when traffic is drained to zero and an evidence pack is signed. Locks show reasons.
+    </aside>
+    <nav class="nav-steps" aria-label="Lifecycle path">
+      <button type="button" data-panel="roster">1 Roster</button>
+      <button type="button" data-panel="ownership">2 Ownership</button>
+      <button type="button" data-panel="golive">3 Go-live</button>
+      <button type="button" data-panel="monitor">4 Monitor</button>
+      <button type="button" data-panel="incident">5 Incident</button>
+      <button type="button" data-panel="retire">6 Retire</button>
+      <button type="button" data-panel="evidence">7 Evidence</button>
+    </nav>
+    <main>
+      <section id="panel-roster" class="panel"></section>
+      <section id="panel-ownership" class="panel"></section>
+      <section id="panel-golive" class="panel"></section>
+      <section id="panel-monitor" class="panel"></section>
+      <section id="panel-incident" class="panel"></section>
+      <section id="panel-retire" class="panel"></section>
+      <section id="panel-evidence" class="panel"></section>
+    </main>
+    <footer class="footer">Prototype for interview practice. Not affiliated with Sycamore. Not a Sycamore product. Synthetic bank and agent data only.</footer>
+  </div>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

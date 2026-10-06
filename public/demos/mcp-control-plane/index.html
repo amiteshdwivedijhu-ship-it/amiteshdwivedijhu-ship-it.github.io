@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MCP Control Plane · Harborline Retail (synthetic)</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="banner" role="status">All tenants, MCP servers, users, and tools on this page are synthetic. Fake data only.</div>
+  <div class="wrap">
+    <header class="topbar">
+      <div>
+        <h1>MCP Control Plane</h1>
+        <p class="sub">Tool permissions · server lifecycle · certify for prod</p>
+      </div>
+      <button type="button" id="btn-reset" class="ghost">Reset demo</button>
+    </header>
+    <aside class="hard-rule"><strong>Hard product rule</strong> Certify only when every tool has an explicit role allow list (no wildcard), at least one high-risk tool requires step-up approval, Verified User mode is on, the last simulation has zero unexpected allows on high-risk tools, and an owner signs.</aside>
+    <nav class="nav-steps" aria-label="Control plane path">
+      <button type="button" data-panel="catalog">1 Catalog</button>
+      <button type="button" data-panel="detail">2 Detail</button>
+      <button type="button" data-panel="perms">3 Permissions</button>
+      <button type="button" data-panel="sim">4 Simulation</button>
+      <button type="button" data-panel="deny">5 Live deny</button>
+      <button type="button" data-panel="cert">6 Certify</button>
+      <button type="button" data-panel="audit">7 Audit</button>
+    </nav>
+    <main>
+      <section id="panel-catalog" class="panel"></section>
+      <section id="panel-detail" class="panel"></section>
+      <section id="panel-perms" class="panel"></section>
+      <section id="panel-sim" class="panel"></section>
+      <section id="panel-deny" class="panel"></section>
+      <section id="panel-cert" class="panel"></section>
+      <section id="panel-audit" class="panel"></section>
+    </main>
+    <footer class="footer">Prototype for interview practice. Not affiliated with Workato. Not a Workato product. Synthetic tenant and tool data only.</footer>
+  </div>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
