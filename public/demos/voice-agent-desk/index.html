@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Voice Agent Desk · Fairharbor Card (synthetic)</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="banner" role="status">All callers, campaigns, and transcripts on this page are synthetic. No real phone numbers or recordings.</div>
+  <div class="wrap">
+    <header class="topbar">
+      <div>
+        <h1>Voice Agent Desk</h1>
+        <p class="sub">QA · escalation · campaign pause gate</p>
+      </div>
+      <button type="button" id="btn-reset" class="ghost">Reset demo</button>
+    </header>
+    <aside class="hard-rule"><strong>Hard product rule</strong> Campaign stays Live only when rolling containment is at least 70% on last 50 calls, zero open safety flags, escalation SLA breaches under 5%, at least 5 QA reviews this hour, and an owner is on call. Otherwise Pause is required.</aside>
+    <nav class="nav-steps">
+      <button type="button" data-panel="board">1 Board</button>
+      <button type="button" data-panel="live">2 Live</button>
+      <button type="button" data-panel="qa">3 QA</button>
+      <button type="button" data-panel="esc">4 Escalations</button>
+      <button type="button" data-panel="gate">5 Quality gate</button>
+      <button type="button" data-panel="brief">6 Brief</button>
+    </nav>
+    <main>
+      <section id="panel-board" class="panel"></section>
+      <section id="panel-live" class="panel"></section>
+      <section id="panel-qa" class="panel"></section>
+      <section id="panel-esc" class="panel"></section>
+      <section id="panel-gate" class="panel"></section>
+      <section id="panel-brief" class="panel"></section>
+    </main>
+    <footer class="footer">Prototype for interview practice. Not affiliated with Regal. Not a Regal product. Synthetic callers and campaigns only. No real phone numbers or recordings.</footer>
+  </div>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
