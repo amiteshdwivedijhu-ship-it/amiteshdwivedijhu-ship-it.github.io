@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="Context Replay prototype. See the exact feature values a support agent used, find the stale one, and backtest a fix. Synthetic data only.">
+  <title>Context Replay | Fernway Goods</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <div class="banner" role="status">Synthetic data only. Fernway Goods, its customers, orders, and feature values are fake.</div>
+  <div class="wrap">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Refund Agent · inference time context</p>
+        <h1>Context Replay</h1>
+        <p class="sub">Fernway Goods · replay the features a decision actually saw</p>
+      </div>
+      <button type="button" id="btn-reset" class="ghost">Reset demo</button>
+    </header>
+    <aside class="hard-rule">
+      <strong>Hard product rule.</strong>
+      A fix can ship only when the backtest shows no new wrong denials, p99 serving latency stays under the 50ms budget, and the feature version is bumped with a change note.
+    </aside>
+    <nav class="tabs" aria-label="Screens">
+      <button type="button" data-screen="feed">Decisions</button>
+      <button type="button" data-screen="replay">Replay</button>
+      <button type="button" data-screen="diff">Diff</button>
+      <button type="button" data-screen="cause">Root cause</button>
+      <button type="button" data-screen="fix">Fix and backtest</button>
+      <button type="button" data-screen="ship">Ship and history</button>
+    </nav>
+    <main id="main"></main>
+    <footer class="site-foot">
+      <p><a href="https://amiteshdwivedijhu-ship-it.github.io/">Prototype by Amitesh Dwivedi</a></p>
+      <p>Prototype for interview practice. Not affiliated with Chalk. Not a Chalk product. Pseudo-code only. Synthetic store, customer, and feature data only.</p>
+    </footer>
+  </div>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

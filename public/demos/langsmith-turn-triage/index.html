@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="Turn Triage prototype. Find the turn that broke a multi-turn agent thread, then send it to a queue, a dataset, or a rule. Synthetic data only.">
+  <title>Turn Triage | SkyHarbor Air rebooking</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <div class="banner" role="status">Synthetic data only. SkyHarbor Air, the Rebooking Assistant, the users, and every thread are fake.</div>
+  <div class="wrap">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">rebooking-prod · multi-turn threads</p>
+        <h1>Turn Triage</h1>
+        <p class="sub">SkyHarbor Air · Rebooking Assistant · find the turn that broke</p>
+      </div>
+      <button type="button" id="btn-reset" class="ghost">Reset demo</button>
+    </header>
+    <aside class="hard-rule">
+      <strong>Hard product rule.</strong>
+      A thread can join a dataset only after a person confirms the break turn and writes the expected next action.
+      A new automation rule can be saved only after a backtest on labeled threads catches at least 3 confirmed breaks and has at most 1 false flag.
+    </aside>
+    <nav class="tabs" aria-label="Screens">
+      <button type="button" data-screen="threads">Threads</button>
+      <button type="button" data-screen="patterns">Patterns</button>
+      <button type="button" data-screen="backtest">Rule backtest</button>
+      <button type="button" data-screen="activity">Activity log</button>
+    </nav>
+    <main id="main"></main>
+    <footer class="site-foot">
+      <p><a href="https://amiteshdwivedijhu-ship-it.github.io/">Prototype by Amitesh Dwivedi</a></p>
+      <p>Prototype for interview practice. Not affiliated with LangChain. Not a LangSmith feature. Synthetic airline, agent, and thread data only.</p>
+    </footer>
+  </div>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

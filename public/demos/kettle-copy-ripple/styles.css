@@ -1,0 +1,101 @@
+:root {
+  --paper: #fafaf7;
+  --card: #ffffff;
+  --ink: #111111;
+  --muted: #3f3f3a;
+  --line: #e2e2dc;
+  --accent: #e4572e;
+  --ok: #166534;
+  --ok-bg: #dcfce7;
+  --bad: #991b1b;
+  --bad-bg: #fee2e2;
+  --warn: #92400e;
+  --warn-bg: #fef3c7;
+  --tap: 44px;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--ink);
+  background: var(--paper);
+}
+button, input, textarea, select { font: inherit; color: inherit; }
+button {
+  min-height: var(--tap);
+  padding: 0.55rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid var(--ink);
+  background: #fff;
+  cursor: pointer;
+}
+button.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+button.ghost { background: transparent; border-color: var(--line); }
+button.active-tab { background: var(--ink); color: #fff; border-color: var(--ink); }
+button:disabled { opacity: 0.45; cursor: not-allowed; }
+a { color: var(--accent); }
+.skip { position: absolute; left: -999px; }
+.skip:focus { left: 8px; background: #fff; padding: 8px; }
+.banner { background: #fff4ee; color: #7a2e16; padding: 0.75rem 1rem; font-weight: 700; }
+.wrap, main, .card, .table-scroll { min-width: 0; max-width: 100%; }
+.wrap { max-width: 1040px; margin: 0 auto; padding: 1rem 1rem 2.5rem; }
+.topbar { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.75rem; }
+h1 { margin: 0; font-size: 2rem; font-weight: 800; letter-spacing: -0.03em; }
+h2 { margin: 0 0 0.4rem; font-size: 1.35rem; font-weight: 800; }
+h3 { margin: 0 0 0.3rem; font-size: 1.05rem; }
+.eyebrow { margin: 0; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; color: var(--accent); }
+.sub, .muted { color: var(--muted); }
+.hard-rule, .card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 1rem;
+  margin: 0.75rem 0;
+}
+.hard-rule { border-left: 6px solid var(--accent); }
+.tabs { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+.pill { display: inline-flex; align-items: center; min-height: 28px; padding: 0.1rem 0.55rem; border-radius: 999px; font-weight: 800; margin: 0.15rem 0.25rem 0.15rem 0; }
+.pill.ok { background: var(--ok-bg); color: var(--ok); }
+.pill.bad { background: var(--bad-bg); color: var(--bad); }
+.pill.warn { background: var(--warn-bg); color: var(--warn); }
+.actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+label.field { display: block; font-weight: 800; margin: 0.65rem 0 0.25rem; }
+input[type="text"], textarea {
+  width: 100%;
+  min-height: var(--tap);
+  padding: 0.55rem 0.75rem;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+textarea { min-height: 88px; }
+.banner-box {
+  max-width: 100%;
+  border: 1px solid var(--ink);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0.4rem;
+  overflow: hidden;
+  background: #fff7f3;
+  font-weight: 800;
+  margin: 0.5rem 0;
+}
+.lock { background: var(--bad-bg); color: var(--bad); border-radius: 12px; padding: 0.7rem; font-weight: 750; margin-top: 0.6rem; }
+.okbox { background: var(--ok-bg); color: var(--ok); border-radius: 12px; padding: 0.7rem; font-weight: 750; margin-top: 0.6rem; }
+.table-scroll { width: 100%; max-width: 100%; overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; background: #fff; }
+table { width: 100%; border-collapse: collapse; min-width: 640px; }
+th, td { text-align: left; padding: 0.7rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { background: #f6f5f0; }
+.sheet { background: #fff; border: 1px dashed var(--ink); border-radius: 12px; padding: 1rem; }
+.site-foot { margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--line); }
+.site-foot p { margin: 0.3rem 0; }
+.site-foot a { display: inline-flex; align-items: center; min-height: 44px; }
+@media (max-width: 420px) {
+  h1 { font-size: 1.55rem; }
+}
