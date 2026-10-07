@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="MSK Steerage Desk prototype. Rank members by claims signals, steer them to efficient providers, and turn a data gap into a roadmap item. Synthetic data only. No PHI.">
+  <title>MSK Steerage Desk | synthetic health plans</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <div class="banner" role="status">Synthetic data only. No PHI. Plans, members, providers, claims, and efficiency scores are fake.</div>
+  <div class="wrap">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Tasha (Care Coordinator)</p>
+        <h1>MSK Steerage Desk</h1>
+        <p class="sub">Lakeshore Health Plan and Granite State Medicare Advantage</p>
+      </div>
+      <button type="button" id="btn-reset" class="ghost">Reset demo</button>
+    </header>
+    <aside class="hard-rule">
+      <strong>Hard product rule.</strong>
+      Mark a member Steered only when the chosen provider scores at least 4 of 5 and you logged a reason plus the member's agreement.
+      Members with claims older than 30 days stay labeled Data stale and stay below fresh members unless you save an override note.
+    </aside>
+    <nav class="tabs" aria-label="Screens">
+      <button type="button" data-screen="worklist">Worklist</button>
+      <button type="button" data-screen="member">Member</button>
+      <button type="button" data-screen="steer">Steer</button>
+      <button type="button" data-screen="outreach">Outreach</button>
+      <button type="button" data-screen="partner">Partner view</button>
+      <button type="button" data-screen="roadmap">Roadmap</button>
+    </nav>
+    <main id="main"></main>
+    <footer class="site-foot">
+      <p><a href="https://amiteshdwivedijhu-ship-it.github.io/">Prototype by Amitesh Dwivedi</a></p>
+      <p>Prototype for interview practice. Not affiliated with Icon Health. Not an Icon Health product. Synthetic members, plans, providers, and claims only. No PHI.</p>
+    </footer>
+  </div>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
