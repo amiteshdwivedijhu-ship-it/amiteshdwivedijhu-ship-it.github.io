@@ -1,0 +1,38 @@
+/* Proof Desk token layer. Values matched to public hebbia.com CSS (screen.css, matrixMockTable.css), read Oct 29, 2026.
+   See DESIGN-TOKENS.md for the source of each token. Fonts are free stand ins, not Hebbia's licensed fonts. */
+@font-face{font-family:"Inter PD";font-style:normal;font-weight:100 900;font-display:swap;src:url(fonts/inter-latin-wght-normal.woff2) format("woff2")}
+@font-face{font-family:"Instrument Serif PD";font-style:normal;font-weight:400;font-display:swap;src:url(fonts/instrument-serif-latin-400-normal.woff2) format("woff2")}
+:root{
+  /* type */
+  --ff-sans:"Inter PD",Inter,Roboto,"Helvetica Neue",Arial,sans-serif;
+  --ff-serif:"Instrument Serif PD","Iowan Old Style","Palatino Linotype","URW Palladio L",P052,serif;
+  --fz-xs:.75rem;--fz-sm:.8125rem;--fz-md:.875rem;--fz-base:1rem;--fz-lg:1.125rem;--fz-xl:1.5rem;--fz-2xl:1.875rem;--fz-3xl:2.5rem;
+  --lh-fine:1.2;--lh-medium:1.375;--lh-normal:1.5;--lts-tight:-.02em;
+  /* neutrals (site grey ramp) */
+  --grey-25:#FCFCFC;--grey-50:#F5F5F5;--grey-100:#F2F2F2;--grey-200:#E5E5E5;--grey-300:#D6D6D6;--grey-400:#A0A0A0;--grey-500:#626262;--grey-600:#525252;--grey-700:#3D3D3D;--grey-800:#262626;--grey-900:#171717;--grey-950:#0E0B0B;
+  --warm-grey-50:#F4F1EB;--sand:#EEECDD;--sand-tint:#DEDBD4;--steel:#828893;
+  /* blue ramp */
+  --blue-50:#F4F6FF;--blue-100:#E0E6FF;--blue-200:#C1D0FF;--blue-500:#465BFF;--blue-600:#3043E0;--blue-700:#2534B3;
+  /* product surface tokens (matrix mock) */
+  --background-primary:rgb(251,251,251);--background-secondary:rgb(244,244,244);--background-emphasis:#fff;--background-hover:rgb(250,250,250);
+  --background-cobalt:rgb(238,242,255);--background-nova:rgb(244,239,249);--background-arbor:rgb(232,246,242);--background-solar:rgb(247,244,234);--background-terra:rgb(245,239,234);--background-negative:rgb(255,233,230);
+  --header-primary:rgb(23,23,23);--header-secondary:rgb(82,82,82);--header-eyebrow:rgb(163,163,163);
+  --content-primary:rgb(38,38,38);--content-secondary:rgb(91,91,91);--content-tertiary:rgb(134,134,134);--content-disabled:rgb(186,186,186);
+  --content-cobalt:rgb(70,91,255);--content-nova:rgb(164,109,224);--content-arbor:rgb(94,142,113);--content-terra:rgb(236,127,112);--content-solar:rgb(215,161,54);--content-negative:rgb(220,57,34);
+  --border-default:rgb(229,229,229);--border-weak:rgb(234,234,234);--border-focus:rgb(144,157,255);--border-hairline:rgba(0,0,0,.13);--hairline:rgb(229 229 229);
+  --pill-blue-bg:rgba(70,91,255,.1);--pill-blue-text:#1d2eb3;--pill-red-bg:rgba(227,51,34,.09);--pill-red-text:#c2261a;--pill-green-bg:rgba(22,138,74,.1);--pill-green-text:#126d3b;--pill-yellow-bg:rgba(255,212,0,.23);--pill-yellow-text:#80661d;--pill-orange-bg:rgba(247,107,21,.12);--pill-orange-text:#a84a00;--pill-purple-bg:rgba(148,13,231,.08);--pill-purple-text:#784da7;--pill-teal-bg:rgba(14,138,198,.1);--pill-teal-text:#096c9c;--pill-grey-bg:rgba(23,23,23,.05);--pill-grey-text:#525252;
+  /* radius, space, shadow */
+  --bdrs-xxs:.125rem;--bdrs-xs:.25rem;--bdrs-sm:.375rem;--bdrs-md:.5rem;--bdrs-lg:.625rem;--bdrs-xl:.75rem;--bdrs-2xl:1rem;--bdrs-full:62.4375rem;
+  --space-1:.25rem;--space-2:.5rem;--space-3:.75rem;--space-4:1rem;--space-5:1.25rem;--space-6:1.5rem;--space-8:2rem;
+  --shadow-small:0 4px 6px -2px rgb(0 0 0 / 6%);--shadow-xs:0 1px 2px 0 rgba(0,0,0,.05);--shadow-float:0 8px 32px 0 rgba(0,0,0,.25);
+  --trs:120ms ease-out;
+
+  /* app aliases used by styles.css */
+  --bg:var(--background-primary);--panel:var(--background-emphasis);--ink:var(--header-primary);--ink2:var(--content-secondary);--muted:var(--content-tertiary);--line:var(--border-default);
+  --brand:var(--blue-500);--brand2:var(--background-cobalt);--teal:var(--content-arbor);--teal2:var(--background-arbor);
+  --good:var(--pill-green-text);--good2:var(--pill-green-bg);--warn:var(--pill-orange-text);--warn2:var(--pill-yellow-bg);--bad:var(--pill-red-text);--bad2:var(--pill-red-bg);
+  --clin:var(--pill-purple-text);--clin2:var(--pill-purple-bg);--pi:var(--pill-orange-text);--pi2:var(--pill-orange-bg);--info:var(--pill-blue-text);--info2:var(--pill-blue-bg);
+  --amber:var(--content-solar);
+  --r:var(--bdrs-md);--shadow:var(--shadow-small);--side:232px;
+  --chart-1:var(--content-cobalt);--chart-2:var(--content-arbor);--chart-3:var(--content-nova);--chart-grid:var(--border-weak);--chart-label:var(--content-tertiary);
+}
